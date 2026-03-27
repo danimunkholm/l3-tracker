@@ -552,14 +552,14 @@ let resendKey='';
 
 // ══ LOGIN ══════════════════════════════════════════════════════════════════════
 (function(){
-  if(sessionStorage.getItem('l3_auth')==='1'){
+  if(localStorage.getItem('l3_auth')==='1'){
     document.getElementById('loginScreen').style.display='none';
   }
 })();
 function doLogin(){
   const v=document.getElementById('loginPwd').value;
   if(v===PWD){
-    sessionStorage.setItem('l3_auth','1');
+    localStorage.setItem('l3_auth','1');
     document.getElementById('loginScreen').style.display='none';
     document.getElementById('connecting').style.display='flex';
     boot();
@@ -569,7 +569,7 @@ function doLogin(){
     setTimeout(()=>{e.style.display='none';document.getElementById('loginPwd').style.borderColor='';},3000);
   }
 }
-function doLogout(){sessionStorage.removeItem('l3_auth');location.reload();}
+function doLogout(){localStorage.removeItem('l3_auth');location.reload();}
 
 
 const SB_URL='https://hyvbxpsjgoqsazvmkjgb.supabase.co';
@@ -769,7 +769,7 @@ window.saveNotifSettings=function(){
 };
 
 async function boot(){
-  if(sessionStorage.getItem('l3_auth')!=='1')return;
+  if(localStorage.getItem('l3_auth')!=='1')return;
   const saved=localStorage.getItem('l3_notif');if(saved)try{notifSettings=JSON.parse(saved);}catch(e){}
   resendKey=localStorage.getItem('l3_resend_key')||'';
   try{
@@ -1335,3 +1335,17 @@ window.closeSb=function(){
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function toast(msg,type=''){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show'+(type==='err'?' err':type==='ok'?' ok':'');setTimeout(()=>el.classList.remove('show'),3200);}
 docume
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    if(document.getElementById('ov').classList.contains('open'))closeModal();
+    else if(document.getElementById('cmtOv').classList.contains('open'))closeCmtModal();
+    else if(document.getElementById('notifOv').classList.contains('open'))closeNotifModal();
+    else if(document.getElementById('memberOv').classList.contains('open'))closeMemberModal();
+    else if(document.getElementById('cliOv').classList.contains('open'))closeCliModal();
+    else closePop();
+  }
+  if(e.key==='Enter'&&(e.metaKey||e.ctrlKey))saveTask();
+});
+</script>
+</body>
+</html>
