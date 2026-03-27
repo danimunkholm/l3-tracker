@@ -854,8 +854,7 @@ function buildFbar(){
 }
 
 // ── helpers ──
-function parseClients(v){if(!v)return[];try{const p=JSON.parse(v);return Array.isArray(p)?p:[p];}catch(e){return v?[v]:[];}}catch{return v?[v]:[];}
-}
+function parseClients(v){if(!v)return[];try{const p=JSON.parse(v);return Array.isArray(p)?p:[p];}catch(e){return v?[v]:[]; }}
 function renderClients(arr){
   if(!arr||!arr.length)return `<span class="editable-dash" onclick="openPop(event,'clients',this.closest('tr,div.task-card').dataset.id)">+ cliente</span>`;
   return arr.map(c=>`<span class="ctag">${esc(c)}</span>`).join(' ');
