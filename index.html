@@ -243,11 +243,75 @@ td{padding:13px 14px;vertical-align:middle}
 .toast.show{transform:translateX(0)}
 .toast.err{border-color:#E74C3C}
 
+
+/* ── LOGIN ── */
+#loginScreen{position:fixed;inset:0;background:var(--d);display:flex;align-items:center;justify-content:center;z-index:999;padding:20px}
+.login-card{background:var(--d2);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:44px 40px;width:420px;max-width:100%;box-shadow:0 40px 100px rgba(0,0,0,0.7)}
+.login-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:var(--w);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.login-logo span{color:var(--y)}
+.login-sub{color:var(--si2);font-size:13px;margin-bottom:32px}
+.login-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--si2);margin-bottom:7px;display:block}
+.login-inp{width:100%;background:var(--d);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r2);padding:12px 14px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border .15s;margin-bottom:16px}
+.login-inp:focus{border-color:var(--y);box-shadow:0 0 0 3px rgba(240,187,61,0.1)}
+.login-btn{width:100%;background:var(--y);color:var(--d);border:none;padding:14px;border-radius:var(--r2);font-family:'Syne',sans-serif;font-weight:800;font-size:15px;cursor:pointer;transition:all .15s;letter-spacing:.3px}
+.login-btn:hover{background:#e5af30;transform:translateY(-1px);box-shadow:0 4px 20px rgba(240,187,61,0.35)}
+.login-err{color:#e74c3c;font-size:12px;margin-top:10px;padding:9px 12px;background:rgba(231,76,60,0.1);border-radius:6px;display:none;text-align:center}
+
+/* ── CALENDAR ── */
+.cal-wrap{margin-bottom:24px}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.cal-nav{display:flex;align-items:center;gap:10px}
+.cal-nav-btn{background:var(--d3);border:1px solid rgba(255,255,255,0.08);color:var(--si2);padding:8px 14px;border-radius:var(--r2);cursor:pointer;font-size:16px;transition:all .12s;line-height:1}
+.cal-nav-btn:hover{border-color:var(--y);color:var(--y)}
+.cal-month-lbl{font-family:'Syne',sans-serif;font-weight:700;font-size:20px;color:var(--w);min-width:180px;text-align:center}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;background:var(--d3);border-radius:var(--r);overflow:hidden;border:1px solid rgba(255,255,255,0.06)}
+.cal-dow{background:var(--d);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--si);padding:11px 8px;text-align:center}
+.cal-day{background:var(--d2);min-height:100px;padding:8px 6px;display:flex;flex-direction:column;gap:3px}
+@media(max-width:600px){.cal-day{min-height:60px;padding:5px 4px}}
+.cal-day.other{opacity:.4}
+.cal-day.today{background:rgba(240,187,61,0.06);outline:1px solid rgba(240,187,61,0.3);outline-offset:-1px}
+.cal-day-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--si2);margin-bottom:2px;line-height:1}
+.cal-day.today .cal-day-num{color:var(--y);font-weight:700}
+.cal-pill{padding:2px 6px;border-radius:4px;font-size:10px;font-weight:500;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.4;transition:opacity .1s}
+.cal-pill:hover{opacity:.75}
+.cal-pill.p-start{background:rgba(240,187,61,0.25);color:var(--y);border-left:3px solid var(--y)}
+.cal-pill.p-end{background:rgba(231,76,60,0.2);color:#e74c3c;border-left:3px solid #e74c3c}
+.cal-pill.p-range{background:rgba(52,152,219,0.15);color:#5dade2;border-left:3px solid #5dade2}
+.cal-more{font-size:9px;color:var(--si);font-family:'DM Mono',monospace;cursor:pointer;padding:1px 4px}
+.cal-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--si2);padding:0 4px}
+.cal-leg{display:flex;align-items:center;gap:6px}
+.cal-leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* ── NOTIFICATIONS ── */
+.notif-section{margin-bottom:18px}
+.notif-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--si);margin-bottom:10px}
+.notif-row{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;background:var(--d3);border-radius:var(--r2);margin-bottom:6px;font-size:13px}
+.notif-row span{color:var(--cr)}
+.toggle{width:38px;height:22px;background:var(--d4);border-radius:20px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--y)}
+.toggle::after{content:'';width:16px;height:16px;background:var(--w);border-radius:50%;position:absolute;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,0.3)}
+.toggle.on::after{transform:translateX(16px)}
+.notif-hint{font-size:11px;color:var(--si);margin-top:8px;line-height:1.6;padding:10px 12px;background:rgba(240,187,61,0.06);border-left:2px solid var(--y);border-radius:4px}
+.notif-hint code{font-family:'DM Mono',monospace;font-size:10px;background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:3px;color:var(--y)}
+.toast.ok{border-color:#27ae60}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:10px}
 </style>
 </head>
 <body>
+
+
+<!-- ══ LOGIN ══ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">lem<span>●</span>nthree</div>
+    <div class="login-sub">Project Tracker 2026 — Acceso privado</div>
+    <label class="login-lbl">Contraseña de acceso</label>
+    <input class="login-inp" type="password" id="loginPwd" placeholder="••••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <div id="loginErr" class="login-err">Contraseña incorrecta. Inténtalo de nuevo.</div>
+    <button class="login-btn" onclick="doLogin()">Entrar →</button>
+  </div>
+</div>
 
 <div id="connecting">
   <div class="spin"></div>
@@ -263,8 +327,10 @@ td{padding:13px 14px;vertical-align:middle}
     </div>
     <div class="tb-right">
       <div class="dbadge" id="dateBadge"></div>
+      <button class="btn-sm" onclick="openNotifModal()" title="Notificaciones">🔔</button>
       <button class="btn-sm" onclick="openMemberModal()" title="Responsables">👤</button>
       <button class="btn-sm" onclick="openCliModal()" title="Clientes">👥</button>
+      <button class="btn-sm" onclick="doLogout()" title="Salir" style="font-size:12px">⎋ Salir</button>
       <button class="btn-add" onclick="openModal()">+ Tarea</button>
     </div>
   </div>
@@ -277,6 +343,7 @@ td{padding:13px 14px;vertical-align:middle}
         <div class="sb-lbl">Vista</div>
         <div class="ni act" onclick="setView('all',this)"><span>◈</span> Todas</div>
         <div class="ni" onclick="setView('ms',this)"><span>◆</span> Hitos clave</div>
+        <div class="ni" onclick="setView('cal',this)"><span>📅</span> Calendario</div>
       </div>
       <div class="sb-s">
         <div class="sb-lbl"><span>Responsable</span><span class="sb-lbl-btn" onclick="openMemberModal()">+</span></div>
@@ -348,6 +415,36 @@ td{padding:13px 14px;vertical-align:middle}
   </div>
 </div>
 
+
+<!-- NOTIFICATIONS MODAL -->
+<div class="ov" id="notifOv" onclick="if(event.target.id==='notifOv')closeNotifModal()">
+  <div class="mo mo-sm">
+    <div class="mtit"><span>🔔 Notificaciones por <em>email</em></span><button class="mtit-close" onclick="closeNotifModal()">✕</button></div>
+    <div class="notif-section">
+      <div class="notif-title">Cuándo notificar</div>
+      <div class="notif-row"><span>Al crear una tarea nueva</span><div class="toggle on" id="tog-new" onclick="toggleNotif('new')"></div></div>
+      <div class="notif-row"><span>Al cambiar el estado</span><div class="toggle on" id="tog-status" onclick="toggleNotif('status')"></div></div>
+      <div class="notif-row"><span>Al asignar responsable</span><div class="toggle on" id="tog-assign" onclick="toggleNotif('assign')"></div></div>
+      <div class="notif-row"><span>Recordatorio entrega (3 días antes)</span><div class="toggle on" id="tog-reminder" onclick="toggleNotif('reminder')"></div></div>
+    </div>
+    <div class="notif-section">
+      <div class="notif-title">API Key de Resend</div>
+      <div class="notif-hint">
+        Para activar los emails: entra en <code>resend.com</code> → crea cuenta gratuita → <code>API Keys</code> → <code>Create API Key</code> → pega aquí la clave.<br><br>
+        Los emails se enviarán a: <code>dani@lemonthree.es</code>, <code>carlos@lemonthree.es</code>, <code>manu@lemonthree.es</code>
+      </div>
+      <div style="margin-top:12px">
+        <label class="fgl" style="display:block;margin-bottom:6px">Resend API Key</label>
+        <input class="fi" id="resend-key" placeholder="re_xxxxxxxxxxxxxxxxxxxx" style="font-family:'DM Mono',monospace;font-size:12px"/>
+      </div>
+    </div>
+    <div class="ma">
+      <button class="bcl" onclick="closeNotifModal()">Cerrar</button>
+      <button class="bsv" onclick="saveNotifSettings()">Guardar configuración</button>
+    </div>
+  </div>
+</div>
+
 <!-- MEMBER MODAL -->
 <div class="ov" id="memberOv" onclick="if(event.target.id==='memberOv')closeMemberModal()">
   <div class="mo mo-sm">
@@ -378,6 +475,39 @@ td{padding:13px 14px;vertical-align:middle}
 
 <script>
 // ══ CONFIG ════════════════════════════════════════════════════════════════════
+const PWD='Lemon123789.';
+const TEAM_EMAILS={Carlos:'carlos@lemonthree.es',Manu:'manu@lemonthree.es',Dani:'dani@lemonthree.es'};
+const ALL_EMAILS=Object.values(TEAM_EMAILS);
+let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
+let notifSettings={new:true,status:true,assign:true,reminder:true};
+let resendKey='';
+
+// ══ LOGIN ══════════════════════════════════════════════════════════════════════
+(function(){
+  if(sessionStorage.getItem('l3_auth')==='1'){
+    document.getElementById('loginScreen').style.display='none';
+  }
+})();
+function doLogin(){
+  const v=document.getElementById('loginPwd').value;
+  if(v===PWD){
+    sessionStorage.setItem('l3_auth','1');
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('connecting').style.display='flex';
+    if(sessionStorage.getItem('l3_auth')==='1'){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('connecting').style.display='flex';
+  boot();
+}
+  }else{
+    const e=document.getElementById('loginErr');e.style.display='block';
+    document.getElementById('loginPwd').style.borderColor='#e74c3c';
+    setTimeout(()=>{e.style.display='none';document.getElementById('loginPwd').style.borderColor='';},3000);
+  }
+}
+function doLogout(){sessionStorage.removeItem('l3_auth');location.reload();}
+
+
 const SB_URL='https://hyvbxpsjgoqsazvmkjgb.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5dmJ4cHNqZ29xc2F6dm1ramdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MTAxODgsImV4cCI6MjA5MDE4NjE4OH0.1iM_hO2Wu3kcVYbXrfhjYqiPT3BU5asANkgvqMt_0qY';
 
@@ -413,7 +543,119 @@ const addMemberDB=n=>sb('members',{method:'POST',prefer:'return=representation',
 const delMemberDB=id=>sb(`members?id=eq.${id}`,{method:'DELETE'});
 
 // ══ BOOT ══════════════════════════════════════════════════════════════════════
+// ══ EMAIL (Resend) ════════════════════════════════════════════════════════════
+async function sendEmail(subject,html,recipients){
+  const key=resendKey||localStorage.getItem('l3_resend_key');
+  if(!key)return;
+  try{
+    await fetch('https://api.resend.com/emails',{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json'},
+      body:JSON.stringify({from:'L3 Tracker <onboarding@resend.dev>',to:recipients||ALL_EMAILS,subject,html})
+    });
+  }catch(e){console.warn('Email:',e);}
+}
+function emailHtml(title,body,task){
+  return`<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;background:#1e1e23;border-radius:12px;overflow:hidden">
+    <div style="background:#16161a;padding:18px 24px;border-bottom:2px solid #F0BB3D">
+      <b style="color:#fff;font-size:18px">lem<span style="color:#F0BB3D">●</span>nthree</b>
+      <span style="color:#7a7875;font-size:11px;margin-left:6px">/ tracker</span>
+    </div>
+    <div style="padding:24px">
+      <h2 style="color:#F0BB3D;font-size:15px;margin:0 0 14px">${title}</h2>${body}
+      ${task?`<div style="background:#28282f;border-radius:8px;padding:14px;margin-top:14px">
+        <div style="color:#b0ada8;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Tarea</div>
+        <div style="color:#fff;font-size:14px;font-weight:700;margin-bottom:6px">${task.task||''}</div>
+        ${task.owner?`<div style="color:#b0ada8;font-size:12px">Responsable: <b style="color:#F0BB3D">${task.owner}</b></div>`:''}
+        ${task.status?`<div style="color:#b0ada8;font-size:12px">Estado: <b style="color:#fff">${task.status}</b></div>`:''}
+        ${task.date_end?`<div style="color:#b0ada8;font-size:12px">Entrega: <b style="color:#e74c3c">${fmtDate(task.date_end)}</b></div>`:''}
+      </div>`:''}
+    </div>
+    <div style="padding:14px 24px;border-top:1px solid rgba(255,255,255,0.06);text-align:center">
+      <a href="https://danimunkholm.github.io/l3-tracker/" style="color:#F0BB3D;font-size:12px">Abrir el tracker →</a>
+    </div>
+  </div>`;
+}
+async function notifyNewTask(t){if(!notifSettings.new)return;await sendEmail(`Nueva tarea: ${t.task}`,emailHtml('Nueva tarea creada',`<p style="color:#b0ada8;font-size:14px">Se ha creado una nueva tarea.</p>`,t));}
+async function notifyStatusChange(t,old){if(!notifSettings.status)return;const r=t.owner&&TEAM_EMAILS[t.owner]?[TEAM_EMAILS[t.owner]]:ALL_EMAILS;await sendEmail(`Estado actualizado: ${t.task}`,emailHtml('Estado actualizado',`<p style="color:#b0ada8;font-size:14px">Estado cambiado de <b style="color:#fff">${old}</b> a <b style="color:#F0BB3D">${t.status}</b></p>`,t),r);}
+async function notifyAssignment(t){if(!notifSettings.assign||!t.owner)return;const e=TEAM_EMAILS[t.owner];if(!e)return;await sendEmail(`Tarea asignada: ${t.task}`,emailHtml('Te han asignado una tarea',`<p style="color:#b0ada8;font-size:14px">Se te ha asignado la siguiente tarea.</p>`,t),[e]);}
+function checkReminders(){if(!notifSettings.reminder||!resendKey)return;const today=new Date();today.setHours(0,0,0,0);const in3=new Date(today);in3.setDate(in3.getDate()+3);tasks.forEach(t=>{if(!t.date_end||t.status==='✓ Done')return;const d=new Date(t.date_end);d.setHours(0,0,0,0);if(d.getTime()===in3.getTime()){const r=t.owner&&TEAM_EMAILS[t.owner]?[TEAM_EMAILS[t.owner]]:ALL_EMAILS;sendEmail(`⏰ Entrega en 3 días: "${t.task}"`,emailHtml('Recordatorio de entrega',`<p style="color:#b0ada8;font-size:14px">⚠️ Esta tarea vence en <b style="color:#e74c3c">3 días</b>.</p>`,t),r);}});}
+
+// ══ CALENDAR ══════════════════════════════════════════════════════════════════
+const DOW=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+function buildCal(c){
+  const today=new Date();
+  const firstDay=new Date(calYear,calMonth,1);
+  const lastDay=new Date(calYear,calMonth+1,0);
+  let startDow=firstDay.getDay()-1;if(startDow<0)startDow=6;
+  const mName=firstDay.toLocaleDateString('es-ES',{month:'long',year:'numeric'});
+  let h=`<div class="cal-wrap">
+    <div class="cal-header">
+      <div class="st">Calendario</div>
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="calPrev()">‹</button>
+        <div class="cal-month-lbl">${mName.charAt(0).toUpperCase()+mName.slice(1)}</div>
+        <button class="cal-nav-btn" onclick="calNext()">›</button>
+        <button class="cal-nav-btn" onclick="calToday()" style="font-size:11px;padding:8px 12px">Hoy</button>
+      </div>
+    </div>
+    <div class="cal-grid">${DOW.map(d=>`<div class="cal-dow">${d}</div>`).join('')}`;
+  for(let i=0;i<startDow;i++)h+=`<div class="cal-day other"><div class="cal-day-num"></div></div>`;
+  for(let day=1;day<=lastDay.getDate();day++){
+    const dStr=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    const isToday=new Date(calYear,calMonth,day).toDateString()===today.toDateString();
+    const dTasks=tasks.filter(t=>{
+      if(!t.date_start&&!t.date_end)return false;
+      const s=t.date_start?new Date(t.date_start+'T00:00'):null;
+      const e=t.date_end?new Date(t.date_end+'T00:00'):null;
+      const d=new Date(dStr+'T00:00');
+      return(s&&s.toDateString()===d.toDateString())||(e&&e.toDateString()===d.toDateString())||(s&&e&&d>=s&&d<=e);
+    });
+    h+=`<div class="cal-day${isToday?' today':''}"><div class="cal-day-num">${day}</div>`;
+    dTasks.slice(0,3).forEach(t=>{
+      const s=t.date_start?new Date(t.date_start+'T00:00'):null;
+      const e=t.date_end?new Date(t.date_end+'T00:00'):null;
+      const d=new Date(dStr+'T00:00');
+      let cls='p-range';
+      if(s&&s.toDateString()===d.toDateString())cls='p-start';
+      else if(e&&e.toDateString()===d.toDateString())cls='p-end';
+      h+=`<div class="cal-pill ${cls}" onclick="editTask('${t.id}')" title="${esc(t.task)}">${esc(t.task)}</div>`;
+    });
+    if(dTasks.length>3)h+=`<div class="cal-more">+${dTasks.length-3} más</div>`;
+    h+=`</div>`;
+  }
+  const rem=(7-(startDow+lastDay.getDate())%7)%7;
+  for(let i=0;i<rem;i++)h+=`<div class="cal-day other"><div class="cal-day-num"></div></div>`;
+  h+=`</div><div class="cal-legend">
+    <div class="cal-leg"><div class="cal-leg-dot" style="background:rgba(240,187,61,0.5)"></div>Inicio</div>
+    <div class="cal-leg"><div class="cal-leg-dot" style="background:rgba(231,76,60,0.5)"></div>Entrega</div>
+    <div class="cal-leg"><div class="cal-leg-dot" style="background:rgba(52,152,219,0.4)"></div>En rango</div>
+  </div></div>`;
+  c.innerHTML=h;
+}
+window.calPrev=function(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}if(vView==='cal')buildCal(document.getElementById('content'));};
+window.calNext=function(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}if(vView==='cal')buildCal(document.getElementById('content'));};
+window.calToday=function(){calYear=new Date().getFullYear();calMonth=new Date().getMonth();if(vView==='cal')buildCal(document.getElementById('content'));};
+
+// ══ NOTIFICATIONS MODAL ═══════════════════════════════════════════════════════
+window.openNotifModal=function(){
+  Object.keys(notifSettings).forEach(k=>{const el=document.getElementById('tog-'+k);if(el)el.className='toggle'+(notifSettings[k]?' on':'');});
+  document.getElementById('resend-key').value=resendKey;
+  document.getElementById('notifOv').classList.add('open');
+};
+window.closeNotifModal=function(){document.getElementById('notifOv').classList.remove('open');};
+window.toggleNotif=function(k){notifSettings[k]=!notifSettings[k];const el=document.getElementById('tog-'+k);if(el)el.className='toggle'+(notifSettings[k]?' on':'');};
+window.saveNotifSettings=function(){
+  localStorage.setItem('l3_notif',JSON.stringify(notifSettings));
+  resendKey=document.getElementById('resend-key').value.trim();
+  localStorage.setItem('l3_resend_key',resendKey);
+  closeNotifModal();toast('Configuración guardada ✓','ok');
+};
+
 async function boot(){
+  if(sessionStorage.getItem('l3_auth')!=='1')return;
+  const saved=localStorage.getItem('l3_notif');if(saved)try{notifSettings=JSON.parse(saved);}catch(e){}
+  resendKey=localStorage.getItem('l3_resend_key')||'';
   try{
     const[t,c,m]=await Promise.all([getTasks(),getClients().catch(()=>null),getMembers().catch(()=>null)]);
     tasks=t||[];
@@ -423,6 +665,7 @@ async function boot(){
     document.getElementById('app').style.display='block';
     document.getElementById('dateBadge').textContent=new Date().toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'});
     render();
+    checkReminders();
     setInterval(async()=>{try{tasks=await getTasks();render();}catch(e){}},20000);
   }catch(e){
     document.getElementById('connecting').innerHTML=`<div style="color:#e74c3c;font-family:'DM Mono',monospace;font-size:12px;text-align:center;padding:24px;max-width:380px;line-height:1.8"><div style="font-size:28px;margin-bottom:12px">⚠</div><b>Error de conexión</b><br>${esc(e.message)}</div>`;
@@ -541,6 +784,7 @@ function fmtDate(d){if(!d)return '—';try{const[y,m,day]=d.split('-');return`${
 function buildContent(){
   const c=document.getElementById('content');
   if(vView==='ms'){buildMS(c);return;}
+  if(vView==='cal'){buildCal(c);return;}
   const f=filtered();
   // Desktop table
   let h=`<div class="sh">
@@ -749,9 +993,13 @@ async function doSaveInline(field,val){
   try{
     const data={[field]:val,updated_at:new Date().toISOString()};
     await updTaskDB(popTaskId,data);
+    const oldTask={...tasks.find(t=>t.id===popTaskId)};
     tasks=tasks.map(t=>t.id===popTaskId?{...t,...data}:t);
+    const newTask=tasks.find(t=>t.id===popTaskId);
     render();toast('Guardado ✓');
-  }catch(e){toast('Error: '+e.message,true);}
+    if(field==='status'&&oldTask.status!==val)notifyStatusChange(newTask,oldTask.status);
+    if(field==='owner'&&val&&oldTask.owner!==val)notifyAssignment(newTask);
+  }catch(e){toast('Error: '+e.message,'err');}
 }
 
 function closePop(){document.getElementById('pop').classList.remove('open');}
@@ -801,7 +1049,7 @@ window.editTask=function(id){const t=tasks.find(t=>t.id===id);if(t)openModal(t);
 window.deleteTask=async function(id){
   if(!confirm('¿Eliminar esta tarea?'))return;
   try{await delTaskDB(id);tasks=tasks.filter(t=>t.id!==id);render();toast('Tarea eliminada');}
-  catch(e){toast('Error: '+e.message,true);}
+  catch(e){toast('Error: '+e.message,'err');}
 };
 
 window.saveTask=async function(){
@@ -829,9 +1077,9 @@ window.saveTask=async function(){
   };
   try{
     if(editId){await updTaskDB(editId,data);tasks=tasks.map(t=>t.id===editId?{...t,...data}:t);toast('Tarea actualizada ✓');}
-    else{const res=await addTaskDB(data);const c=Array.isArray(res)?res[0]:res;if(c)tasks.push(c);else tasks=await getTasks();toast('Tarea añadida ✓');}
+    else{const res=await addTaskDB(data);const c=Array.isArray(res)?res[0]:res;if(c)tasks.push(c);else tasks=await getTasks();toast('Tarea añadida ✓');notifyNewTask(data);if(data.owner)notifyAssignment(data);}
     closeModal();render();
-  }catch(e){toast('Error: '+e.message,true);}
+  }catch(e){toast('Error: '+e.message,'err');}
   btn.disabled=false;btn.textContent='Guardar tarea';
 };
 
@@ -890,13 +1138,17 @@ window.closeSb=function(){
 
 // ══ UTILS ════════════════════════════════════════════════════════════════════
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function toast(msg,err=false){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show'+(err?' err':'');setTimeout(()=>el.classList.remove('show'),3000);}
+function toast(msg,type=''){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show'+(type==='err'?' err':type==='ok'?' ok':'');setTimeout(()=>el.classList.remove('show'),3200);}
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeModal();closeCliModal();closeMemberModal();closePop();}
+  if(e.key==='Escape'){closeModal();closeCliModal();closeMemberModal();if(window.closeNotifModal)closeNotifModal();closePop();}
   if(e.key==='Enter'&&(e.metaKey||e.ctrlKey))saveTask();
 });
 
-boot();
+if(sessionStorage.getItem('l3_auth')==='1'){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('connecting').style.display='flex';
+  boot();
+}
 </script>
 </body>
 </html>
