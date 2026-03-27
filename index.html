@@ -544,7 +544,7 @@ td{padding:13px 14px;vertical-align:middle}
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ══ CONFIG ════════════════════════════════════════════════════════════════════
 const PWD='Lemon123789.';
-const TEAM_EMAILS={Carlos:'carlos@lemonthree.es',Manu:'manu@lemonthree.es',Dani:'dani@lemonthree.es'};
+const TEAM_EMAILS={Carlos:'carlos'+'@'+'lemonthree.es',Manu:'manu'+'@'+'lemonthree.es',Dani:'dani'+'@'+'lemonthree.es'};
 const ALL_EMAILS=Object.values(TEAM_EMAILS);
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 let notifSettings={new:true,status:true,assign:true,reminder:true};
@@ -618,7 +618,7 @@ async function sendEmail(subject,html,recipients){
     await fetch('https://api.resend.com/emails',{
       method:'POST',
       headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json'},
-      body:JSON.stringify({from:'L3 Tracker <onboarding@resend.dev>',to:recipients||ALL_EMAILS,subject,html})
+      body:JSON.stringify({from:'L3 Tracker <'+'onboarding'+'@'+'resend.dev>',to:recipients||ALL_EMAILS,subject,html})
     });
   }catch(e){console.warn('Email:',e);}
 }
