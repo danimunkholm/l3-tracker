@@ -4,6 +4,13 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 <title>L3 Agency — Tracker 2026</title>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="L3 Tracker"/>
+<meta name="theme-color" content="#16161a"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon.png"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root{
@@ -492,7 +499,7 @@ td{padding:13px 14px;vertical-align:middle}
       <div class="notif-title">API Key de Resend</div>
       <div class="notif-hint">
         Para activar los emails: entra en <code>resend.com</code> → crea cuenta gratuita → <code>API Keys</code> → <code>Create API Key</code> → pega aquí la clave.<br><br>
-        Los emails se enviarán a: <code>dani@lemonthree.es</code>, <code>carlos@lemonthree.es</code>, <code>manu@lemonthree.es</code>
+        Los emails se enviarán a: <code><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5531343b3c153930383a3b213d2730307b3026">[email&#160;protected]</a></code>, <code><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="325153405e5d41725e575f5d5c465a4057571c5741">[email&#160;protected]</a></code>, <code><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="88e5e9e6fdc8e4ede5e7e6fce0faededa6edfb">[email&#160;protected]</a></code>
       </div>
       <div style="margin-top:12px">
         <label class="fgl" style="display:block;margin-bottom:6px">Resend API Key</label>
@@ -534,7 +541,7 @@ td{padding:13px 14px;vertical-align:middle}
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ══ CONFIG ════════════════════════════════════════════════════════════════════
 const PWD='Lemon123789.';
 const TEAM_EMAILS={Carlos:'carlos@lemonthree.es',Manu:'manu@lemonthree.es',Dani:'dani@lemonthree.es'};
@@ -1327,16 +1334,4 @@ window.closeSb=function(){
 // ══ UTILS ════════════════════════════════════════════════════════════════════
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function toast(msg,type=''){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show'+(type==='err'?' err':type==='ok'?' ok':'');setTimeout(()=>el.classList.remove('show'),3200);}
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeModal();closeCliModal();closeMemberModal();if(window.closeNotifModal)closeNotifModal();if(window.closeCmtModal)closeCmtModal();closePop();}
-  if(e.key==='Enter'&&(e.metaKey||e.ctrlKey))saveTask();
-});
-
-if(sessionStorage.getItem('l3_auth')==='1'){
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('connecting').style.display='flex';
-  boot();
-}
-</script>
-</body>
-</html>
+docume

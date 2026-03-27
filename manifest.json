@@ -1,0 +1,25 @@
+{
+  "name": "L3 Agency Tracker",
+  "short_name": "L3 Tracker",
+  "description": "Project Tracker de lemonthree agency",
+  "start_url": "/l3-tracker/",
+  "scope": "/l3-tracker/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#16161a",
+  "theme_color": "#16161a",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
