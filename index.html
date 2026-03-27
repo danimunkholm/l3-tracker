@@ -294,6 +294,42 @@ td{padding:13px 14px;vertical-align:middle}
 .notif-hint{font-size:11px;color:var(--si);margin-top:8px;line-height:1.6;padding:10px 12px;background:rgba(240,187,61,0.06);border-left:2px solid var(--y);border-radius:4px}
 .notif-hint code{font-family:'DM Mono',monospace;font-size:10px;background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:3px;color:var(--y)}
 .toast.ok{border-color:#27ae60}
+
+/* ── PRIORITY ── */
+.pri{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;transition:all .12s;user-select:none;white-space:nowrap}
+.pri:hover{opacity:.8}
+.pri-alta{background:rgba(231,76,60,0.18);color:#e74c3c}
+.pri-media{background:rgba(240,187,61,0.18);color:#F0BB3D}
+.pri-baja{background:rgba(39,174,96,0.18);color:#27ae60}
+
+/* ── KANBAN ── */
+.kanban-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:24px;align-items:start}
+@media(max-width:600px){.kanban-wrap{grid-template-columns:1fr}}
+.kb-col{background:var(--d2);border:1px solid rgba(255,255,255,0.06);border-radius:var(--r);overflow:hidden}
+.kb-col-hdr{padding:13px 16px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05)}
+.kb-col-cnt{font-family:'DM Mono',monospace;font-size:10px;background:rgba(255,255,255,0.07);padding:2px 8px;border-radius:10px;font-weight:400}
+.kb-cards{padding:10px;display:flex;flex-direction:column;gap:8px;min-height:60px}
+.kb-card{background:var(--d3);border:1px solid rgba(255,255,255,0.06);border-radius:var(--r2);padding:13px;cursor:pointer;transition:all .15s;position:relative}
+.kb-card:hover{background:var(--d4);border-color:rgba(240,187,61,0.2);transform:translateY(-1px)}
+.kb-card-name{font-weight:600;color:var(--w);font-size:13px;line-height:1.3;margin-bottom:8px}
+.kb-card-meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.kb-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.05)}
+
+/* ── COMMENTS MODAL ── */
+.cmts-wrap{max-height:280px;overflow-y:auto;margin-bottom:14px;display:flex;flex-direction:column;gap:10px}
+.cmt-bubble{background:var(--d3);border-radius:var(--r2);padding:12px 14px}
+.cmt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.cmt-author{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--y)}
+.cmt-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--si)}
+.cmt-body{font-size:13px;color:var(--cr);line-height:1.5}
+.cmt-input-wrap{display:flex;gap:8px;align-items:flex-start}
+.cmt-input-wrap .ft{flex:1;min-height:52px}
+.cmt-send{background:var(--y);color:var(--d);border:none;padding:10px 16px;border-radius:var(--r2);font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all .15s;white-space:nowrap;align-self:flex-end}
+.cmt-send:hover{background:#e5af30}
+.cmt-who{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.cmt-who-opt{padding:5px 12px;border-radius:20px;font-size:12px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--si2);cursor:pointer;transition:all .12s;font-family:'DM Sans',sans-serif}
+.cmt-who-opt.sel{background:var(--y);color:var(--d);border-color:var(--y);font-weight:600}
+.cmt-empty{text-align:center;padding:24px;color:var(--si);font-size:12px;opacity:.7}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:10px}
 </style>
@@ -344,6 +380,7 @@ td{padding:13px 14px;vertical-align:middle}
         <div class="ni act" onclick="setView('all',this)"><span>◈</span> Todas</div>
         <div class="ni" onclick="setView('ms',this)"><span>◆</span> Hitos clave</div>
         <div class="ni" onclick="setView('cal',this)"><span>📅</span> Calendario</div>
+        <div class="ni" onclick="setView('kb',this)"><span>⬛</span> Kanban</div>
       </div>
       <div class="sb-s">
         <div class="sb-lbl"><span>Responsable</span><span class="sb-lbl-btn" onclick="openMemberModal()">+</span></div>
@@ -403,6 +440,13 @@ td{padding:13px 14px;vertical-align:middle}
       </div>
       <div class="fg2 f"><label class="fgl">Enlace (Drive / OneDrive)</label><input class="fi" id="f-link" placeholder="https://…"/></div>
       <div class="fg2"><label class="fgl">Colaboradores</label><input class="fi" id="f-collab" placeholder="Equipo, agencia…"/></div>
+      <div class="fg2"><label class="fgl">Prioridad</label>
+        <select class="fs" id="f-priority">
+          <option value="Alta">🔴 Alta</option>
+          <option value="Media" selected>🟡 Media</option>
+          <option value="Baja">🟢 Baja</option>
+        </select>
+      </div>
       <div class="fg2"><label class="fgl">¿Hito clave?</label><select class="fs" id="f-ms"><option value="no">No</option><option value="yes">Sí ◆</option></select></div>
       <div class="fg2 f"><label class="fgl">Descripción / Actividades</label><textarea class="ft" id="f-desc" placeholder="¿Qué se está haciendo?"></textarea></div>
       <div class="fg2 f"><label class="fgl">Próximos pasos</label><textarea class="ft" id="f-next" placeholder="¿Qué viene a continuación?" style="min-height:56px"></textarea></div>
@@ -415,6 +459,23 @@ td{padding:13px 14px;vertical-align:middle}
   </div>
 </div>
 
+
+
+<!-- COMMENTS MODAL -->
+<div class="ov" id="cmtOv" onclick="if(event.target.id==='cmtOv')closeCmtModal()">
+  <div class="mo" style="max-width:520px">
+    <div class="mtit"><span id="cmt-task-name">💬 <em>Comentarios</em></span><button class="mtit-close" onclick="closeCmtModal()">✕</button></div>
+    <div class="cmts-wrap" id="cmts-list"><div class="cmt-empty">Sin comentarios aún.</div></div>
+    <div style="margin-bottom:10px">
+      <label class="fgl" style="display:block;margin-bottom:7px">¿Quién comenta?</label>
+      <div class="cmt-who" id="cmt-who"></div>
+    </div>
+    <div class="cmt-input-wrap">
+      <textarea class="ft" id="cmt-input" placeholder="Escribe un comentario…" style="min-height:52px" onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey))sendComment()"></textarea>
+      <button class="cmt-send" onclick="sendComment()">Enviar</button>
+    </div>
+  </div>
+</div>
 
 <!-- NOTIFICATIONS MODAL -->
 <div class="ov" id="notifOv" onclick="if(event.target.id==='notifOv')closeNotifModal()">
@@ -539,6 +600,9 @@ const updTaskDB=(id,d)=>sb(`tasks?id=eq.${id}`,{method:'PATCH',prefer:'return=re
 const delTaskDB=id=>sb(`tasks?id=eq.${id}`,{method:'DELETE'});
 const addCliDB=n=>sb('clients',{method:'POST',prefer:'return=representation',body:JSON.stringify({name:n})});
 const delCliDB=id=>sb(`clients?id=eq.${id}`,{method:'DELETE'});
+const getComments=id=>sb(`comments?task_id=eq.${id}&order=created_at.asc&select=*`);
+const addCommentDB=d=>sb('comments',{method:'POST',prefer:'return=representation',body:JSON.stringify(d)});
+const delCommentDB=id=>sb(`comments?id=eq.${id}`,{method:'DELETE'});
 const addMemberDB=n=>sb('members',{method:'POST',prefer:'return=representation',body:JSON.stringify({name:n})});
 const delMemberDB=id=>sb(`members?id=eq.${id}`,{method:'DELETE'});
 
@@ -580,6 +644,55 @@ async function notifyNewTask(t){if(!notifSettings.new)return;await sendEmail(`Nu
 async function notifyStatusChange(t,old){if(!notifSettings.status)return;const r=t.owner&&TEAM_EMAILS[t.owner]?[TEAM_EMAILS[t.owner]]:ALL_EMAILS;await sendEmail(`Estado actualizado: ${t.task}`,emailHtml('Estado actualizado',`<p style="color:#b0ada8;font-size:14px">Estado cambiado de <b style="color:#fff">${old}</b> a <b style="color:#F0BB3D">${t.status}</b></p>`,t),r);}
 async function notifyAssignment(t){if(!notifSettings.assign||!t.owner)return;const e=TEAM_EMAILS[t.owner];if(!e)return;await sendEmail(`Tarea asignada: ${t.task}`,emailHtml('Te han asignado una tarea',`<p style="color:#b0ada8;font-size:14px">Se te ha asignado la siguiente tarea.</p>`,t),[e]);}
 function checkReminders(){if(!notifSettings.reminder||!resendKey)return;const today=new Date();today.setHours(0,0,0,0);const in3=new Date(today);in3.setDate(in3.getDate()+3);tasks.forEach(t=>{if(!t.date_end||t.status==='✓ Done')return;const d=new Date(t.date_end);d.setHours(0,0,0,0);if(d.getTime()===in3.getTime()){const r=t.owner&&TEAM_EMAILS[t.owner]?[TEAM_EMAILS[t.owner]]:ALL_EMAILS;sendEmail(`⏰ Entrega en 3 días: "${t.task}"`,emailHtml('Recordatorio de entrega',`<p style="color:#b0ada8;font-size:14px">⚠️ Esta tarea vence en <b style="color:#e74c3c">3 días</b>.</p>`,t),r);}});}
+
+
+// ══ KANBAN ════════════════════════════════════════════════════════════════════
+const KB_COLS=[
+  {status:'◆ Planificado',color:'#aaa',bg:'rgba(74,74,82,0.3)'},
+  {status:'● In Progress',color:'#F0BB3D',bg:'rgba(240,187,61,0.12)'},
+  {status:'◐ Revisión',color:'#5dade2',bg:'rgba(52,152,219,0.12)'},
+  {status:'● LIVE',color:'#2ecc71',bg:'rgba(39,174,96,0.12)'},
+  {status:'⏸ On Hold',color:'#e74c3c',bg:'rgba(231,76,60,0.12)'},
+  {status:'✓ Done',color:'#27ae60',bg:'rgba(30,132,73,0.12)'},
+];
+function buildKanban(c){
+  const f=filtered();
+  let h=`<div class="sh"><div class="st">Kanban</div><button class="btn-add" onclick="openModal()" style="font-size:12px;padding:8px 14px">+ Tarea</button></div>
+  <div class="kanban-wrap">`;
+  KB_COLS.forEach(col=>{
+    const cards=f.filter(t=>t.status===col.status);
+    h+=`<div class="kb-col">
+      <div class="kb-col-hdr" style="border-top:3px solid ${col.color}">
+        <span style="color:${col.color}">${col.status}</span>
+        <span class="kb-col-cnt">${cards.length}</span>
+      </div>
+      <div class="kb-cards">`;
+    if(!cards.length)h+=`<div style="text-align:center;padding:16px;color:var(--si);font-size:11px;opacity:.5">Sin tareas</div>`;
+    cards.forEach(t=>{
+      const pc=PC[t.owner]||{};
+      const clis=parseClients(t.client);
+      h+=`<div class="kb-card" onclick="editTask('${t.id}')">
+        <div class="kb-card-name">${esc(t.task)}${t.milestone==='yes'?'<span class="mstar">◆</span>':''}</div>
+        <div class="kb-card-meta">
+          ${renderPriority(t.priority,t.id)}
+          ${clis.slice(0,1).map(c=>`<span class="ctag">${esc(c)}</span>`).join('')}
+          ${clis.length>1?`<span style="font-size:10px;color:var(--si)">+${clis.length-1}</span>`:''}
+        </div>
+        <div class="kb-card-footer">
+          ${t.owner?`<span class="pb ${pc.cls||'pb-gen'}" style="font-size:11px"><span class="av ${pc.av||''}" style="width:18px;height:18px;font-size:8px;${!pc.av?'background:var(--d4);color:var(--si2)':''}">${t.owner.slice(0,1)}</span>${esc(t.owner)}</span>`:'<span style="color:var(--si);font-size:11px">Sin asignar</span>'}
+          <div style="display:flex;gap:4px">
+            <button class="ib" onclick="event.stopPropagation();openCmtModal('${t.id}')" title="Comentarios" style="font-size:12px">💬</button>
+            <button class="ib" onclick="event.stopPropagation();duplicateTask('${t.id}')" title="Duplicar" style="font-size:12px">⎘</button>
+          </div>
+        </div>
+        ${t.date_end?`<div style="margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,0.05);font-family:'DM Mono',monospace;font-size:10px;color:var(--si2)">📅 ${fmtDate(t.date_end)}</div>`:''}
+      </div>`;
+    });
+    h+=`</div></div>`;
+  });
+  h+=`</div>`;
+  c.innerHTML=h;
+}
 
 // ══ CALENDAR ══════════════════════════════════════════════════════════════════
 const DOW=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
@@ -745,9 +858,7 @@ function buildFbar(){
 }
 
 // ── helpers ──
-function parseClients(v){
-  if(!v)return[];
-  try{const p=JSON.parse(v);return Array.isArray(p)?p:[p];}catch{return v?[v]:[];}
+function parseClients(v){if(!v)return[];try{const p=JSON.parse(v);return Array.isArray(p)?p:[p];}catch(e){return v?[v]:[];}}catch{return v?[v]:[];}
 }
 function renderClients(arr){
   if(!arr||!arr.length)return `<span class="editable-dash" onclick="openPop(event,'clients',this.closest('tr,div.task-card').dataset.id)">+ cliente</span>`;
@@ -778,6 +889,12 @@ function renderMonth(val,id){
   if(!val)return `<span class="editable-dash" onclick="openPop(event,'month','${id}')">+ mes</span>`;
   return `<span class="mt editable" onclick="openPop(event,'month','${id}')">${val.slice(0,3)}</span>`;
 }
+function renderPriority(p,id){
+  const cfg={Alta:'pri-alta',Media:'pri-media',Baja:'pri-baja'};
+  const icon={Alta:'🔴',Media:'🟡',Baja:'🟢'};
+  const val=p||'Media';
+  return`<span class="pri ${cfg[val]||'pri-media'}" onclick="openPop(event,'priority','${id}')">${icon[val]||'🟡'} ${val}</span>`;
+}
 function fmtDate(d){if(!d)return '—';try{const[y,m,day]=d.split('-');return`${day}/${m}/${y.slice(2)}`;}catch{return d;}}
 
 // ── build content ──
@@ -785,6 +902,7 @@ function buildContent(){
   const c=document.getElementById('content');
   if(vView==='ms'){buildMS(c);return;}
   if(vView==='cal'){buildCal(c);return;}
+  if(vView==='kb'){buildKanban(c);return;}
   const f=filtered();
   // Desktop table
   let h=`<div class="sh">
@@ -811,6 +929,7 @@ function buildContent(){
           <td>${renderOwner(t.owner)}</td>
           <td style="white-space:normal">${renderClients(clis)} <span class="editable" style="font-size:10px;color:var(--si);cursor:pointer" onclick="openPop(event,'clients','${t.id}')">✎</span></td>
           <td>${renderStatus(t.status,t.id)}</td>
+          <td>${renderPriority(t.priority,t.id)}</td>
           <td>${renderDate(t.date_start,t.id,'date_start')}</td>
           <td>${renderDate(t.date_end,t.id,'date_end')}</td>
           <td>${renderLink(t.link,t.id)}</td>
@@ -847,6 +966,7 @@ function buildContent(){
         <div class="tc-meta">
           ${renderStatus(t.status,t.id)}
           ${t.owner?`<span class="pb ${pc.cls||'pb-gen'} editable" onclick="openPop(event,'owner','${t.id}')"><span class="av ${pc.av||''}" style="width:18px;height:18px;font-size:8px;${!pc.av?'background:var(--d4);color:var(--si2)':''}">${t.owner.slice(0,1)}</span>${esc(t.owner)}</span>`:`<span class="editable-dash" onclick="openPop(event,'owner','${t.id}')">+ asignar</span>`}
+          ${renderPriority(t.priority,t.id)}
           ${clis.map(c=>`<span class="ctag">${esc(c)}</span>`).join('')}
           <span class="editable" style="font-size:11px;color:var(--si);cursor:pointer" onclick="openPop(event,'clients','${t.id}')">👥</span>
         </div>
@@ -942,6 +1062,10 @@ window.openPop=function(e,field,id){
         <button class="pop-cancel" onclick="closePop()">Cancelar</button>
         <button class="pop-btn" onclick="saveClientsInline()">Guardar</button>
       </div>`;
+  }else if(field==='priority'){
+    const opts=['Alta','Media','Baja'];
+    const icons={Alta:'🔴',Media:'🟡',Baja:'🟢'};
+    body=opts.map(p=>`<div class="pop-opt ${(t.priority||'Media')===p?'sel':''}" onclick="saveInline('priority','${p}')"><span class="pri ${p==='Alta'?'pri-alta':p==='Media'?'pri-media':'pri-baja'}" style="pointer-events:none">${icons[p]} ${p}</span></div>`).join('');
   }else if(field==='date_start'||field==='date_end'){
     const cur=t[field]||'';
     body=`<input type="date" class="pop-input" id="pop-date-val" value="${cur}"/>
@@ -1039,6 +1163,7 @@ window.openModal=function(task){
   document.getElementById('f-block').value=task?.blockers||'';
   document.getElementById('f-collab').value=task?.collab||'';
   document.getElementById('f-ms').value=task?.milestone||'no';
+  document.getElementById('f-priority').value=task?.priority||'Media';
   populateModalSelects(task);
   document.getElementById('ov').classList.add('open');
   setTimeout(()=>document.getElementById('f-task').focus(),80);
@@ -1072,6 +1197,7 @@ window.saveTask=async function(){
     description:document.getElementById('f-desc').value.trim(),
     next_steps:document.getElementById('f-next').value.trim(),
     blockers:document.getElementById('f-block').value.trim(),
+    priority:document.getElementById('f-priority').value,
     milestone:document.getElementById('f-ms').value,
     updated_at:new Date().toISOString(),
   };
@@ -1081,6 +1207,73 @@ window.saveTask=async function(){
     closeModal();render();
   }catch(e){toast('Error: '+e.message,'err');}
   btn.disabled=false;btn.textContent='Guardar tarea';
+};
+
+
+
+// ══ COMMENTS ══════════════════════════════════════════════════════════════════
+let cmtTaskId=null, cmtAuthor=members[0]||'Carlos';
+window.openCmtModal=async function(id){
+  cmtTaskId=id;
+  const t=tasks.find(x=>x.id===id);
+  document.getElementById('cmt-task-name').innerHTML=`💬 <em>${esc(t?.task||'Comentarios')}</em>`;
+  // who selector
+  document.getElementById('cmt-who').innerHTML=members.map(m=>
+    `<div class="cmt-who-opt ${cmtAuthor===m?'sel':''}" onclick="setCmtAuthor('${m}',this)">${m}</div>`
+  ).join('');
+  document.getElementById('cmt-input').value='';
+  document.getElementById('cmtOv').classList.add('open');
+  await loadComments();
+  setTimeout(()=>document.getElementById('cmt-input').focus(),80);
+};
+window.closeCmtModal=function(){document.getElementById('cmtOv').classList.remove('open');cmtTaskId=null;};
+window.setCmtAuthor=function(name,el){
+  cmtAuthor=name;
+  document.querySelectorAll('.cmt-who-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+};
+async function loadComments(){
+  const list=document.getElementById('cmts-list');
+  list.innerHTML=`<div class="cmt-empty"><div class="spin" style="margin:0 auto 8px;width:20px;height:20px;border-width:2px"></div></div>`;
+  try{
+    const cmts=await getComments(cmtTaskId);
+    if(!cmts||!cmts.length){list.innerHTML='<div class="cmt-empty">Sin comentarios aún. ¡Sé el primero!</div>';return;}
+    list.innerHTML=cmts.map(c=>`
+      <div class="cmt-bubble">
+        <div class="cmt-header">
+          <span class="cmt-author">${esc(c.author||'?')}</span>
+          <span class="cmt-time">${new Date(c.created_at).toLocaleDateString('es-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span>
+        </div>
+        <div class="cmt-body">${esc(c.body).replace(/\n/g,'<br>')}</div>
+      </div>`).join('');
+    list.scrollTop=list.scrollHeight;
+  }catch(e){list.innerHTML=`<div class="cmt-empty">Error cargando comentarios.</div>`;}
+}
+window.sendComment=async function(){
+  const inp=document.getElementById('cmt-input');
+  const body=inp.value.trim();
+  if(!body||!cmtTaskId)return;
+  inp.disabled=true;
+  try{
+    await addCommentDB({task_id:cmtTaskId,author:cmtAuthor,body});
+    inp.value='';await loadComments();
+  }catch(e){toast('Error: '+e.message,'err');}
+  inp.disabled=false;inp.focus();
+};
+
+// ══ DUPLICATE TASK ════════════════════════════════════════════════════════════
+window.duplicateTask=async function(id){
+  const t=tasks.find(x=>x.id===id);if(!t)return;
+  const copy={...t};
+  delete copy.id;delete copy.created_at;delete copy.updated_at;
+  copy.task='[Copia] '+copy.task;
+  copy.updated_at=new Date().toISOString();
+  try{
+    const res=await addTaskDB(copy);
+    const c=Array.isArray(res)?res[0]:res;
+    if(c)tasks.push(c);else tasks=await getTasks();
+    render();toast('Tarea duplicada ✓');
+  }catch(e){toast('Error: '+e.message,'err');}
 };
 
 // ══ MEMBER MODAL ══════════════════════════════════════════════════════════════
@@ -1140,7 +1333,7 @@ window.closeSb=function(){
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function toast(msg,type=''){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show'+(type==='err'?' err':type==='ok'?' ok':'');setTimeout(()=>el.classList.remove('show'),3200);}
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeModal();closeCliModal();closeMemberModal();if(window.closeNotifModal)closeNotifModal();closePop();}
+  if(e.key==='Escape'){closeModal();closeCliModal();closeMemberModal();if(window.closeNotifModal)closeNotifModal();if(window.closeCmtModal)closeCmtModal();closePop();}
   if(e.key==='Enter'&&(e.metaKey||e.ctrlKey))saveTask();
 });
 
