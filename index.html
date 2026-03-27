@@ -555,11 +555,7 @@ function doLogin(){
     sessionStorage.setItem('l3_auth','1');
     document.getElementById('loginScreen').style.display='none';
     document.getElementById('connecting').style.display='flex';
-    if(sessionStorage.getItem('l3_auth')==='1'){
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('connecting').style.display='flex';
-  boot();
-}
+    boot();
   }else{
     const e=document.getElementById('loginErr');e.style.display='block';
     document.getElementById('loginPwd').style.borderColor='#e74c3c';
