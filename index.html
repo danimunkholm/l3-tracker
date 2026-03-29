@@ -756,7 +756,8 @@ async function boot() {
     if(!lp||(now-parseInt(lp))>three){ getTasks().then(function(){localStorage.setItem(pk,now.toString());}).catch(function(){}); }
     setInterval(function(){ getTasks().then(function(){localStorage.setItem('l3_ping',Date.now().toString());}).catch(function(){}); }, three);
   } catch(e) {
-    var me=document.getElementById('main');if(me)me.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:50vh;flex-direction:column;gap:16px;padding:24px;text-align:center"><div style="font-size:36px">⚠️</div><div style="color:var(--tx);font-weight:600;font-size:16px">Error de conexión</div><div style="color:var(--tx2);font-size:13px;max-width:300px">'+esc(e.message)+'</div><button onclick="location.reload()" style="background:var(--y);color:#16161a;border:none;padding:12px 24px;border-radius:8px;font-size:14px;cursor:pointer;font-family:Syne,sans-serif;font-weight:700;margin-top:8px">Reintentar</button></div>';
+    var ce=document.getElementById('content');
+    if(ce)ce.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:50vh;flex-direction:column;gap:16px;padding:24px;text-align:center"><div style="font-size:36px">⚠️</div><div style="color:var(--tx);font-weight:600;font-size:16px">Error de conexión</div><div style="color:var(--tx2);font-size:13px;max-width:300px;word-break:break-all">'+esc(e.message)+'</div><button onclick="location.reload()" style="background:var(--y);color:#16161a;border:none;padding:12px 24px;border-radius:8px;font-size:14px;cursor:pointer;font-family:Syne,sans-serif;font-weight:700;margin-top:8px">Reintentar</button></div>';
   }
 }
 
