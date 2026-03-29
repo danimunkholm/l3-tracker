@@ -743,13 +743,13 @@ async function boot() {
   if (saved) { try { notifSettings=JSON.parse(saved); } catch(e){} }
   resendKey = localStorage.getItem('l3_resend_key') || '';
   var el = document.getElementById('main');
-  el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:40vh;flex-direction:column;gap:14px"><div class="sp-spin" style="animation-delay:0s"></div><div style="font-family:DM Mono,monospace;font-size:12px;color:var(--mu)">Cargando…</div></div>';
+  if(el) el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:40vh;flex-direction:column;gap:14px"><div class="sp-spin" style="animation-delay:0s"></div><div style="font-family:DM Mono,monospace;font-size:12px;color:var(--mu)">Cargando…</div></div>';
   try {
     var results = await Promise.all([getTasks(), getClients().catch(function(){return null;}), getMembers().catch(function(){return null;})]);
     tasks = results[0] || [];
     if (results[1] && results[1].length) clients = results[1].map(function(x){return x.name;});
     if (results[2] && results[2].length) members = results[2].map(function(x){return x.name;});
-    document.getElementById('dateBadge').textContent = new Date().toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'});
+    var db=document.getElementById('dateBadge');if(db)db.textContent = new Date().toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'});
     render();
     setInterval(async function(){ try{ tasks=await getTasks(); render(); }catch(e){} }, 20000);
     // Keep-alive
@@ -757,7 +757,7 @@ async function boot() {
     if(!lp||(now-parseInt(lp))>three){ getTasks().then(function(){localStorage.setItem(pk,now.toString());}).catch(function(){}); }
     setInterval(function(){ getTasks().then(function(){localStorage.setItem('l3_ping',Date.now().toString());}).catch(function(){}); }, three);
   } catch(e) {
-    document.getElementById('main').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:50vh;flex-direction:column;gap:16px;padding:24px;text-align:center"><div style="font-size:36px">⚠️</div><div style="color:var(--tx);font-weight:600;font-size:16px">Error de conexión</div><div style="color:var(--tx2);font-size:13px;max-width:300px">'+esc(e.message)+'</div><button onclick="location.reload()" style="background:var(--y);color:#16161a;border:none;padding:12px 24px;border-radius:8px;font-size:14px;cursor:pointer;font-family:Syne,sans-serif;font-weight:700;margin-top:8px">Reintentar</button></div>';
+    var me=document.getElementById('main');if(me)me.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:50vh;flex-direction:column;gap:16px;padding:24px;text-align:center"><div style="font-size:36px">⚠️</div><div style="color:var(--tx);font-weight:600;font-size:16px">Error de conexión</div><div style="color:var(--tx2);font-size:13px;max-width:300px">'+esc(e.message)+'</div><button onclick="location.reload()" style="background:var(--y);color:#16161a;border:none;padding:12px 24px;border-radius:8px;font-size:14px;cursor:pointer;font-family:Syne,sans-serif;font-weight:700;margin-top:8px">Reintentar</button></div>';
   }
 }
 
@@ -798,7 +798,8 @@ function buildMNav(){
     }).join('');
 }
 function buildCliNav(){
-  document.getElementById('cliNav').innerHTML=clients.map(function(cli){
+  var cn=document.getElementById('cliNav');if(!cn)return;
+  cn.innerHTML=clients.map(function(cli){
     var c=tasks.filter(function(t){return parseClients(t.client).includes(cli);}).length;
     return '<div class="cli-row '+(vCli===cli?'act':'')+'" onclick="fCli(\''+cli.replace(/'/g,"\\'")+'\',this)"><span class="cli-name" title="'+esc(cli)+'">'+esc(cli)+'</span>'+(c?'<span class="mcnt">'+c+'</span>':'')+'</div>';
   }).join('');
@@ -816,7 +817,8 @@ function buildStats(){
   var done=f.filter(function(t){return t.status==='✓ Done';}).length;
   var pct=tot?Math.round(done/tot*100):0;
   var byP=function(p){return f.filter(function(t){return t.owner===p;}).length;};
-  document.getElementById('stats').innerHTML=
+  var se=document.getElementById('stats');if(!se)return;
+  se.innerHTML=
     '<div class="sc"><div class="slbl">Total</div><div class="sval ac">'+tot+'</div><div class="ssub">tareas</div></div>'+
     '<div class="sc"><div class="slbl">En curso</div><div class="sval">'+live+'</div><div class="ssub">'+(tot?Math.round(live/tot*100):0)+'%</div></div>'+
     '<div class="sc"><div class="slbl">Completadas</div><div class="sval">'+done+'</div><div style="display:flex;align-items:center;gap:6px;margin-top:7px"><div class="pt" style="flex:1"><div class="pf" style="width:'+pct+'%;background:#27ae60"></div></div><span style="font-family:DM Mono,monospace;font-size:10px;color:var(--tx2)">'+pct+'%</span></div></div>'+
@@ -824,7 +826,8 @@ function buildStats(){
 }
 function buildFbar(){
   var ss=['all','● LIVE','● In Progress','◐ Revisión','◆ Planificado','↻ Ongoing','⏸ On Hold','✓ Done'];
-  document.getElementById('fbar').innerHTML='<span class="fl2">Estado</span>'+ss.map(function(s){return '<button class="chip '+(vStat===s?'act':'')+'" onclick="fStat(\''+s.replace(/'/g,"\\'")+'\')"> '+(s==='all'?'Todos':s)+'</button>';}).join('');
+  var fe=document.getElementById('fbar');if(!fe)return;
+  fe.innerHTML='<span class="fl2">Estado</span>'+ss.map(function(s){return '<button class="chip '+(vStat===s?'act':'')+'" onclick="fStat(\''+s.replace(/'/g,"\\'")+'\')"> '+(s==='all'?'Todos':s)+'</button>';}).join('');
 }
 
 function buildContent(){
