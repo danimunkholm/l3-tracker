@@ -582,7 +582,7 @@ var USERS = {
 var SESSION_DAYS = 30;
 var selUserName = '';
 
-function selUser(name, el) {
+window.selUser = function selUser(name, el) {
   selUserName = name;
   document.querySelectorAll('.lc-who-btn').forEach(function(b){ b.classList.remove('sel'); });
   el.classList.add('sel');
@@ -590,7 +590,7 @@ function selUser(name, el) {
   document.getElementById('loginPwd').focus();
 }
 
-function doLogin() {
+window.doLogin = function doLogin() {
   if (!selUserName) return;
   var pwd = document.getElementById('loginPwd').value;
   if (USERS[selUserName] && pwd === USERS[selUserName]) {
@@ -624,7 +624,7 @@ function doLogout() {
   localStorage.removeItem('l3_user');
   localStorage.removeItem('l3_expiry');
   location.reload();
-}
+};
 
 function showApp() {
   var av = document.getElementById('userAv');
