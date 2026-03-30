@@ -693,10 +693,14 @@ window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('loginPwd').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
 
   var user = checkSession();
-  setTimeout(function() {
-    document.getElementById('splash').classList.add('out');
+
+  function hideSplash() {
+    var sp = document.getElementById('splash');
+    if (!sp) return;
+    sp.style.transition = 'opacity .4s';
+    sp.style.opacity = '0';
     setTimeout(function() {
-      document.getElementById('splash').style.display = 'none';
+      sp.style.display = 'none';
       if (user) {
         currentUser = user;
         showApp();
@@ -704,8 +708,15 @@ window.addEventListener('DOMContentLoaded', function() {
       } else {
         document.getElementById('loginScreen').classList.add('show');
       }
-    }, 400);
-  }, 1600);
+    }, 420);
+  }
+
+  // Hide splash after 1.6s, with a hard fallback at 3s
+  setTimeout(hideSplash, 1600);
+  setTimeout(function() {
+    var sp = document.getElementById('splash');
+    if (sp && sp.style.display !== 'none') hideSplash();
+  }, 3000);
 });
 
 // ═══ SUPABASE ══════════════════════════════════════════════════════════════════
