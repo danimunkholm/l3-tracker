@@ -690,6 +690,7 @@ async function boot(){
     var db=document.getElementById('dateBadge');
     if(db)db.textContent=new Date().toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'});
     render();
+    checkTgReminders();
     setInterval(async function(){try{tasks=await gTasks();render();}catch(e){}},20000);
     var pk='l3_ping',lp=localStorage.getItem(pk),now=Date.now(),three=3*24*60*60*1000;
     if(!lp||(now-parseInt(lp))>three){gTasks().then(function(){localStorage.setItem(pk,now.toString());}).catch(function(){});}
@@ -1023,7 +1024,7 @@ async function doInline(f,v){
     tasks=tasks.map(function(t){return t.id===popId?Object.assign({},t,d):t;});
     var nw=tasks.find(function(t){return t.id===popId;});
     render();toast('Guardado ✓');
-    if(f==='status'&&old.status!==v)ntfStatusChange(nw,old.status);
+    if(f==='status'&&old.status!==v){ntfStatusChange(nw,old.status);tgStatusChange(nw,old.status);}
     if(f==='owner'&&v&&old.owner!==v)ntfAssign(nw);
   }catch(e){toast('Error: '+e.message,'err');}
 }
@@ -1079,6 +1080,56 @@ async function sendCmt(){
   try{await addCmt({task_id:cmtId,author:curUser||'?',body:body});inp.value='';await loadCmts();}
   catch(e){toast('Error: '+e.message,'err');}
   inp.disabled=false;
+}
+
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TELEGRAM
+// ═══════════════════════════════════════════════════════════════════════════════
+var TG_TOKEN = '8636177069:AAGE7lG9A82Zug88GfgQ0A6L80toBKRmL5A';
+var TG_CHAT  = '-5142480046';
+
+async function sendTelegram(msg) {
+  try {
+    await fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({chat_id: TG_CHAT, text: msg, parse_mode: 'HTML'})
+    });
+  } catch(e) { console.warn('Telegram:', e); }
+}
+
+function tgNewTask(t) {
+  var msg = '🍋 <b>Nueva tarea</b>\n\n📌 ' + (t.task||'') +
+    (t.owner ? '\n👤 ' + t.owner : '') +
+    (t.date_end ? '\n📅 Entrega: ' + fmtD(t.date_end) : '') +
+    '\n🔴 Prioridad: ' + (t.priority||'Media');
+  sendTelegram(msg);
+}
+
+function tgStatusChange(t, oldStatus) {
+  var msg = '🔄 <b>Estado actualizado</b>\n\n📌 ' + (t.task||'') +
+    '\n' + oldStatus + ' → <b>' + t.status + '</b>' +
+    (t.owner ? '\n👤 ' + t.owner : '');
+  sendTelegram(msg);
+}
+
+function tgReminder(t) {
+  var msg = '⏰ <b>Entrega en 3 días</b>\n\n📌 ' + (t.task||'') +
+    '\n📅 ' + fmtD(t.date_end) +
+    (t.owner ? '\n👤 ' + t.owner : '') +
+    '\n\n<i>Recuerda revisar el estado de la tarea</i>';
+  sendTelegram(msg);
+}
+
+function checkTgReminders() {
+  var today = new Date(); today.setHours(0,0,0,0);
+  var in3 = new Date(today); in3.setDate(in3.getDate() + 3);
+  tasks.forEach(function(t) {
+    if (!t.date_end || t.status === '✓ Done') return;
+    var d = new Date(t.date_end); d.setHours(0,0,0,0);
+    if (d.getTime() === in3.getTime()) tgReminder(t);
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -1169,7 +1220,7 @@ async function saveTask(){
     }else{
       var res=await addTask(d);var s=Array.isArray(res)?res[0]:res;
       if(s)tasks.push(s);else tasks=await gTasks();
-      toast('Añadida ✓');ntfNew(d);if(d.owner)ntfAssign(d);
+      toast('Añadida ✓');ntfNew(d);if(d.owner)ntfAssign(d);tgNewTask(d);
     }
     closeModal();render();
   }catch(e){toast('Error: '+e.message,'err');}
@@ -1271,6 +1322,8 @@ window.fCli=fCli;
 window.calP=calP;
 window.calN=calN;
 window.calT=calT;
+window.sendTelegram=sendTelegram;
+window.checkTgReminders=checkTgReminders;
 // Service Worker
 if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
 </script>
