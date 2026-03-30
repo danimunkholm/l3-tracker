@@ -671,17 +671,17 @@ async function sb(path,opts){
     var tx=await r.text();return tx?JSON.parse(tx):null;
   }catch(e){clearTimeout(t);if(e.name==='AbortError')throw new Error('Sin conexión. Comprueba tu internet.');throw e;}
 }
-var gTasks=function(){return sb('tasks?order=created_at.asc&select=*');};
-var gCli=function(){return sb('clients?order=name.asc&select=*');};
-var gMem=function(){return sb('members?order=name.asc&select=*');};
-var gCmts=function(id){return sb('comments?task_id=eq.'+id+'&order=created_at.asc&select=*');};
-var addTask=function(d){return sb('tasks',{method:'POST',prefer:'return=representation',body:JSON.stringify(d)});};
-var updTask=function(id,d){return sb('tasks?id=eq.'+id,{method:'PATCH',prefer:'return=representation',body:JSON.stringify(d)});};
-var delTask=function(id){return sb('tasks?id=eq.'+id,{method:'DELETE'});};
-var addCliDB=function(n){return sb('clients',{method:'POST',prefer:'return=representation',body:JSON.stringify({name:n})});};
-var addMemDB=function(n){return sb('members',{method:'POST',prefer:'return=representation',body:JSON.stringify({name:n})});};
-var delMemDB=function(id){return sb('members?id=eq.'+id,{method:'DELETE'});};
-var addCmt=function(d){return sb('comments',{method:'POST',prefer:'return=representation',body:JSON.stringify(d)});};
+function gTasks(){return sb('tasks?order=created_at.asc&select=*');}
+function gCli(){return sb('clients?order=name.asc&select=*');}
+function gMem(){return sb('members?order=name.asc&select=*');}
+function gCmts(id){return sb('comments?task_id=eq.'+id+'&order=created_at.asc&select=*');}
+function addTask(d){return sb('tasks',{method:'POST',prefer:'return=representation',body:JSON.stringify(d)});}
+function updTask(id,d){return sb('tasks?id=eq.'+id,{method:'PATCH',prefer:'return=representation',body:JSON.stringify(d)});}
+function delTask(id){return sb('tasks?id=eq.'+id,{method:'DELETE'});}
+function addCliDB(n){return sb('clients',{method:'POST',prefer:'return=representation',body:JSON.stringify({name:n})});}
+function addMemDB(n){return sb('members',{method:'POST',prefer:'return=representation',body:JSON.stringify({name:n})});}
+function delMemDB(id){return sb('members?id=eq.'+id,{method:'DELETE'});}
+function addCmt(d){return sb('comments',{method:'POST',prefer:'return=representation',body:JSON.stringify(d)});}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // BOOT
