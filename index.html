@@ -1227,6 +1227,50 @@ document.addEventListener('keydown',function(e){
   if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){var ov=document.getElementById('ov');if(ov&&ov.classList.contains('open'))saveTask();}
 });
 
+
+// Expose all functions globally
+window.selUser=selUser;
+window.doLogin=doLogin;
+window.doLogout=doLogout;
+window.toggleTheme=toggleTheme;
+window.openModal=openModal;
+window.closeModal=closeModal;
+window.saveTask=saveTask;
+window.editTask=editTask;
+window.delT=delT;
+window.dupTask=dupTask;
+window.reopenTask=reopenTask;
+window.openCmt=openCmt;
+window.closeCmt=closeCmt;
+window.sendCmt=sendCmt;
+window.openPop=openPop;
+window.sInline=sInline;
+window.saveCli=saveCli;
+window.togCliPop=togCliPop;
+window.closePop=closePop;
+window.openNotifModal=openNotifModal;
+window.closeNtf=closeNtf;
+window.togNtf=togNtf;
+window.saveNtf=saveNtf;
+window.openMobileMenu=openMobileMenu;
+window.closeMM=closeMM;
+window.openMemberModal=openMemberModal;
+window.closeMem=closeMem;
+window.addMem=addMem;
+window.removeMem=removeMem;
+window.openCliModal=openCliModal;
+window.closeCli=closeCli;
+window.addCli=addCli;
+window.removeCli=removeCli;
+window.setView=setView;
+window.setViewM=setViewM;
+window.fPart=fPart;
+window.fMonth=fMonth;
+window.fStat=fStat;
+window.fCli=fCli;
+window.calP=calP;
+window.calN=calN;
+window.calT=calT;
 // Service Worker
 if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
 </script>
