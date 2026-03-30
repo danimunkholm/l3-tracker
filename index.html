@@ -482,13 +482,20 @@ td{padding:11px 13px;vertical-align:middle}
   <div class="mo mo-sm">
     <div class="mo-hnd"></div>
     <div class="mttl"><span>🔔 <em>Notificaciones</em></span><button class="mttl-x" onclick="closeNtf()">✕</button></div>
+    <div style="margin-bottom:4px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;padding:0 2px">Telegram</div>
+    <div style="margin-bottom:16px">
+      <div class="ntf-row"><span>Nueva tarea creada</span><div class="tgl on" id="tog-tg-new" onclick="togNtf('tg_new')"></div></div>
+      <div class="ntf-row"><span>Cambio de estado</span><div class="tgl on" id="tog-tg-status" onclick="togNtf('tg_status')"></div></div>
+      <div class="ntf-row"><span>Recordatorio entrega (3 días)</span><div class="tgl on" id="tog-tg-reminder" onclick="togNtf('tg_reminder')"></div></div>
+    </div>
+    <div style="margin-bottom:4px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;padding:0 2px">Email (Resend)</div>
     <div style="margin-bottom:16px">
       <div class="ntf-row"><span>Al crear una tarea</span><div class="tgl on" id="tog-new" onclick="togNtf('new')"></div></div>
       <div class="ntf-row"><span>Al cambiar el estado</span><div class="tgl on" id="tog-status" onclick="togNtf('status')"></div></div>
       <div class="ntf-row"><span>Al asignar responsable</span><div class="tgl on" id="tog-assign" onclick="togNtf('assign')"></div></div>
       <div class="ntf-row"><span>Recordatorio entrega (3 días)</span><div class="tgl on" id="tog-reminder" onclick="togNtf('reminder')"></div></div>
     </div>
-    <div class="ntf-hint">Ve a <code>resend.com</code> → Sign up → API Keys → Create → pega aquí.</div>
+    <div class="ntf-hint">Para email: ve a <code>resend.com</code> → Sign up → API Keys → pega aquí.</div>
     <div style="margin-top:12px"><label class="fgl" style="display:block;margin-bottom:8px">Resend API Key</label>
       <input class="fi" id="resend-key" placeholder="re_xxxxxxxxxxxxxxxxxxxx" style="font-family:'DM Mono',monospace;font-size:13px" autocomplete="off"/>
     </div>
@@ -565,7 +572,7 @@ var tasks=[],clients=[...DEF_CLI],members=[...DEF_MEM];
 var editId=null,popId=null,popCli=[];
 var vView='all',vPart='all',vMonth='all',vStat='all',vCli='all';
 var calY=new Date().getFullYear(),calM=new Date().getMonth();
-var ntf={new:true,status:true,assign:true,reminder:true};
+var ntf={new:true,status:true,assign:true,reminder:true,tg_new:true,tg_status:true,tg_reminder:true};
 var rKey='',curUser='',selUserName='';
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -691,10 +698,10 @@ async function boot(){
     if(db)db.textContent=new Date().toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'});
     render();
     checkTgReminders();
-    setInterval(async function(){try{tasks=await gTasks();render();}catch(e){}},20000);
+    setInterval(async function(){try{var t=await gTasks();if(t)tasks=t;render();}catch(e){}},20000);
     var pk='l3_ping',lp=localStorage.getItem(pk),now=Date.now(),three=3*24*60*60*1000;
-    if(!lp||(now-parseInt(lp))>three){gTasks().then(function(){localStorage.setItem(pk,now.toString());}).catch(function(){});}
-    setInterval(function(){gTasks().then(function(){localStorage.setItem('l3_ping',Date.now().toString());}).catch(function(){});},three);
+    if(!lp||(now-parseInt(lp))>three){try{gTasks().then(function(){localStorage.setItem(pk,now.toString());}).catch(function(){});}catch(e){}}
+    setInterval(function(){try{gTasks().then(function(){localStorage.setItem('l3_ping',Date.now().toString());}).catch(function(){});}catch(e){}},three);
   }catch(e){
     var c=document.getElementById('content');
     if(c)c.innerHTML='<div style="text-align:center;padding:60px 24px"><div style="font-size:36px;margin-bottom:14px">⚠️</div><div style="font-size:16px;font-weight:600;color:var(--tx);margin-bottom:8px">Error de conexión</div><div style="font-size:13px;color:var(--tx2);margin-bottom:20px;max-width:300px;margin-left:auto;margin-right:auto">'+esc(e.message)+'</div><button onclick="location.reload()" style="background:var(--y);color:#16161a;border:none;padding:12px 24px;border-radius:8px;font-size:14px;cursor:pointer;font-family:Syne,sans-serif;font-weight:700">Reintentar</button></div>';
@@ -1100,6 +1107,7 @@ async function sendTelegram(msg) {
 }
 
 function tgNewTask(t) {
+  if(!ntf.tg_new)return;
   var msg = '🍋 <b>Nueva tarea</b>\n\n📌 ' + (t.task||'') +
     (t.owner ? '\n👤 ' + t.owner : '') +
     (t.date_end ? '\n📅 Entrega: ' + fmtD(t.date_end) : '') +
@@ -1108,6 +1116,7 @@ function tgNewTask(t) {
 }
 
 function tgStatusChange(t, oldStatus) {
+  if(!ntf.tg_status)return;
   var msg = '🔄 <b>Estado actualizado</b>\n\n📌 ' + (t.task||'') +
     '\n' + oldStatus + ' → <b>' + t.status + '</b>' +
     (t.owner ? '\n👤 ' + t.owner : '');
@@ -1115,6 +1124,7 @@ function tgStatusChange(t, oldStatus) {
 }
 
 function tgReminder(t) {
+  if(!ntf.tg_reminder)return;
   var msg = '⏰ <b>Entrega en 3 días</b>\n\n📌 ' + (t.task||'') +
     '\n📅 ' + fmtD(t.date_end) +
     (t.owner ? '\n👤 ' + t.owner : '') +
@@ -1148,9 +1158,9 @@ function ntfAssign(t){if(!ntf.assign||!t.owner)return;var e=EM[t.owner];if(!e)re
 // ═══════════════════════════════════════════════════════════════════════════════
 // NOTIFICATIONS MODAL
 // ═══════════════════════════════════════════════════════════════════════════════
-function openNotifModal(){Object.keys(ntf).forEach(function(k){var el=document.getElementById('tog-'+k);if(el)el.className='tgl'+(ntf[k]?' on':'');});document.getElementById('resend-key').value=rKey;document.getElementById('ntfOv').classList.add('open');}
+function openNotifModal(){Object.keys(ntf).forEach(function(k){var el=document.getElementById('tog-'+k.replace('_','-'));if(el)el.className='tgl'+(ntf[k]?' on':'');});document.getElementById('resend-key').value=rKey;document.getElementById('ntfOv').classList.add('open');}
 function closeNtf(){document.getElementById('ntfOv').classList.remove('open');}
-function togNtf(k){ntf[k]=!ntf[k];var el=document.getElementById('tog-'+k);if(el)el.className='tgl'+(ntf[k]?' on':'');}
+function togNtf(k){ntf[k]=!ntf[k];var el=document.getElementById('tog-'+k.replace('_','-'));if(el)el.className='tgl'+(ntf[k]?' on':'');}
 function saveNtf(){localStorage.setItem('l3_ntf',JSON.stringify(ntf));rKey=document.getElementById('resend-key').value.trim();localStorage.setItem('l3_rkey',rKey);closeNtf();toast('Guardado ✓','ok');}
 
 // ═══════════════════════════════════════════════════════════════════════════════
