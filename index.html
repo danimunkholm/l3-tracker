@@ -327,6 +327,14 @@ td{padding:11px 13px;vertical-align:middle}
 @media(min-width:769px){.toast{bottom:24px}}
 .spin{width:28px;height:28px;border:2.5px solid rgba(240,187,61,0.2);border-top-color:var(--y);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* TEMPLATES */
+.tpl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:8px}
+.tpl-card{background:var(--bg3);border:1.5px solid var(--bd);border-radius:var(--r2);padding:14px 16px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.tpl-card:hover,.tpl-card:active{border-color:var(--y);background:var(--yd)}
+.tpl-icon{font-size:24px;margin-bottom:6px}
+.tpl-name{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--tx);margin-bottom:3px}
+.tpl-desc{font-size:11px;color:var(--tx2)}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:10px}
 </style>
@@ -399,6 +407,7 @@ td{padding:11px 13px;vertical-align:middle}
         <div class="ni" onclick="setView('ms',this)"><span>◆</span> Hitos</div>
         <div class="ni" onclick="setView('cal',this)"><span>📅</span> Calendario</div>
         <div class="ni" onclick="setView('done',this)"><span>✓</span> Finalizadas</div>
+        <div class="ni" onclick="openTpl()"><span>📋</span> Plantillas</div>
       </div>
       <div class="sb-s">
         <div class="sb-lbl"><span>Responsable</span><span class="sb-lbl-btn" onclick="openMemberModal()">+</span></div>
@@ -551,6 +560,16 @@ td{padding:11px 13px;vertical-align:middle}
   </div>
 </div>
 
+
+<!-- TEMPLATES -->
+<div class="ov" id="tplOv" onclick="if(event.target.id==='tplOv')closeTpl()">
+  <div class="mo" style="max-width:560px">
+    <div class="mo-hnd"></div>
+    <div class="mttl"><span>📋 <em>Plantillas</em></span><button class="mttl-x" onclick="closeTpl()">✕</button></div>
+    <p style="font-size:13px;color:var(--tx2);margin-bottom:16px">Selecciona una plantilla para crear la tarea con los campos prerellenados.</p>
+    <div class="tpl-grid" id="tpl-grid"></div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -564,7 +583,7 @@ var SBK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6
 var MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 var DOW=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
 var DEF_MEM=['Carlos','Manu','Dani'];
-var DEF_CLI=['Melia Isla Canela','Melia Benidorm','Clinica Sagur','Alessandro Thione','Lucia Piccoli Miracoli','Asociación Comerciantes Benalua'];
+var DEF_CLI=['Lemonthree','Melia Isla Canela','Melia Benidorm','Clinica Sagur','Alessandro Thione','Lucia Piccoli Miracoli','Asociación Comerciantes Benalua'];
 var SC={'● LIVE':'sl','● In Progress':'sg','◐ Revisión':'so','◆ Planificado':'spn','↻ Ongoing':'so','⏸ On Hold':'sh2','✓ Done':'sd'};
 var PC={Carlos:{cls:'pbC',av:'uav-C'},Manu:{cls:'pbM',av:'uav-M'},Dani:{cls:'pbD',av:'uav-D'}};
 var PRI={Alta:{cls:'pri-a',ico:'🔴'},Media:{cls:'pri-m',ico:'🟡'},Baja:{cls:'pri-b',ico:'🟢'}};
@@ -695,7 +714,12 @@ async function boot(){
   try{
     var res=await Promise.all([gTasks(),gCli().catch(function(){return null;}),gMem().catch(function(){return null;})]);
     tasks=res[0]||[];
-    if(res[1]&&res[1].length)clients=res[1].map(function(x){return x.name;});
+    if(res[1]&&res[1].length){
+      var dbCli=res[1].map(function(x){return x.name;});
+      // Merge DB clients with defaults, no duplicates
+      DEF_CLI.forEach(function(c){if(!dbCli.includes(c))dbCli.unshift(c);});
+      clients=dbCli;
+    }
     if(res[2]&&res[2].length)members=res[2].map(function(x){return x.name;});
     var db=document.getElementById('dateBadge');
     if(db)db.textContent=new Date().toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'});
@@ -1093,6 +1117,77 @@ async function sendCmt(){
 }
 
 
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TEMPLATES
+// ═══════════════════════════════════════════════════════════════════════════════
+var TEMPLATES = [
+  {
+    icon: '📅',
+    name: 'Calendario Redes',
+    desc: 'Planificación mensual de redes sociales',
+    data: {task:'Calendario Redes — [CLIENTE] [MES]', status:'◆ Planificado', priority:'Alta', milestone:'no', description:'Planificación y creación del calendario de contenidos para redes sociales del mes.', next_steps:'Enviar propuesta al cliente para aprobación.'}
+  },
+  {
+    icon: '📣',
+    name: 'Campaña Paid Media',
+    desc: 'Configuración y gestión de campaña',
+    data: {task:'Campaña Paid Media — [CLIENTE] [MES]', status:'◆ Planificado', priority:'Alta', milestone:'no', description:'Configuración, lanzamiento y optimización de campaña de publicidad de pago.', next_steps:'Definir objetivos y presupuesto con el cliente.'}
+  },
+  {
+    icon: '📊',
+    name: 'Reporte Mensual',
+    desc: 'Informe de resultados del mes',
+    data: {task:'Reporte Mensual — [CLIENTE] [MES]', status:'◆ Planificado', priority:'Media', milestone:'no', description:'Elaboración del informe mensual de resultados y métricas para el cliente.', next_steps:'Recopilar datos de todas las plataformas.'}
+  },
+  {
+    icon: '🧾',
+    name: 'Creación Factura',
+    desc: 'Preparar factura del mes',
+    data: {task:'Creación Factura — [CLIENTE] [MES]', status:'◆ Planificado', priority:'Alta', milestone:'no', description:'Preparación de factura mensual de servicios.', next_steps:'Revisar servicios prestados y añadir importes.'}
+  },
+  {
+    icon: '📤',
+    name: 'Envío Factura',
+    desc: 'Enviar y registrar factura',
+    data: {task:'Envío Factura — [CLIENTE] [MES]', status:'◆ Planificado', priority:'Alta', milestone:'no', description:'Envío de factura al cliente y registro de pago pendiente.', next_steps:'Enviar por email y confirmar recepción.'}
+  }
+];
+
+function openTpl(){
+  var mes = MONTHS[new Date().getMonth()];
+  document.getElementById('tpl-grid').innerHTML = TEMPLATES.map(function(t,i){
+    return '<div class="tpl-card" onclick="useTpl('+i+')">'+
+      '<div class="tpl-icon">'+t.icon+'</div>'+
+      '<div class="tpl-name">'+t.name+'</div>'+
+      '<div class="tpl-desc">'+t.desc+'</div>'+
+    '</div>';
+  }).join('');
+  document.getElementById('tplOv').classList.add('open');
+}
+function closeTpl(){document.getElementById('tplOv').classList.remove('open');}
+function useTpl(idx){
+  closeTpl();
+  var tpl = TEMPLATES[idx];
+  var mes = MONTHS[new Date().getMonth()];
+  var d = Object.assign({}, tpl.data);
+  d.task = d.task.replace('[MES]', mes);
+  // Open modal with template data
+  openModal(null);
+  setTimeout(function(){
+    document.getElementById('f-task').value = d.task;
+    document.getElementById('f-status').value = d.status || '◆ Planificado';
+    document.getElementById('f-priority').value = d.priority || 'Media';
+    document.getElementById('f-ms').value = d.milestone || 'no';
+    document.getElementById('f-month').value = mes;
+    if(d.description) document.getElementById('f-desc').value = d.description;
+    if(d.next_steps) document.getElementById('f-next').value = d.next_steps;
+    if(curUser) document.getElementById('f-owner').value = curUser;
+    document.getElementById('f-task').focus();
+    document.getElementById('f-task').select();
+  }, 350);
+}
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // TELEGRAM
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -1287,7 +1382,7 @@ function removeCli(idx){
 // KEYBOARD
 // ═══════════════════════════════════════════════════════════════════════════════
 document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){['ov','cmtOv','ntfOv','memOv','cliOv','mmOv'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove('open');});closePop();}
+  if(e.key==='Escape'){['ov','cmtOv','ntfOv','memOv','cliOv','mmOv','tplOv'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove('open');});closePop();}
   if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){var ov=document.getElementById('ov');if(ov&&ov.classList.contains('open'))saveTask();}
 });
 
@@ -1337,6 +1432,9 @@ window.calN=calN;
 window.calT=calT;
 window.sendTelegram=sendTelegram;
 window.checkTgReminders=checkTgReminders;
+window.openTpl=openTpl;
+window.closeTpl=closeTpl;
+window.useTpl=useTpl;
 // Service Worker
 if('serviceWorker' in navigator){
   navigator.serviceWorker.getRegistrations().then(function(regs){
