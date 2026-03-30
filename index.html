@@ -339,18 +339,6 @@ td{padding:11px 13px;vertical-align:middle}
 </head>
 <body>
 
-<!-- SPLASH -->
-<div id="splash">
-  <div class="sp-iso">
-    <svg viewBox="0 0 1500 1500" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
-      <path fill="#ffffff" d="M460.5 1134.3C434.2 1134.3 413.1 1123.7 392.1 1107.9C360.5 1076.4 355.2 1029 376.3 992.1L397.3 960.6C402.6 950 407.8 934.2 402.6 923.7C349.9 786.8 392.1 623.7 507.9 507.9C623.7 392.1 792.1 349.9 923.7 402.6C934.2 407.8 950 402.6 960.6 397.3L986.9 381.5C1023.7 360.5 1071.1 365.7 1102.7 397.3C1134.3 428.9 1139.5 476.3 1118.5 513.1L1102.7 539.4C1097.4 550 1092.1 565.8 1097.4 576.3C1150.1 707.9 1107.9 876.3 992.1 992.1C876.3 1107.9 707.9 1150.1 576.3 1097.4C565.8 1092.1 550 1097.4 539.4 1102.7L513.1 1118.5C497.3 1129 481.5 1134.3 460.5 1134.3ZM802.6 434.2C713.1 434.2 618.4 476.3 544.7 544.7C444.7 644.7 407.8 792.1 450 907.9C460.5 934.2 455.2 965.8 439.4 992.1L423.6 1018.5C413.1 1034.2 418.4 1055.3 428.9 1071.1C444.7 1086.9 460.5 1086.9 481.5 1076.4L507.9 1060.6C539.4 1039.5 565.8 1039.5 592.1 1050C707.9 1097.4 850 1060.6 955.3 955.3C1055.3 855.3 1092.1 707.9 1050 592.1C1039.5 565.8 1044.8 534.2 1060.6 507.9L1071.1 486.8C1081.6 471 1076.4 450 1065.8 434.2C1050 418.4 1034.2 418.4 1013.2 428.9L986.9 444.7C960.6 460.5 934.2 465.7 907.9 455.2C871.1 439.4 839.5 434.2 802.6 434.2Z"/>
-      <circle cx="750" cy="750" r="118" fill="#F0BB3D"/>
-    </svg>
-  </div>
-  <div class="sp-name">lem<span>●</span>nthree</div>
-  <div class="sp-spin"></div>
-</div>
-
 <!-- LOGIN -->
 <div id="loginScreen">
   <div class="lc">
@@ -693,30 +681,13 @@ window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('loginPwd').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
 
   var user = checkSession();
-
-  function hideSplash() {
-    var sp = document.getElementById('splash');
-    if (!sp) return;
-    sp.style.transition = 'opacity .4s';
-    sp.style.opacity = '0';
-    setTimeout(function() {
-      sp.style.display = 'none';
-      if (user) {
-        currentUser = user;
-        showApp();
-        boot();
-      } else {
-        document.getElementById('loginScreen').classList.add('show');
-      }
-    }, 420);
+  if (user) {
+    currentUser = user;
+    showApp();
+    boot();
+  } else {
+    document.getElementById('loginScreen').classList.add('show');
   }
-
-  // Hide splash after 1.6s, with a hard fallback at 3s
-  setTimeout(hideSplash, 1600);
-  setTimeout(function() {
-    var sp = document.getElementById('splash');
-    if (sp && sp.style.display !== 'none') hideSplash();
-  }, 3000);
 });
 
 // ═══ SUPABASE ══════════════════════════════════════════════════════════════════
