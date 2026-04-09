@@ -386,6 +386,15 @@ td{padding:10px 12px;vertical-align:middle}
 .fd-kpi-val{font-family:'Syne',sans-serif;font-weight:700;font-size:20px;color:var(--tx);line-height:1}
 .fd-kpi-val.warn{color:#e67e22}
 .fd-kpi-lbl{font-size:10px;color:var(--tx2);margin-top:3px}
+.fd-box-edit{width:100%;background:var(--bg);border:1.5px solid var(--y);border-radius:var(--r2);padding:6px 8px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;-webkit-appearance:none;margin-top:2px}
+.fd-box-edit-wrap{display:flex;gap:5px;margin-top:2px}
+.fd-box-edit-wrap .fd-box-edit{flex:1}
+.fd-save-btn{background:var(--y);color:#16161a;border:none;padding:5px 10px;border-radius:var(--r2);font-family:'Syne',sans-serif;font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap}
+.fd-box-trigger{cursor:pointer;display:flex;align-items:center;gap:4px}
+.fd-box-trigger:hover .fd-box-val{color:var(--y)}
+.fd-box-trigger::after{content:'✎';font-size:9px;color:var(--mu);opacity:0;transition:opacity .15s}
+.fd-box-trigger:hover::after{opacity:1}
+
 .inv-row{display:flex;align-items:center;gap:8px;padding:9px 11px;background:var(--bg3);border-radius:var(--r2);margin-bottom:5px}
 .inv-info{flex:1;min-width:0}
 .inv-concept{font-size:12px;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -819,7 +828,7 @@ var TEMPLATES = [
 ];
 
 // ── STATE ──────────────────────────────────────────────────────────────────
-var tasks = [], clients = DEF_CLI.slice(), members = DEF_MEM.slice(), invoices = [], notes = {};
+var tasks = [], clients = DEF_CLI.slice(), members = DEF_MEM.slice(), invoices = [], notes = {}, contactInfo = {};
 var curUser = '', editTaskId = null, editInvId = null, curFicha = null, curCmtTask = null, curInvClient = null, curNoteClient = null;
 var popId = null, popField = null, popCliSel = [];
 var vView = 'all', vMem = 'all', vMon = 'all', vStat = 'all', vCli = 'all', vPri = 'all', vSort = 'created', vSearch = '';
@@ -937,6 +946,8 @@ var sb = {
 function boot() {
   var saved = localStorage.getItem('l3_ntf');
   if (saved) try { ntfPrefs = JSON.parse(saved); } catch(e) {}
+  var savedContacts = localStorage.getItem('l3_contacts');
+  if (savedContacts) try { contactInfo = JSON.parse(savedContacts); } catch(e) {}
   resendKey = localStorage.getItem('l3_rkey') || '';
 
   var db = document.getElementById('dateBadge');
@@ -1427,9 +1438,18 @@ function buildFichaDetail(c, cli) {
     '<div style="flex:1"><div class="fd-nome">' + esc(cli) + '</div><div class="fd-sub-txt">' + actTasks.length + ' tareas activas</div></div>' +
     '<span class="fd-active">Activo</span></div>' +
     '<div class="fd-contacts">' +
-    '<div class="fd-box"><div class="fd-box-lbl">Contacto</div><div class="fd-box-val">—</div></div>' +
-    '<div class="fd-box"><div class="fd-box-lbl">Email</div><div class="fd-box-val">—</div></div>' +
-    '<div class="fd-box"><div class="fd-box-lbl">Teléfono</div><div class="fd-box-val">—</div></div>' +
+    '<div class="fd-box" id="box-contacto"><div class="fd-box-lbl">Contacto</div>' +
+      '<div class="fd-box-trigger" onclick="editContact(\'' + esc(cli) + '\',\'contacto\')">' +
+        '<div class="fd-box-val">' + esc((contactInfo[cli]||{}).contacto||'—') + '</div>' +
+      '</div></div>' +
+    '<div class="fd-box" id="box-email"><div class="fd-box-lbl">Email</div>' +
+      '<div class="fd-box-trigger" onclick="editContact(\'' + esc(cli) + '\',\'email\')">' +
+        '<div class="fd-box-val" style="font-size:11px">' + esc((contactInfo[cli]||{}).email||'—') + '</div>' +
+      '</div></div>' +
+    '<div class="fd-box" id="box-telefono"><div class="fd-box-lbl">Teléfono</div>' +
+      '<div class="fd-box-trigger" onclick="editContact(\'' + esc(cli) + '\',\'telefono\')">' +
+        '<div class="fd-box-val">' + esc((contactInfo[cli]||{}).telefono||'—') + '</div>' +
+      '</div></div>' +
     '</div></div>' +
 
     '<div class="fd-section"><div class="fd-sec-head"><span>Facturación</span><button class="sm-btn" id="addInvBtn">+ Factura</button></div>' +
@@ -1473,14 +1493,62 @@ function buildFichaDetail(c, cli) {
   if (!notasCli.length) {
     h += '<div style="color:var(--mu);font-size:12px;padding:8px 0">Sin notas aún.</div>';
   } else {
-    h += notasCli.map(function(n) {
-      return '<div class="nota-card"><div class="nota-hdr"><span class="nota-author">' + esc(n.author) + '</span><span class="nota-date">' + n.date + '</span></div><div class="nota-body">' + esc(n.body) + '</div></div>';
+    h += notasCli.map(function(n, idx) {
+      return '<div class="nota-card"><div class="nota-hdr"><span class="nota-author">' + esc(n.author) + '</span>' +
+        '<div style="display:flex;align-items:center;gap:6px"><span class="nota-date">' + n.date + '</span>' +
+        '<button class="ib d" onclick="delNote(\'' + esc(cli) + '\',' + idx + ')" style="padding:2px 4px" title="Eliminar nota">' + I.del + '</button></div></div>' +
+        '<div class="nota-body">' + esc(n.body) + '</div></div>';
     }).join('');
   }
   h += '</div>';
   c.innerHTML = h;
 }
 
+
+// ── CONTACT EDIT ──────────────────────────────────────────────────────────
+function editContact(cli, field) {
+  var labels = {contacto:'Contacto',email:'Email',telefono:'Teléfono'};
+  var boxId = 'box-' + field;
+  var box = document.getElementById(boxId);
+  if (!box) return;
+  var cur = (contactInfo[cli] || {})[field] || '';
+  var placeholder = field==='email'?'correo@ejemplo.com':field==='telefono'?'+34 600 000 000':'Nombre del contacto';
+  box.innerHTML = '<div class="fd-box-lbl">' + labels[field] + '</div>' +
+    '<div class="fd-box-edit-wrap">' +
+    '<input class="fd-box-edit" id="ci-' + field + '" value="' + esc(cur) + '" placeholder="' + placeholder + '" autocomplete="off"/>' +
+    '<button class="fd-save-btn" onclick="saveContact(\'' + esc(cli) + '\',\''+field+'\')">✓</button>' +
+    '</div>';
+  setTimeout(function() {
+    var inp = document.getElementById('ci-' + field);
+    if (inp) { inp.focus(); inp.select();
+      inp.addEventListener('keydown', function(e) {
+        if (e.key==='Enter') saveContact(cli, field);
+        if (e.key==='Escape') buildFichaDetail(document.getElementById('contentArea'), cli);
+      });
+    }
+  }, 50);
+}
+
+function saveContact(cli, field) {
+  var inp = document.getElementById('ci-' + field);
+  if (!inp) return;
+  var val = inp.value.trim();
+  if (!contactInfo[cli]) contactInfo[cli] = {};
+  contactInfo[cli][field] = val;
+  localStorage.setItem('l3_contacts', JSON.stringify(contactInfo));
+  buildFichaDetail(document.getElementById('contentArea'), cli);
+  toast('Guardado ✓', 'ok');
+}
+
+// ── NOTE DELETE ───────────────────────────────────────────────────────────
+function delNote(cli, idx) {
+  if (!confirm('¿Eliminar esta nota?')) return;
+  if (notes[cli]) {
+    notes[cli].splice(idx, 1);
+    buildFichaDetail(document.getElementById('contentArea'), cli);
+    toast('Nota eliminada');
+  }
+}
 // ── INVOICE MODAL ─────────────────────────────────────────────────────────
 function openInvModal(cli) {
   editInvId = null;
