@@ -1391,7 +1391,7 @@ function buildFichas(c) {
     var act = tasks.filter(function(t) { return parseCli(t.client).includes(cli) && t.status !== '✓ Done'; }).length;
     var done = tasks.filter(function(t) { return parseCli(t.client).includes(cli) && t.status === '✓ Done'; }).length;
     var invCli = invoices.filter(function(i) { return i.client === cli; });
-    var mensual = invCli.filter(function(i){return i.type==='mensual';}).slice(0,1).reduce(function(s,i){return s+parseFloat(i.amount||0);},0);
+    var totalAll = invCli.reduce(function(s,i){return s+parseFloat(i.amount||0);},0);
     var pend = invCli.filter(function(i){return i.status!=='Pagada';}).reduce(function(s,i){return s+parseFloat(i.amount||0);},0);
     h += '<div class="ficha-card" data-ficha="' + esc(cli) + '">' +
       '<div style="display:flex;align-items:center;gap:11px;margin-bottom:11px">' +
@@ -1400,7 +1400,7 @@ function buildFichas(c) {
       '<div class="ficha-stats">' +
       '<div class="ficha-stat"><div class="ficha-stat-val hi">' + act + '</div><div class="ficha-stat-lbl">Activas</div></div>' +
       '<div class="ficha-stat"><div class="ficha-stat-val">' + done + '</div><div class="ficha-stat-lbl">Hechas</div></div>' +
-      (mensual ? '<div class="ficha-stat"><div class="ficha-stat-val">' + fmtEur(mensual) + '</div><div class="ficha-stat-lbl">Mensual</div></div>' : '') +
+      (totalAll ? '<div class="ficha-stat"><div class="ficha-stat-val">' + fmtEur(totalAll) + '</div><div class="ficha-stat-lbl">Total fact.</div></div>' : '') +
       (pend ? '<div class="ficha-stat"><div class="ficha-stat-val" style="color:#e67e22">' + fmtEur(pend) + '</div><div class="ficha-stat-lbl">Pendiente</div></div>' : '') +
       '</div></div>';
   });
@@ -1422,14 +1422,8 @@ function closeFicha() {
 function buildFichaDetail(c, cli) {
   var actTasks = tasks.filter(function(t) { return parseCli(t.client).includes(cli) && t.status !== '✓ Done'; });
   var invCli = invoices.filter(function(i) { return i.client === cli; });
-  var now = new Date();
-  var totalMes = invCli.filter(function(i) {
-    var d = new Date(i.date || i.created_at);
-    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-  }).reduce(function(s,i){return s+parseFloat(i.amount||0);},0);
+  var totalAll = invCli.reduce(function(s,i){return s+parseFloat(i.amount||0);},0);
   var pend = invCli.filter(function(i){return i.status!=='Pagada';}).reduce(function(s,i){return s+parseFloat(i.amount||0);},0);
-  var mensualInvs = invCli.filter(function(i){return i.type==='mensual';});
-  var mensual = mensualInvs.length ? parseFloat(mensualInvs[0].amount||0) : 0;
   var notasCli = notes[cli] || [];
 
   var h = '<div class="fd-back" id="fichaBack">' + I.bck + ' Volver a fichas</div>' +
@@ -1454,8 +1448,7 @@ function buildFichaDetail(c, cli) {
 
     '<div class="fd-section"><div class="fd-sec-head"><span>Facturación</span><button class="sm-btn" id="addInvBtn">+ Factura</button></div>' +
     '<div class="fd-kpis">' +
-    '<div class="fd-kpi"><div class="fd-kpi-val">' + fmtEur(mensual) + '</div><div class="fd-kpi-lbl">Tarifa mensual</div></div>' +
-    '<div class="fd-kpi"><div class="fd-kpi-val">' + fmtEur(totalMes) + '</div><div class="fd-kpi-lbl">Facturado este mes</div></div>' +
+    '<div class="fd-kpi"><div class="fd-kpi-val">' + fmtEur(totalAll) + '</div><div class="fd-kpi-lbl">Facturación total</div></div>' +
     '<div class="fd-kpi"><div class="fd-kpi-val warn">' + fmtEur(pend) + '</div><div class="fd-kpi-lbl">Pendiente cobro</div></div>' +
     '</div>';
 
