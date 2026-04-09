@@ -485,12 +485,12 @@ td{padding:11px 13px;vertical-align:middle}
     <div class="ntf-sec">Telegram</div>
     <div class="ntf-row"><span>Nueva tarea creada</span><div class="tgl on" id="tog-tg_new" onclick="togNtf('tg_new')"></div></div>
     <div class="ntf-row"><span>Cambio de estado</span><div class="tgl on" id="tog-tg_status" onclick="togNtf('tg_status')"></div></div>
-    <div class="ntf-row"><span>Recordatorio entrega (3 días)</span><div class="tgl on" id="tog-tg_reminder" onclick="togNtf('tg_reminder')"></div></div>
+    <div class="ntf-row"><span>Recordatorio entrega (1 día antes)</span><div class="tgl on" id="tog-tg_reminder" onclick="togNtf('tg_reminder')"></div></div>
     <div class="ntf-sec">Email (Resend)</div>
     <div class="ntf-row"><span>Al crear una tarea</span><div class="tgl on" id="tog-new" onclick="togNtf('new')"></div></div>
     <div class="ntf-row"><span>Al cambiar el estado</span><div class="tgl on" id="tog-status" onclick="togNtf('status')"></div></div>
     <div class="ntf-row"><span>Al asignar responsable</span><div class="tgl on" id="tog-assign" onclick="togNtf('assign')"></div></div>
-    <div class="ntf-row"><span>Recordatorio entrega (3 días)</span><div class="tgl on" id="tog-reminder" onclick="togNtf('reminder')"></div></div>
+    <div class="ntf-row"><span>Recordatorio entrega (1 día antes)</span><div class="tgl on" id="tog-reminder" onclick="togNtf('reminder')"></div></div>
     <div class="ntf-hint" style="margin-top:12px">Ve a <code>resend.com</code> → Sign up → API Keys → Create → pega aquí.</div>
     <div style="margin-top:12px"><label class="fgl" style="display:block;margin-bottom:8px">Resend API Key</label><input class="fi" id="resend-key" placeholder="re_xxxxxxxxxxxxxxxxxxxx" style="font-family:'DM Mono',monospace;font-size:13px" autocomplete="off"/></div>
     <div class="ma"><button class="bcl" onclick="closeNtf()">Cerrar</button><button class="bsv" onclick="saveNtf()">Guardar</button></div>
@@ -936,8 +936,8 @@ function ntfAssign(t){if(!ntf.assign||!t.owner)return;var e=EM[t.owner];if(!e)re
 async function sendTg(msg){try{await fetch('https://api.telegram.org/bot'+TG_TOKEN+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:TG_CHAT,text:msg,parse_mode:'HTML'})});}catch(e){console.warn('TG:',e);}}
 function tgNewTask(t){if(!ntf.tg_new)return;sendTg('🍋 <b>Nueva tarea</b>\n\n📌 '+(t.task||'')+(t.owner?'\n👤 '+t.owner:'')+(t.date_end?'\n📅 Entrega: '+fmtD(t.date_end):'')+'\n'+((PRI[t.priority||'Media']||PRI.Media).ico)+' '+(t.priority||'Media'));}
 function tgStatusChange(t,old){if(!ntf.tg_status)return;sendTg('🔄 <b>Estado actualizado</b>\n\n📌 '+(t.task||'')+'\n'+old+' → <b>'+t.status+'</b>'+(t.owner?'\n👤 '+t.owner:''));}
-function tgReminder(t){if(!ntf.tg_reminder)return;sendTg('⏰ <b>Entrega en 3 días</b>\n\n📌 '+(t.task||'')+'\n📅 '+fmtD(t.date_end)+(t.owner?'\n👤 '+t.owner:'')+'\n\n<i>Recuerda revisar el estado de la tarea</i>');}
-function checkTgReminders(){var today=new Date();today.setHours(0,0,0,0);var in3=new Date(today);in3.setDate(in3.getDate()+3);tasks.forEach(function(t){if(!t.date_end||t.status==='✓ Done')return;var d=new Date(t.date_end);d.setHours(0,0,0,0);if(d.getTime()===in3.getTime())tgReminder(t);});}
+function tgReminder(t){if(!ntf.tg_reminder)return;sendTg('⏰ <b>Entrega mañana</b>\n\n📌 '+(t.task||'')+'\n📅 '+fmtD(t.date_end)+(t.owner?'\n👤 '+t.owner:'')+'\n\n<i>Recuerda revisar el estado de la tarea</i>');}
+function checkTgReminders(){var today=new Date();today.setHours(0,0,0,0);var in3=new Date(today);in3.setDate(in3.getDate()+1);tasks.forEach(function(t){if(!t.date_end||t.status==='✓ Done')return;var d=new Date(t.date_end);d.setHours(0,0,0,0);if(d.getTime()===in3.getTime())tgReminder(t);});}
 // ── NOTIFICATIONS MODAL ───────────────────────────────────────────────────────
 function openNotifModal(){Object.keys(ntf).forEach(function(k){var el=document.getElementById('tog-'+k);if(el)el.className='tgl'+(ntf[k]?' on':'');});document.getElementById('resend-key').value=rKey;document.getElementById('ntfOv').classList.add('open');}
 function closeNtf(){document.getElementById('ntfOv').classList.remove('open');}
