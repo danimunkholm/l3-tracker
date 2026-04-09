@@ -335,6 +335,55 @@ td{padding:11px 13px;vertical-align:middle}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.err{border-color:#E74C3C}.toast.ok{border-color:#27ae60}
 @media(min-width:769px){.toast{bottom:24px}}
+
+.ficha-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:18px}
+.ficha-card{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+.ficha-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--y)}
+.ficha-card:hover{transform:translateY(-2px);box-shadow:0 8px 28px var(--sh);border-color:rgba(240,187,61,0.25)}
+.ficha-av{width:42px;height:42px;border-radius:50%;background:var(--y);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:#16161a;flex-shrink:0}
+.ficha-nombre{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--tx);margin-bottom:2px}
+.ficha-stats{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)}
+.ficha-stat{flex:1;text-align:center}
+.ficha-stat-val{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--tx)}
+.ficha-stat-lbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:1px}
+.fd-back{display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx2);font-size:13px;margin-bottom:16px;-webkit-tap-highlight-color:transparent;width:fit-content}
+.fd-back:hover{color:var(--y)}
+.fd-header{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:20px 22px;margin-bottom:14px}
+.fd-top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.fd-info{flex:1}
+.fd-nombre{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--tx);margin-bottom:4px}
+.fd-sub{font-size:13px;color:var(--tx2)}
+.fd-badge{font-size:11px;padding:4px 12px;border-radius:20px;font-weight:600}
+.fd-badge.activo{background:rgba(39,174,96,0.18);color:#27ae60}
+.fd-contacts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:600px){.fd-contacts{grid-template-columns:1fr 1fr}}
+.fd-contact-box{background:var(--bg3);border-radius:var(--r2);padding:10px 12px}
+.fd-contact-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--mu);text-transform:uppercase;margin-bottom:4px}
+.fd-contact-val{font-size:13px;font-weight:600;color:var(--tx)}
+.fd-contact-sub{font-size:11px;color:var(--tx2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fd-section{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:18px 20px;margin-bottom:14px}
+.fd-sec-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.fd-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:500px){.fd-stats{grid-template-columns:1fr 1fr}}
+.fd-stat-box{background:var(--bg3);border-radius:var(--r2);padding:12px 14px}
+.fd-stat-val{font-family:'Syne',sans-serif;font-weight:700;font-size:22px;color:var(--tx);line-height:1}
+.fd-stat-val.warn{color:#e67e22}
+.fd-stat-lbl{font-size:11px;color:var(--tx2);margin-top:4px}
+.inv-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg3);border-radius:var(--r2);margin-bottom:6px;gap:8px}
+.inv-concepto{font-size:13px;font-weight:600;color:var(--tx)}
+.inv-sub{font-size:11px;color:var(--tx2);margin-top:2px}
+.inv-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.inv-amount{font-size:14px;font-weight:700;color:var(--tx)}
+.inv-status{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:600;white-space:nowrap}
+.inv-status.pendiente{background:rgba(230,126,34,0.18);color:#e67e22}
+.inv-status.enviada{background:rgba(52,152,219,0.18);color:#5dade2}
+.inv-status.pagada{background:rgba(39,174,96,0.18);color:#27ae60}
+.task-mini{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--bg3);border-left:3px solid var(--y);border-radius:0 var(--r2) var(--r2) 0;margin-bottom:6px}
+.nota-row{background:var(--bg3);border-radius:var(--r2);padding:12px 14px;margin-bottom:8px}
+.nota-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.nota-auth{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--y)}
+.nota-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu)}
+.nota-body{font-size:13px;color:var(--tx);line-height:1.5}
 .spin{width:28px;height:28px;border:2.5px solid rgba(240,187,61,0.2);border-top-color:var(--y);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 ::-webkit-scrollbar{width:4px;height:4px}
@@ -405,6 +454,7 @@ td{padding:11px 13px;vertical-align:middle}
         <div class="ni" onclick="setView('ms',this)"><span>◆</span> Hitos</div>
         <div class="ni" onclick="setView('cal',this)"><span>📅</span> Calendario</div>
         <div class="ni" onclick="setView('done',this)"><span>✓</span> Finalizadas</div>
+        <div class="ni" onclick="setView('fichas',this)"><span>👥</span> Fichas cliente</div>
         <div class="ni" onclick="openTpl()"><span>📋</span> Plantillas</div>
       </div>
       <div class="sb-s">
@@ -432,7 +482,7 @@ td{padding:11px 13px;vertical-align:middle}
   <nav class="bnav">
     <div class="bn-it act" onclick="setViewM('all',this)"><div class="bi">◈</div><div class="bl">Tareas</div></div>
     <div class="bn-it" onclick="setViewM('kb',this)"><div class="bi">⬛</div><div class="bl">Kanban</div></div>
-    <div class="bn-it" onclick="setViewM('cal',this)"><div class="bi">📅</div><div class="bl">Cal.</div></div>
+    <div class="bn-it" onclick="setViewM('fichas',this)"><div class="bi">👥</div><div class="bl">Clientes</div></div>
     <div class="bn-it" onclick="setViewM('done',this)"><div class="bi">✓</div><div class="bl">Hecho</div></div>
     <div class="bn-it" onclick="openMobileMenu()"><div class="bi">⋯</div><div class="bl">Más</div></div>
   </nav>
@@ -582,6 +632,32 @@ td{padding:11px 13px;vertical-align:middle}
   </div>
 </div>
 
+
+<!-- INVOICE MODAL -->
+<div class="ov" id="invOv" onclick="if(event.target.id==='invOv')closeInvModal()">
+  <div class="mo mo-sm">
+    <div class="mo-hnd"></div>
+    <div class="mttl"><span id="inv-ttl">+ Nueva <em>factura</em></span><button class="mttl-x" onclick="closeInvModal()">✕</button></div>
+    <div class="fg">
+      <div class="fg2 f"><label class="fgl">Concepto *</label><input class="fi" id="inv-concept" placeholder="Servicios mensuales…" autocomplete="off"/></div>
+      <div class="fg2"><label class="fgl">Importe (€) *</label><input class="fi" type="number" id="inv-amount" placeholder="0.00" min="0" step="0.01"/></div>
+      <div class="fg2"><label class="fgl">Tipo</label><select class="fs" id="inv-type"><option value="mensual">Mensual</option><option value="extra">Servicio extra</option></select></div>
+      <div class="fg2"><label class="fgl">Estado</label><select class="fs" id="inv-status"><option value="Pendiente">Pendiente</option><option value="Enviada">Enviada</option><option value="Pagada">Pagada</option></select></div>
+      <div class="fg2 f"><label class="fgl">Fecha</label><input class="fi" type="date" id="inv-date"/></div>
+    </div>
+    <div class="ma"><button class="bcl" onclick="closeInvModal()">Cancelar</button><button class="bsv" id="inv-sbtn" onclick="saveInvoice()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- NOTA MODAL -->
+<div class="ov" id="notaOv" onclick="if(event.target.id==='notaOv')closeNotaModal()">
+  <div class="mo mo-sm">
+    <div class="mo-hnd"></div>
+    <div class="mttl"><span>+ Nueva <em>nota</em></span><button class="mttl-x" onclick="closeNotaModal()">✕</button></div>
+    <div class="fg2 f" style="margin-bottom:12px"><label class="fgl">Nota interna</label><textarea class="ft" id="nota-body" placeholder="Escribe una nota sobre este cliente…" style="min-height:100px"></textarea></div>
+    <div class="ma"><button class="bcl" onclick="closeNotaModal()">Cancelar</button><button class="bsv" onclick="saveNota()">Guardar</button></div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -610,8 +686,9 @@ var TPL=[
   {icon:'📤',name:'Envío Factura',desc:'Enviar y registrar factura',status:'◆ Planificado',priority:'Alta',dl:'Envío de factura al cliente y registro de pago pendiente.',next:'Enviar por email y confirmar recepción.'}
 ];
 // ── STATE ─────────────────────────────────────────────────────────────────────
-var tasks=[],clients=[...DEF_CLI],members=[...DEF_MEM];
+var tasks=[],clients=[...DEF_CLI],members=[...DEF_MEM],invoices=[],notas={};
 var editId=null,popId=null,popCli=[],lastNewId=null,cmtId=null;
+var editInvId=null,currentFichaClient=null,notaClient=null;
 var vView='all',vPart='all',vMonth='all',vStat='all',vCli='all',vSearch='',vSort='created',vPri='all';
 var calY=new Date().getFullYear(),calM=new Date().getMonth();
 var ntf={new:true,status:true,assign:true,reminder:true,tg_new:true,tg_status:true,tg_reminder:true};
@@ -653,15 +730,20 @@ function addCliDB(n){return sb('clients',{method:'POST',prefer:'return=represent
 function addMemDB(n){return sb('members',{method:'POST',prefer:'return=representation',body:JSON.stringify({name:n})});}
 function delMemDB(id){return sb('members?id=eq.'+id,{method:'DELETE'});}
 function addCmtDB(d){return sb('comments',{method:'POST',prefer:'return=representation',body:JSON.stringify(d)});}
+function gInvoices(){return sb('invoices?order=created_at.desc&select=*');}
+function addInvoiceDB(d){return sb('invoices',{method:'POST',prefer:'return=representation',body:JSON.stringify(d)});}
+function updInvoiceDB(id,d){return sb('invoices?id=eq.'+id,{method:'PATCH',prefer:'return=representation',body:JSON.stringify(d)});}
+function delInvoiceDB(id){return sb('invoices?id=eq.'+id,{method:'DELETE'});}
 // ── BOOT ──────────────────────────────────────────────────────────────────────
 async function boot(){
   var s=localStorage.getItem('l3_ntf');if(s)try{ntf=JSON.parse(s);}catch(e){}
   rKey=localStorage.getItem('l3_rkey')||'';
   try{
-    var res=await Promise.all([gTasks(),gCli().catch(function(){return null;}),gMem().catch(function(){return null;})]);
+    var res=await Promise.all([gTasks(),gCli().catch(function(){return null;}),gMem().catch(function(){return null;}),gInvoices().catch(function(){return null;})]);
     tasks=res[0]||[];
     if(res[1]&&res[1].length){var dbCli=res[1].map(function(x){return x.name;});DEF_CLI.forEach(function(c){if(!dbCli.includes(c))dbCli.unshift(c);});clients=dbCli;}
     if(res[2]&&res[2].length)members=res[2].map(function(x){return x.name;});
+    invoices=res[3]||[];
     var db=document.getElementById('dateBadge');if(db)db.textContent=new Date().toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'});
     render();checkTgReminders();
     setInterval(async function(){try{var t=await gTasks();if(t){tasks=t;render();}}catch(e){}},20000);
@@ -674,6 +756,8 @@ async function boot(){
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function parseC(v){if(!v)return[];try{var p=JSON.parse(v);return Array.isArray(p)?p:[p];}catch(e){return v?[v]:[];}}
 function fmtD(d){if(!d)return'—';try{var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0].slice(2);}catch(e){return d;}}
+function fmtEur(n){return(Math.round(n*100)/100).toLocaleString('es-ES',{minimumFractionDigits:0,maximumFractionDigits:2})+'€';}
+function clientInitial(name){return name?name.slice(0,1).toUpperCase():'?';}
 function relDate(d){
   if(!d)return null;
   var today=new Date();today.setHours(0,0,0,0);
@@ -751,7 +835,7 @@ function buildFbar(){
     +'<button class="chip fb-desk '+(vPri==='Baja'?'act':'')+'" onclick="fPri(\'Baja\')">🟢 Baja</button>';
 }
 // ── VIEWS ─────────────────────────────────────────────────────────────────────
-function buildContent(){var c=document.getElementById('content');if(!c)return;if(vView==='kb'){buildKB(c);return;}if(vView==='ms'){buildMS(c);return;}if(vView==='cal'){buildCal(c);return;}if(vView==='done'){buildDone(c);return;}buildAll(c);}
+function buildContent(){var c=document.getElementById('content');if(!c)return;if(vView==='kb'){buildKB(c);return;}if(vView==='ms'){buildMS(c);return;}if(vView==='cal'){buildCal(c);return;}if(vView==='done'){buildDone(c);return;}if(vView==='fichas'){buildFichas(c);return;}buildAll(c);}
 var ICMT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
 var IDUP='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
 var IEDIT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
@@ -795,6 +879,132 @@ function buildAll(c){
       +'<div class="tc-f"><span class="tc-lbl">Enlace</span>'+rLink(t.link,t.id)+'</div></div></div>';
   });}
   h+='</div>';c.innerHTML=h;
+}
+
+function buildFichas(c){
+  if(!c)return;
+  if(currentFichaClient){buildFichaDetalle(c,currentFichaClient);return;}
+  var h='<div class="sh"><div class="st">Fichas cliente</div></div><div class="ficha-grid">';
+  clients.forEach(function(cli){
+    var activas=tasks.filter(function(t){return parseC(t.client).includes(cli)&&t.status!=='✓ Done';}).length;
+    var done=tasks.filter(function(t){return parseC(t.client).includes(cli)&&t.status==='✓ Done';}).length;
+    var invCli=invoices.filter(function(i){return i.client===cli;});
+    var pendiente=invCli.filter(function(i){return i.status!=='Pagada';}).reduce(function(s,i){return s+parseFloat(i.amount||0);},0);
+    var mensualInvs=invCli.filter(function(i){return i.type==='mensual';});
+    var mensual=mensualInvs.length?mensualInvs[0].amount:0;
+    h+='<div class="ficha-card" onclick="openFicha(''+cli.replace(/'/g,"\'")+'')">'+
+      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">'+
+      '<div class="ficha-av">'+clientInitial(cli)+'</div>'+
+      '<div><div class="ficha-nombre">'+esc(cli)+'</div><div style="font-size:11px;color:var(--tx2)">'+activas+' tareas activas</div></div></div>'+
+      '<div class="ficha-stats">'+
+      '<div class="ficha-stat"><div class="ficha-stat-val ac">'+activas+'</div><div class="ficha-stat-lbl">Activas</div></div>'+
+      '<div class="ficha-stat"><div class="ficha-stat-val">'+done+'</div><div class="ficha-stat-lbl">Hechas</div></div>'+
+      (mensual?'<div class="ficha-stat"><div class="ficha-stat-val">'+fmtEur(mensual)+'</div><div class="ficha-stat-lbl">Mensual</div></div>':'')+
+      (pendiente?'<div class="ficha-stat"><div class="ficha-stat-val" style="color:#e67e22">'+fmtEur(pendiente)+'</div><div class="ficha-stat-lbl">Pendiente</div></div>':'')+
+      '</div></div>';
+  });
+  h+='</div>';c.innerHTML=h;
+}
+function openFicha(cli){currentFichaClient=cli;var c=document.getElementById('content');if(c)buildFichaDetalle(c,cli);}
+function closeFicha(){currentFichaClient=null;render();}
+function buildFichaDetalle(c,cli){
+  if(!c)return;
+  var activas=tasks.filter(function(t){return parseC(t.client).includes(cli)&&t.status!=='✓ Done';});
+  var invCli=invoices.filter(function(i){return i.client===cli;});
+  var totalMes=invCli.filter(function(i){var d=new Date(i.date||i.created_at),now=new Date();return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).reduce(function(s,i){return s+parseFloat(i.amount||0);},0);
+  var pendiente=invCli.filter(function(i){return i.status!=='Pagada';}).reduce(function(s,i){return s+parseFloat(i.amount||0);},0);
+  var mensualInvs=invCli.filter(function(i){return i.type==='mensual';});
+  var mensual=mensualInvs.length?mensualInvs[0].amount:0;
+  var notasCli=notas[cli]||[];
+  var h='<div class="fd-back" onclick="closeFicha()">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="15,18 9,12 15,6"/></svg>'+
+    'Volver a fichas</div>'+
+    '<div class="fd-header"><div class="fd-top">'+
+    '<div class="ficha-av" style="width:48px;height:48px;font-size:20px">'+clientInitial(cli)+'</div>'+
+    '<div class="fd-info"><div class="fd-nombre">'+esc(cli)+'</div><div class="fd-sub">'+activas.length+' tareas activas</div></div>'+
+    '<span class="fd-badge activo">Activo</span></div>'+
+    '<div class="fd-contacts">'+
+    '<div class="fd-contact-box"><div class="fd-contact-lbl">Contacto</div><div class="fd-contact-val" style="font-size:12px">—</div></div>'+
+    '<div class="fd-contact-box"><div class="fd-contact-lbl">Email</div><div class="fd-contact-val" style="font-size:12px">—</div></div>'+
+    '<div class="fd-contact-box"><div class="fd-contact-lbl">Teléfono</div><div class="fd-contact-val">—</div></div>'+
+    '</div></div>'+
+    '<div class="fd-section"><div class="fd-sec-lbl"><span>Facturación</span><button class="btn-sm" onclick="openInvModal(''+cli.replace(/'/g,"\'")+'')">+ Factura</button></div>'+
+    '<div class="fd-stats">'+
+    '<div class="fd-stat-box"><div class="fd-stat-val">'+fmtEur(mensual)+'</div><div class="fd-stat-lbl">Tarifa mensual</div></div>'+
+    '<div class="fd-stat-box"><div class="fd-stat-val">'+fmtEur(totalMes)+'</div><div class="fd-stat-lbl">Facturado este mes</div></div>'+
+    '<div class="fd-stat-box"><div class="fd-stat-val warn">'+fmtEur(pendiente)+'</div><div class="fd-stat-lbl">Pendiente cobro</div></div>'+
+    '</div>';
+  if(invCli.length){
+    h+=invCli.map(function(inv){
+      var sc=inv.status==='Pagada'?'pagada':inv.status==='Enviada'?'enviada':'pendiente';
+      return'<div class="inv-row"><div style="flex:1;min-width:0"><div class="inv-concepto">'+esc(inv.concept)+'</div>'+
+        '<div class="inv-sub">'+(inv.type==='extra'?'Servicio extra':'Mensual')+' · '+fmtD(inv.date)+' · Carlos</div></div>'+
+        '<div class="inv-right"><div class="inv-amount">'+fmtEur(inv.amount)+'</div>'+
+        '<div class="inv-status '+sc+'">'+inv.status+'</div>'+
+        '<button class="ib" onclick="editInvoice(''+inv.id+'')">'+IEDIT+'</button>'+
+        '<button class="ib del" onclick="delInvoice(''+inv.id+'')">'+IDEL+'</button>'+
+        '</div></div>';
+    }).join('');
+  }else{h+='<div style="color:var(--mu);font-size:13px;padding:10px 0">Sin facturas aún.</div>';}
+  h+='</div>'+
+    '<div class="fd-section"><div class="fd-sec-lbl">Tareas activas <span style="background:var(--bg3);border-radius:10px;padding:2px 8px;font-size:10px;color:var(--mu);font-weight:400">'+activas.length+'</span></div>';
+  if(!activas.length){h+='<div style="color:var(--mu);font-size:13px;padding:8px 0">Sin tareas activas.</div>';}
+  else{h+=activas.map(function(t){return'<div class="task-mini"><div style="font-size:13px;font-weight:600;color:var(--tx);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(t.task)+'</div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font-size:11px;color:var(--tx2)">'+(t.owner||'')+'</span><span class="sp '+(SC[t.status]||'spe')+'" style="pointer-events:none;font-size:10px;padding:3px 8px">'+t.status+'</span></div></div>';}).join('');}
+  h+='</div>'+
+    '<div class="fd-section"><div class="fd-sec-lbl"><span>Notas internas</span><button class="btn-sm" onclick="openNotaModal(''+cli.replace(/'/g,"\'")+'')">+ Nota</button></div>';
+  if(!notasCli.length){h+='<div style="color:var(--mu);font-size:13px;padding:8px 0">Sin notas aún.</div>';}
+  else{h+=notasCli.map(function(n){return'<div class="nota-row"><div class="nota-hdr"><span class="nota-auth">'+esc(n.author)+'</span><span class="nota-time">'+n.date+'</span></div><div class="nota-body">'+esc(n.body)+'</div></div>';}).join('');}
+  h+='</div>';
+  c.innerHTML=h;
+}
+function openInvModal(cli){
+  editInvId=null;if(cli)currentFichaClient=cli;
+  document.getElementById('inv-ttl').innerHTML='+ Nueva <em>factura</em>';
+  document.getElementById('inv-concept').value='';
+  document.getElementById('inv-amount').value='';
+  document.getElementById('inv-type').value='mensual';
+  document.getElementById('inv-status').value='Pendiente';
+  document.getElementById('inv-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('invOv').classList.add('open');
+  setTimeout(function(){document.getElementById('inv-concept').focus();},300);
+}
+function closeInvModal(){document.getElementById('invOv').classList.remove('open');}
+function editInvoice(id){
+  var inv=invoices.find(function(i){return i.id===id;});if(!inv)return;
+  editInvId=id;
+  document.getElementById('inv-ttl').innerHTML='✎ Editar <em>factura</em>';
+  document.getElementById('inv-concept').value=inv.concept||'';
+  document.getElementById('inv-amount').value=inv.amount||'';
+  document.getElementById('inv-type').value=inv.type||'mensual';
+  document.getElementById('inv-status').value=inv.status||'Pendiente';
+  document.getElementById('inv-date').value=inv.date||new Date().toISOString().split('T')[0];
+  document.getElementById('invOv').classList.add('open');
+}
+async function saveInvoice(){
+  var concept=document.getElementById('inv-concept').value.trim();
+  var amount=parseFloat(document.getElementById('inv-amount').value);
+  if(!concept||isNaN(amount)||amount<=0){toast('Rellena concepto e importe','err');return;}
+  var btn=document.getElementById('inv-sbtn');btn.disabled=true;btn.textContent='Guardando…';
+  var d={client:currentFichaClient,concept:concept,amount:amount,type:document.getElementById('inv-type').value,status:document.getElementById('inv-status').value,date:document.getElementById('inv-date').value,updated_at:new Date().toISOString()};
+  try{
+    if(editInvId){await updInvoiceDB(editInvId,d);invoices=invoices.map(function(i){return i.id===editInvId?Object.assign({},i,d):i;});toast('Factura actualizada ✓');}
+    else{var res=await addInvoiceDB(d);var s=Array.isArray(res)?res[0]:res;if(s)invoices.unshift(s);toast('Factura añadida ✓','ok');}
+    closeInvModal();buildFichaDetalle(document.getElementById('content'),currentFichaClient);
+  }catch(e){toast('Error: '+e.message,'err');}
+  btn.disabled=false;btn.textContent='Guardar';
+}
+async function delInvoice(id){
+  if(!confirm('¿Eliminar esta factura?'))return;
+  try{await delInvoiceDB(id);invoices=invoices.filter(function(i){return i.id!==id;});buildFichaDetalle(document.getElementById('content'),currentFichaClient);toast('Eliminada');}
+  catch(e){toast('Error: '+e.message,'err');}
+}
+function openNotaModal(cli){notaClient=cli;document.getElementById('nota-body').value='';document.getElementById('notaOv').classList.add('open');setTimeout(function(){document.getElementById('nota-body').focus();},300);}
+function closeNotaModal(){document.getElementById('notaOv').classList.remove('open');notaClient=null;}
+function saveNota(){
+  var body=document.getElementById('nota-body').value.trim();if(!body)return;
+  if(!notas[notaClient])notas[notaClient]=[];
+  notas[notaClient].unshift({author:curUser,date:new Date().toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}),body:body});
+  closeNotaModal();buildFichaDetalle(document.getElementById('content'),currentFichaClient);toast('Nota añadida ✓','ok');
 }
 function buildKB(c){
   if(!c)return;var f=filtered();
@@ -947,8 +1157,8 @@ function saveNtf(){localStorage.setItem('l3_ntf',JSON.stringify(ntf));rKey=docum
 function openMobileMenu(){document.getElementById('mmOv').classList.add('open');}
 function closeMM(){document.getElementById('mmOv').classList.remove('open');}
 // ── FILTERS ───────────────────────────────────────────────────────────────────
-function setView(v,el){vView=v;vStat='all';document.querySelectorAll('.ni').forEach(function(e){e.classList.remove('act');});if(el)el.classList.add('act');render();}
-function setViewM(v,el){vView=v;vStat='all';document.querySelectorAll('.bn-it').forEach(function(e){e.classList.remove('act');});if(el)el.classList.add('act');render();document.getElementById('main').scrollTop=0;}
+function setView(v,el){vView=v;vStat='all';currentFichaClient=null;document.querySelectorAll('.ni').forEach(function(e){e.classList.remove('act');});if(el)el.classList.add('act');render();}
+function setViewM(v,el){vView=v;vStat='all';currentFichaClient=null;document.querySelectorAll('.bn-it').forEach(function(e){e.classList.remove('act');});if(el)el.classList.add('act');render();document.getElementById('main').scrollTop=0;}
 function fPart(p,el){vPart=p;document.querySelectorAll('.pr').forEach(function(e){e.classList.remove('act');});if(el)el.classList.add('act');else{document.querySelectorAll('.pr').forEach(function(e){if(e.textContent.trim().startsWith(p.slice(0,1)))e.classList.add('act');});}render();}
 function fMonth(m){vMonth=m;render();}
 function fStat(s){vStat=s;render();}
@@ -1013,7 +1223,7 @@ function closeTpl(){document.getElementById('tplOv').classList.remove('open');}
 function useTpl(idx){closeTpl();var tpl=TPL[idx],mes=MONTHS[new Date().getMonth()];openModal(null);setTimeout(function(){document.getElementById('f-task').value=tpl.name+' — [CLIENTE] '+mes;document.getElementById('f-status').value=tpl.status;document.getElementById('f-priority').value=tpl.priority;document.getElementById('f-month').value=mes;document.getElementById('f-desc').value=tpl.dl;document.getElementById('f-next').value=tpl.next;if(curUser)document.getElementById('f-owner').value=curUser;document.getElementById('f-task').select();},350);}
 // ── KEYBOARD ──────────────────────────────────────────────────────────────────
 document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){['ov','cmtOv','ntfOv','memOv','cliOv','mmOv','tplOv','mfilOv'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove('open');});closePop();}
+  if(e.key==='Escape'){['ov','cmtOv','ntfOv','memOv','cliOv','mmOv','tplOv','mfilOv','invOv','notaOv'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove('open');});closePop();}
   if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){var ov=document.getElementById('ov');if(ov&&ov.classList.contains('open'))saveTask();}
 });
 // Unregister old service workers
