@@ -1061,34 +1061,83 @@ function render() {
 function buildSidebarNavs() {
   // Member nav
   var mn = document.getElementById('memberNav');
-  if (mn) mn.innerHTML = members.map(function(m) {
-    var cfg = MEM_MAP[m] || {};
-    return '<div class="sb-mem' + (vMem===m?' on':'') + '" data-mem="' + esc(m) + '">' +
-      '<div class="sb-mini-av ' + (cfg.av||'av-D') + '">' + m.slice(0,1) + '</div>' +
-      '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(m) + '</span></div>';
-  }).join('');
-  document.getElementById('filt-mem-all').className = 'sb-mem' + (vMem==='all'?' on':'');
+  if (mn) {
+    mn.innerHTML = members.map(function(m) {
+      var cfg = MEM_MAP[m] || {};
+      return '<div class="sb-mem' + (vMem===m?' on':'') + '" data-mem="' + esc(m) + '">' +
+        '<div class="sb-mini-av ' + (cfg.av||'av-D') + '">' + m.slice(0,1) + '</div>' +
+        '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;pointer-events:none">' + esc(m) + '</span></div>';
+    }).join('');
+    mn.querySelectorAll('[data-mem]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        vMem = el.dataset.mem;
+        document.getElementById('filt-mem-all').classList.remove('on');
+        mn.querySelectorAll('[data-mem]').forEach(function(x){x.classList.remove('on');});
+        el.classList.add('on');
+        render();
+      });
+    });
+  }
+  var memAll = document.getElementById('filt-mem-all');
+  if (memAll) {
+    memAll.className = 'sb-mem' + (vMem==='all'?' on':'');
+    memAll.onclick = function() {
+      vMem = 'all';
+      if (mn) mn.querySelectorAll('[data-mem]').forEach(function(x){x.classList.remove('on');});
+      memAll.classList.add('on');
+      render();
+    };
+  }
 
   // Client nav
   var cn = document.getElementById('cliNav');
-  if (cn) cn.innerHTML = clients.map(function(c) {
-    var cnt = tasks.filter(function(t) { return parseCli(t.client).includes(c) && t.status !== '✓ Done'; }).length;
-    return '<div class="sb-cli' + (vCli===c?' on':'') + '" data-cli="' + esc(c) + '">' +
-      '<span class="sb-cli-name" title="' + esc(c) + '">' + esc(c) + '</span>' +
-      (cnt ? '<span class="sb-cnt">' + cnt + '</span>' : '') + '</div>';
-  }).join('');
-  document.getElementById('filt-cli-all').className = 'sb-cli' + (vCli==='all'?' on':'');
+  if (cn) {
+    cn.innerHTML = clients.map(function(c) {
+      var cnt = tasks.filter(function(t) { return parseCli(t.client).includes(c) && t.status !== '✓ Done'; }).length;
+      return '<div class="sb-cli' + (vCli===c?' on':'') + '" data-cli="' + esc(c) + '">' +
+        '<span class="sb-cli-name" title="' + esc(c) + '" style="pointer-events:none">' + esc(c) + '</span>' +
+        (cnt ? '<span class="sb-cnt" style="pointer-events:none">' + cnt + '</span>' : '') + '</div>';
+    }).join('');
+    cn.querySelectorAll('[data-cli]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        vCli = el.dataset.cli;
+        var cliAll = document.getElementById('filt-cli-all');
+        if (cliAll) cliAll.classList.remove('on');
+        cn.querySelectorAll('[data-cli]').forEach(function(x){x.classList.remove('on');});
+        el.classList.add('on');
+        render();
+      });
+    });
+  }
+  var cliAll = document.getElementById('filt-cli-all');
+  if (cliAll) {
+    cliAll.className = 'sb-cli' + (vCli==='all'?' on':'');
+    cliAll.onclick = function() {
+      vCli = 'all';
+      if (cn) cn.querySelectorAll('[data-cli]').forEach(function(x){x.classList.remove('on');});
+      cliAll.classList.add('on');
+      render();
+    };
+  }
 
   // Month nav
   var monN = document.getElementById('monNav');
   if (!monN) return;
   var act = tasks.filter(function(t) { return t.status !== '✓ Done'; });
-  monN.innerHTML = '<div class="sb-mon' + (vMon==='all'?' on':'') + '" data-mon="all">Todos <span class="sb-cnt">' + act.length + '</span></div>' +
+  monN.innerHTML = '<div class="sb-mon' + (vMon==='all'?' on':'') + '" data-mon="all">Todos <span class="sb-cnt" style="pointer-events:none">' + act.length + '</span></div>' +
     MONTHS.map(function(m) {
       var c = act.filter(function(t) { return t.month === m; }).length;
       if (!c && vMon !== m) return '';
-      return '<div class="sb-mon' + (vMon===m?' on':'') + '" data-mon="' + m + '">' + m.slice(0,3) + ' <span class="sb-cnt">' + c + '</span></div>';
+      return '<div class="sb-mon' + (vMon===m?' on':'') + '" data-mon="' + m + '">' + m.slice(0,3) + ' <span class="sb-cnt" style="pointer-events:none">' + c + '</span></div>';
     }).join('');
+  monN.querySelectorAll('[data-mon]').forEach(function(el) {
+    el.addEventListener('click', function() {
+      vMon = el.dataset.mon;
+      monN.querySelectorAll('[data-mon]').forEach(function(x){x.classList.remove('on');});
+      el.classList.add('on');
+      render();
+    });
+  });
 }
 
 function buildStats() {
