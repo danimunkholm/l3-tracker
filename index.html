@@ -586,17 +586,13 @@ td{padding:10px 12px;vertical-align:middle}
       <svg viewBox="0 0 1500 1500" width="30" height="30"><path fill="var(--tx)" d="M460.5 1134.3C434.2 1134.3 413.1 1123.7 392.1 1107.9C360.5 1076.4 355.2 1029 376.3 992.1L397.3 960.6C402.6 950 407.8 934.2 402.6 923.7C349.9 786.8 392.1 623.7 507.9 507.9C623.7 392.1 792.1 349.9 923.7 402.6C934.2 407.8 950 402.6 960.6 397.3L986.9 381.5C1023.7 360.5 1071.1 365.7 1102.7 397.3C1134.3 428.9 1139.5 476.3 1118.5 513.1L1102.7 539.4C1097.4 550 1092.1 565.8 1097.4 576.3C1150.1 707.9 1107.9 876.3 992.1 992.1C876.3 1107.9 707.9 1150.1 576.3 1097.4C565.8 1092.1 550 1097.4 539.4 1102.7L513.1 1118.5C497.3 1129 481.5 1134.3 460.5 1134.3Z"/><circle cx="750" cy="750" r="118" fill="#F0BB3D"/></svg>
       <div class="lc-brand">lem<span>●</span>nthree</div>
     </div>
-    <div class="lc-sub">Project Tracker — ¿Quién eres?</div>
-    <label class="lc-label">Usuario</label>
-    <div class="lc-who" id="whoWrap">
-      <button class="who-btn" id="wb-Carlos" type="button" onclick="pickUser('Carlos',this)">Carlos</button>
-      <button class="who-btn" id="wb-Manu" type="button" onclick="pickUser('Manu',this)">Manu</button>
-      <button class="who-btn" id="wb-Dani" type="button" onclick="pickUser('Dani',this)">Dani</button>
-    </div>
+    <div class="lc-sub">Project Tracker — Accede con tu email</div>
+    <label class="lc-label">Email</label>
+    <input class="lc-input" type="email" id="emailInp" placeholder="carlos@lemonthree.es" autocomplete="email" onkeydown="if(event.key==='Enter')document.getElementById('pwdInp').focus()"/>
     <label class="lc-label">Contraseña</label>
     <input class="lc-input" type="password" id="pwdInp" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLoginClick()"/>
-    <button class="lc-btn" id="loginBtn" type="button" disabled onclick="doLoginClick()">Entrar →</button>
-    <div class="lc-error" id="loginErr">Usuario o contraseña incorrectos.</div>
+    <button class="lc-btn" id="loginBtn" type="button" onclick="doLoginClick()">Entrar →</button>
+    <div class="lc-error" id="loginErr">Email o contraseña incorrectos.</div>
   </div>
 </div>
 
@@ -862,7 +858,11 @@ td{padding:10px 12px;vertical-align:middle}
 
 
 // ── CONFIG ──────────────────────────────────────────────────────────────────
-var CREDS = { Carlos: 'LemonCarlos123.', Manu: 'LemonManu123.', Dani: 'LemonDani123.' };
+var CREDS = {
+  'carlos@lemonthree.es': { user: 'Carlos', pwd: 'LemonCarlos123.' },
+  'manu@lemonthree.es':   { user: 'Manu',   pwd: 'LemonManu123.'   },
+  'dani@lemonthree.es':   { user: 'Dani',   pwd: 'LemonDani123.'   }
+};
 var SBU = 'https://hyvbxpsjgoqsazvmkjgb.supabase.co';
 var SBK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5dmJ4cHNqZ29xc2F6dm1ramdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MTAxODgsImV4cCI6MjA5MDE4NjE4OH0.1iM_hO2Wu3kcVYbXrfhjYqiPT3BU5asANkgvqMt_0qY';
 var TG_TOKEN = '8636177069:AAGE7lG9A82Zug88GfgQ0A6L80toBKRmL5A';
@@ -914,14 +914,16 @@ function toggleTheme() {
 // ── AUTH ──────────────────────────────────────────────────────────────────
 var _selUser = '';
 function doLoginClick() {
-  var pwdInp = document.getElementById('pwdInp');
+  var emailInp = document.getElementById('emailInp');
+  var pwdInp   = document.getElementById('pwdInp');
   var loginErr = document.getElementById('loginErr');
-  if (!_selUser) return;
-  var pwd = pwdInp.value;
-  if (CREDS[_selUser] && pwd === CREDS[_selUser]) {
-    localStorage.setItem('l3_user', _selUser);
+  var email = emailInp.value.trim().toLowerCase();
+  var pwd   = pwdInp.value;
+  var match = CREDS[email];
+  if (match && pwd === match.pwd) {
+    localStorage.setItem('l3_user', match.user);
     localStorage.setItem('l3_exp', String(Date.now() + SESSION_MS));
-    curUser = _selUser;
+    curUser = match.user;
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
     setupUserUI();
