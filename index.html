@@ -349,15 +349,15 @@ td{padding:10px 12px;vertical-align:middle}
 
     <div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tx2);margin-bottom:8px">Usuario</div>
     <div style="display:flex;gap:8px;margin-bottom:16px">
-      <button id="wb-Carlos" style="flex:1;padding:11px 4px;border-radius:8px;border:1.5px solid var(--bd);background:var(--bg3);color:var(--tx2);font-family:Syne,sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .15s">Carlos</button>
-      <button id="wb-Manu"   style="flex:1;padding:11px 4px;border-radius:8px;border:1.5px solid var(--bd);background:var(--bg3);color:var(--tx2);font-family:Syne,sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .15s">Manu</button>
-      <button id="wb-Dani"   style="flex:1;padding:11px 4px;border-radius:8px;border:1.5px solid var(--bd);background:var(--bg3);color:var(--tx2);font-family:Syne,sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .15s">Dani</button>
+      <button id="wb-Carlos" onclick="selUser(this,'Carlos')" style="flex:1;padding:11px 4px;border-radius:8px;border:1.5px solid var(--bd);background:var(--bg3);color:var(--tx2);font-family:Syne,sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .15s">Carlos</button>
+      <button id="wb-Manu"   onclick="selUser(this,'Manu')"   style="flex:1;padding:11px 4px;border-radius:8px;border:1.5px solid var(--bd);background:var(--bg3);color:var(--tx2);font-family:Syne,sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .15s">Manu</button>
+      <button id="wb-Dani"   onclick="selUser(this,'Dani')"   style="flex:1;padding:11px 4px;border-radius:8px;border:1.5px solid var(--bd);background:var(--bg3);color:var(--tx2);font-family:Syne,sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .15s">Dani</button>
     </div>
 
     <div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tx2);margin-bottom:8px">Contraseña</div>
-    <input id="pwdInp" type="password" placeholder="••••••••" autocomplete="current-password"
+    <input id="pwdInp" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"
       style="width:100%;background:var(--bg3);border:1.5px solid var(--bd);border-radius:8px;padding:12px 14px;color:var(--tx);font-family:DM Sans,sans-serif;font-size:16px;outline:none;display:block;margin-bottom:10px;box-sizing:border-box;-webkit-appearance:none"/>
-    <button id="loginBtn" disabled
+    <button id="loginBtn" onclick="doLogin()" disabled
       style="width:100%;background:var(--y);color:#16161a;border:none;padding:14px;border-radius:8px;font-family:Syne,sans-serif;font-weight:800;font-size:15px;cursor:pointer;opacity:0.4">Entrar →</button>
     <div id="loginErr" style="display:none;font-size:12px;color:#e74c3c;background:rgba(231,76,60,0.1);border-radius:8px;padding:10px 13px;margin-top:10px;text-align:center">Contraseña incorrecta.</div>
   </div>
@@ -466,21 +466,40 @@ function toggleTheme(){var t=document.documentElement.getAttribute('data-theme')
 
 // ── LOGIN ─────────────────────────────────────────────────────────────────
 var _selUser='';
-document.addEventListener('DOMContentLoaded',function(){
-  if('serviceWorker' in navigator)navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(sw){sw.unregister();});});
-  ['Carlos','Manu','Dani'].forEach(function(name){
-    var el=document.getElementById('wb-'+name);
-    if(el)el.addEventListener('click',function(){
-      _selUser=name;
-      document.querySelectorAll('.who-btn').forEach(function(b){b.classList.remove('sel');});
-      el.classList.add('sel');
-      var lb=document.getElementById('loginBtn');
-      lb.disabled=false;lb.style.opacity='1';
-      document.getElementById('pwdInp').focus();
-    });
+
+function selUser(el,name){
+  _selUser=name;
+  document.querySelectorAll('[id^="wb-"]').forEach(function(b){
+    b.style.borderColor=''; b.style.color=''; b.style.background='';
   });
-  document.getElementById('loginBtn').addEventListener('click',doLogin);
-  document.getElementById('pwdInp').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  el.style.borderColor='var(--y)';
+  el.style.color='var(--y)';
+  el.style.background='rgba(240,187,61,0.12)';
+  var lb=document.getElementById('loginBtn');
+  lb.disabled=false; lb.style.opacity='1';
+  document.getElementById('pwdInp').focus();
+}
+
+function doLogin(){
+  if(!_selUser){return;}
+  var pwd=document.getElementById('pwdInp').value;
+  var err=document.getElementById('loginErr');
+  if(pwd===CREDS[_selUser]){
+    localStorage.setItem('l3_user',_selUser);
+    localStorage.setItem('l3_exp',String(Date.now()+SESSION_MS));
+    curUser=_selUser;
+    startApp();
+  }else{
+    err.style.display='block';
+    document.getElementById('pwdInp').value='';
+    document.getElementById('pwdInp').focus();
+    setTimeout(function(){err.style.display='none';},3000);
+  }
+}
+
+// Check existing session on load
+window.addEventListener('load',function(){
+  if('serviceWorker' in navigator)navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(sw){sw.unregister();});});
   var u=localStorage.getItem('l3_user');
   var exp=parseInt(localStorage.getItem('l3_exp')||'0',10);
   if(u&&CREDS[u]&&Date.now()<exp){curUser=u;startApp();}
