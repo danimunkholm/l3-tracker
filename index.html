@@ -340,25 +340,20 @@ td{padding:10px 12px;vertical-align:middle}
 
 <!-- LOGIN -->
 <div id="loginScreen" style="position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px">
-  <div style="width:100%;max-width:380px;background:var(--bg2);border:1px solid var(--bd2);border-radius:20px;padding:32px 28px">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-      <svg viewBox="0 0 1500 1500" width="28" height="28"><path fill="var(--tx)" d="M460.5 1134.3C434.2 1134.3 413.1 1123.7 392.1 1107.9C360.5 1076.4 355.2 1029 376.3 992.1L397.3 960.6C402.6 950 407.8 934.2 402.6 923.7C349.9 786.8 392.1 623.7 507.9 507.9C623.7 392.1 792.1 349.9 923.7 402.6C934.2 407.8 950 402.6 960.6 397.3L986.9 381.5C1023.7 360.5 1071.1 365.7 1102.7 397.3C1134.3 428.9 1139.5 476.3 1118.5 513.1L1102.7 539.4C1097.4 550 1092.1 565.8 1097.4 576.3C1150.1 707.9 1107.9 876.3 992.1 992.1C876.3 1107.9 707.9 1150.1 576.3 1097.4C565.8 1092.1 550 1097.4 539.4 1102.7L513.1 1118.5C497.3 1129 481.5 1134.3 460.5 1134.3Z"/><circle cx="750" cy="750" r="118" fill="#F0BB3D"/></svg>
-      <div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;color:var(--tx)">lem<span style="color:var(--y)">&#9679;</span>nthree</div>
+  <div style="width:100%;max-width:380px;background:var(--bg2);border:1px solid rgba(255,255,255,0.11);border-radius:20px;padding:32px 28px;text-align:center">
+    <div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:#F0BB3D;margin-bottom:6px">lemon&#9679;three</div>
+    <div style="font-size:12px;color:#a8a5a0;margin-bottom:24px">&#191;Qui&#233;n eres?</div>
+    <div style="display:flex;gap:10px;margin-bottom:16px">
+      <button onclick="selUser(this,'Carlos')" style="flex:1;padding:13px 4px;border-radius:8px;border:2px solid #444;background:#26262d;color:#fff;font-family:Syne,sans-serif;font-weight:700;font-size:15px;cursor:pointer">Carlos</button>
+      <button onclick="selUser(this,'Manu')"   style="flex:1;padding:13px 4px;border-radius:8px;border:2px solid #444;background:#26262d;color:#fff;font-family:Syne,sans-serif;font-weight:700;font-size:15px;cursor:pointer">Manu</button>
+      <button onclick="selUser(this,'Dani')"   style="flex:1;padding:13px 4px;border-radius:8px;border:2px solid #444;background:#26262d;color:#fff;font-family:Syne,sans-serif;font-weight:700;font-size:15px;cursor:pointer">Dani</button>
     </div>
-    <div style="font-size:12px;color:var(--tx2);margin-bottom:26px">Project Tracker — &#191;Qui&#233;n eres?</div>
-    <div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tx2);margin-bottom:8px">Usuario</div>
-    <div style="display:flex;gap:8px;margin-bottom:16px">
-      <button onclick="selUser(this,'Carlos')" style="flex:1;padding:12px 4px;border-radius:8px;border:2px solid var(--bd);background:var(--bg3);color:var(--tx);font-family:Syne,sans-serif;font-weight:700;font-size:15px;cursor:pointer">Carlos</button>
-      <button onclick="selUser(this,'Manu')"   style="flex:1;padding:12px 4px;border-radius:8px;border:2px solid var(--bd);background:var(--bg3);color:var(--tx);font-family:Syne,sans-serif;font-weight:700;font-size:15px;cursor:pointer">Manu</button>
-      <button onclick="selUser(this,'Dani')"   style="flex:1;padding:12px 4px;border-radius:8px;border:2px solid var(--bd);background:var(--bg3);color:var(--tx);font-family:Syne,sans-serif;font-weight:700;font-size:15px;cursor:pointer">Dani</button>
-    </div>
-    <div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tx2);margin-bottom:8px">Contrase&#241;a</div>
-    <input id="pwdInp" type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="current-password"
+    <input id="pwdInp" type="password" placeholder="Contrase&#241;a" autocomplete="current-password"
       onkeydown="if(event.key==='Enter')doLogin()"
-      style="width:100%;background:var(--bg3);border:2px solid var(--bd);border-radius:8px;padding:13px 14px;color:var(--tx);font-size:16px;outline:none;display:block;margin-bottom:10px;box-sizing:border-box"/>
+      style="width:100%;padding:13px;border-radius:8px;border:2px solid #444;background:#26262d;color:#fff;font-size:16px;outline:none;box-sizing:border-box;margin-bottom:12px;display:block"/>
     <button id="loginBtn" onclick="doLogin()" disabled
-      style="width:100%;background:var(--y);color:#16161a;border:none;padding:14px;border-radius:8px;font-family:Syne,sans-serif;font-weight:800;font-size:15px;cursor:pointer;opacity:0.35">Entrar &rarr;</button>
-    <div id="loginErr" style="display:none;font-size:12px;color:#e74c3c;background:rgba(231,76,60,0.1);border-radius:8px;padding:10px;margin-top:10px;text-align:center">Contrase&#241;a incorrecta.</div>
+      style="width:100%;padding:14px;background:#F0BB3D;color:#16161a;border:none;border-radius:8px;font-family:Syne,sans-serif;font-weight:800;font-size:15px;cursor:pointer;opacity:0.35">Entrar &rarr;</button>
+    <div id="loginErr" style="display:none;font-size:12px;color:#e74c3c;background:rgba(231,76,60,0.1);border-radius:8px;padding:10px;margin-top:10px">Contrase&#241;a incorrecta.</div>
   </div>
 </div>
 
@@ -646,15 +641,17 @@ var _selUser='';
 
 function selUser(el,name){
   _selUser=name;
-  document.querySelectorAll('[id^="wb-"]').forEach(function(b){
-    b.style.borderColor=''; b.style.color=''; b.style.background='';
+  var ls=document.getElementById('loginScreen');
+  if(ls) ls.querySelectorAll('button').forEach(function(b){
+    b.style.borderColor='#444'; b.style.color='#fff'; b.style.background='#26262d';
   });
-  el.style.borderColor='var(--y)';
-  el.style.color='var(--y)';
+  el.style.borderColor='#F0BB3D';
+  el.style.color='#F0BB3D';
   el.style.background='rgba(240,187,61,0.12)';
   var lb=document.getElementById('loginBtn');
-  lb.disabled=false; lb.style.opacity='1';
-  document.getElementById('pwdInp').focus();
+  if(lb){lb.disabled=false; lb.style.opacity='1';}
+  var pi=document.getElementById('pwdInp');
+  if(pi) pi.focus();
 }
 
 function doLogin(){
