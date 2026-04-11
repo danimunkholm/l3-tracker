@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Test Login</title>
+<style>
+body{background:#16161a;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}
+.box{background:#1e1e23;padding:32px;border-radius:16px;width:340px;text-align:center}
+h2{color:#F0BB3D;margin-bottom:20px}
+.btns{display:flex;gap:10px;margin-bottom:16px}
+button{flex:1;padding:14px;border-radius:8px;border:2px solid #444;background:#26262d;color:#fff;font-size:16px;font-weight:700;cursor:pointer}
+button.sel{border-color:#F0BB3D;color:#F0BB3D;background:rgba(240,187,61,0.1)}
+input{width:100%;padding:13px;border-radius:8px;border:2px solid #444;background:#26262d;color:#fff;font-size:16px;outline:none;box-sizing:border-box;margin-bottom:12px}
+#entrar{width:100%;padding:14px;background:#F0BB3D;color:#16161a;border:none;border-radius:8px;font-size:16px;font-weight:800;cursor:pointer;opacity:0.4}
+#msg{margin-top:12px;font-size:13px;color:#e74c3c;display:none}
+#ok{margin-top:12px;font-size:14px;color:#27ae60;display:none}
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>lemon&#9679;three</h2>
+  <p style="color:#aaa;margin-bottom:20px;font-size:13px">&#191;Qui&eacute;n eres?</p>
+  <div class="btns">
+    <button onclick="pick(this,'Carlos')">Carlos</button>
+    <button onclick="pick(this,'Manu')">Manu</button>
+    <button onclick="pick(this,'Dani')">Dani</button>
+  </div>
+  <input type="password" id="pwd" placeholder="Contrase&#241;a" onkeydown="if(event.key==='Enter')login()"/>
+  <button id="entrar" onclick="login()">Entrar &rarr;</button>
+  <div id="msg">Contrase&#241;a incorrecta</div>
+  <div id="ok">&#10003; &iexcl;Acceso correcto! Usuario: <span id="who"></span></div>
+</div>
+<script>
+var CREDS = {Carlos:'LemonCarlos123.',Manu:'LemonManu123.',Dani:'LemonDani123.'};
+var sel = '';
+function pick(el, name) {
+  sel = name;
+  document.querySelectorAll('.btns button').forEach(function(b){ b.classList.remove('sel'); });
+  el.classList.add('sel');
+  document.getElementById('entrar').style.opacity = '1';
+  document.getElementById('entrar').disabled = false;
+  document.getElementById('pwd').focus();
+}
+function login() {
+  if (!sel) { alert('Selecciona un usuario'); return; }
+  var pwd = document.getElementById('pwd').value;
+  if (CREDS[sel] && pwd === CREDS[sel]) {
+    document.getElementById('ok').style.display = 'block';
+    document.getElementById('who').textContent = sel;
+    document.getElementById('msg').style.display = 'none';
+  } else {
+    document.getElementById('msg').style.display = 'block';
+    document.getElementById('ok').style.display = 'none';
+    document.getElementById('pwd').value = '';
+  }
+}
+</script>
+</body>
+</html>
