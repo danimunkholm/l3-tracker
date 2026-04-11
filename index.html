@@ -594,7 +594,7 @@ td{padding:10px 12px;vertical-align:middle}
       <button class="who-btn" id="wb-Dani" type="button" onclick="pickUser('Dani',this)">Dani</button>
     </div>
     <label class="lc-label">Contraseña</label>
-    <input class="lc-input" type="password" id="pwdInp" placeholder="••••••••" autocomplete="current-password"/>
+    <input class="lc-input" type="password" id="pwdInp" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLoginClick()"/>
     <button class="lc-btn" id="loginBtn" type="button" disabled onclick="doLoginClick()">Entrar →</button>
     <div class="lc-error" id="loginErr">Usuario o contraseña incorrectos.</div>
   </div>
@@ -858,9 +858,8 @@ td{padding:10px 12px;vertical-align:middle}
 
 <div class="toast" id="toastEl"></div>
 
-<script>
-(function() {
-'use strict';
+<script>'use strict';
+
 
 // ── CONFIG ──────────────────────────────────────────────────────────────────
 var CREDS = { Carlos: 'LemonCarlos123.', Manu: 'LemonManu123.', Dani: 'LemonDani123.' };
@@ -2401,8 +2400,6 @@ document.addEventListener('keydown', function(e) {
 if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(function(regs){ regs.forEach(function(r){r.unregister();}); });
 
 // ── START ──────────────────────────────────────────────────────────────────
-initLogin();
-
 var sessionUser = checkSession();
 if (sessionUser) {
   curUser = sessionUser;
@@ -2412,7 +2409,6 @@ if (sessionUser) {
   boot();
 }
 
-})(); // end IIFE
 </script>
 </body>
 </html>
