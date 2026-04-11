@@ -589,13 +589,13 @@ td{padding:10px 12px;vertical-align:middle}
     <div class="lc-sub">Project Tracker — ¿Quién eres?</div>
     <label class="lc-label">Usuario</label>
     <div class="lc-who" id="whoWrap">
-      <button class="who-btn" id="wb-Carlos" type="button">Carlos</button>
-      <button class="who-btn" id="wb-Manu" type="button">Manu</button>
-      <button class="who-btn" id="wb-Dani" type="button">Dani</button>
+      <button class="who-btn" id="wb-Carlos" type="button" onclick="pickUser('Carlos',this)">Carlos</button>
+      <button class="who-btn" id="wb-Manu" type="button" onclick="pickUser('Manu',this)">Manu</button>
+      <button class="who-btn" id="wb-Dani" type="button" onclick="pickUser('Dani',this)">Dani</button>
     </div>
     <label class="lc-label">Contraseña</label>
     <input class="lc-input" type="password" id="pwdInp" placeholder="••••••••" autocomplete="current-password"/>
-    <button class="lc-btn" id="loginBtn" type="button" disabled>Entrar →</button>
+    <button class="lc-btn" id="loginBtn" type="button" disabled onclick="doLoginClick()">Entrar →</button>
     <div class="lc-error" id="loginErr">Usuario o contraseña incorrectos.</div>
   </div>
 </div>
@@ -914,20 +914,39 @@ function toggleTheme() {
 
 // ── AUTH ──────────────────────────────────────────────────────────────────
 var _selUser = '';
+function doLoginClick() {
+  var pwdInp = document.getElementById('pwdInp');
+  var loginErr = document.getElementById('loginErr');
+  if (!_selUser) return;
+  var pwd = pwdInp.value;
+  if (CREDS[_selUser] && pwd === CREDS[_selUser]) {
+    localStorage.setItem('l3_user', _selUser);
+    localStorage.setItem('l3_exp', String(Date.now() + SESSION_MS));
+    curUser = _selUser;
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    setupUserUI();
+    boot();
+  } else {
+    loginErr.style.display = 'block';
+    pwdInp.value = '';
+    pwdInp.focus();
+    setTimeout(function() { loginErr.style.display = 'none'; }, 3000);
+  }
+}
+function pickUser(name, el) {
+  _selUser = name;
+  document.querySelectorAll('.who-btn').forEach(function(b) { b.classList.remove('sel'); });
+  el.classList.add('sel');
+  document.getElementById('loginBtn').disabled = false;
+  document.getElementById('pwdInp').focus();
+}
 function initLogin() {
   var loginBtn = document.getElementById('loginBtn');
   var pwdInp = document.getElementById('pwdInp');
   var loginErr = document.getElementById('loginErr');
 
-  document.querySelectorAll('.who-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      _selUser = btn.textContent.trim();
-      document.querySelectorAll('.who-btn').forEach(function(b) { b.classList.remove('sel'); });
-      btn.classList.add('sel');
-      loginBtn.disabled = false;
-      pwdInp.focus();
-    });
-  });
+  // who-btn handled by pickUser() onclick
 
   function tryLogin() {
     if (!_selUser) return;
