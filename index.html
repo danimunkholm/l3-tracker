@@ -940,35 +940,6 @@ function pickUser(name, el) {
   document.getElementById('loginBtn').disabled = false;
   document.getElementById('pwdInp').focus();
 }
-function initLogin() {
-  var loginBtn = document.getElementById('loginBtn');
-  var pwdInp = document.getElementById('pwdInp');
-  var loginErr = document.getElementById('loginErr');
-
-  // who-btn handled by pickUser() onclick
-
-  function tryLogin() {
-    if (!_selUser) return;
-    var pwd = pwdInp.value;
-    if (CREDS[_selUser] && pwd === CREDS[_selUser]) {
-      localStorage.setItem('l3_user', _selUser);
-      localStorage.setItem('l3_exp', String(Date.now() + SESSION_MS));
-      curUser = _selUser;
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('app').style.display = 'flex';
-      setupUserUI();
-      boot();
-    } else {
-      loginErr.style.display = 'block';
-      pwdInp.value = '';
-      pwdInp.focus();
-      setTimeout(function() { loginErr.style.display = 'none'; }, 3000);
-    }
-  }
-
-  loginBtn.addEventListener('click', tryLogin);
-  pwdInp.addEventListener('keydown', function(e) { if (e.key === 'Enter') tryLogin(); });
-}
 
 function checkSession() {
   var u = localStorage.getItem('l3_user');
