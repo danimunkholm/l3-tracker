@@ -2413,44 +2413,49 @@ document.addEventListener('keydown', function(e) {
 if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(function(regs){ regs.forEach(function(r){r.unregister();}); });
 
 // ── START ──────────────────────────────────────────────────────────────────
-// Wire login buttons directly
-document.getElementById('wb-Carlos').addEventListener('click', function() {
-  _selUser = 'Carlos';
-  document.getElementById('wb-Carlos').classList.add('sel');
-  document.getElementById('wb-Manu').classList.remove('sel');
-  document.getElementById('wb-Dani').classList.remove('sel');
-  document.getElementById('loginBtn').disabled = false;
-  document.getElementById('pwdInp').focus();
-});
-document.getElementById('wb-Manu').addEventListener('click', function() {
-  _selUser = 'Manu';
-  document.getElementById('wb-Carlos').classList.remove('sel');
-  document.getElementById('wb-Manu').classList.add('sel');
-  document.getElementById('wb-Dani').classList.remove('sel');
-  document.getElementById('loginBtn').disabled = false;
-  document.getElementById('pwdInp').focus();
-});
-document.getElementById('wb-Dani').addEventListener('click', function() {
-  _selUser = 'Dani';
-  document.getElementById('wb-Carlos').classList.remove('sel');
-  document.getElementById('wb-Manu').classList.remove('sel');
-  document.getElementById('wb-Dani').classList.add('sel');
-  document.getElementById('loginBtn').disabled = false;
-  document.getElementById('pwdInp').focus();
-});
-document.getElementById('loginBtn').addEventListener('click', doLogin);
-document.getElementById('pwdInp').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') doLogin();
-});
+document.addEventListener('DOMContentLoaded', function() {
 
-var sessionUser = checkSession();
-if (sessionUser) {
-  curUser = sessionUser;
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-  setupUserUI();
-  boot();
-}
+  // Wire login buttons
+  document.getElementById('wb-Carlos').addEventListener('click', function() {
+    _selUser = 'Carlos';
+    document.getElementById('wb-Carlos').classList.add('sel');
+    document.getElementById('wb-Manu').classList.remove('sel');
+    document.getElementById('wb-Dani').classList.remove('sel');
+    document.getElementById('loginBtn').disabled = false;
+    document.getElementById('pwdInp').focus();
+  });
+  document.getElementById('wb-Manu').addEventListener('click', function() {
+    _selUser = 'Manu';
+    document.getElementById('wb-Carlos').classList.remove('sel');
+    document.getElementById('wb-Manu').classList.add('sel');
+    document.getElementById('wb-Dani').classList.remove('sel');
+    document.getElementById('loginBtn').disabled = false;
+    document.getElementById('pwdInp').focus();
+  });
+  document.getElementById('wb-Dani').addEventListener('click', function() {
+    _selUser = 'Dani';
+    document.getElementById('wb-Carlos').classList.remove('sel');
+    document.getElementById('wb-Manu').classList.remove('sel');
+    document.getElementById('wb-Dani').classList.add('sel');
+    document.getElementById('loginBtn').disabled = false;
+    document.getElementById('pwdInp').focus();
+  });
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
+  document.getElementById('pwdInp').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  // Check existing session
+  var sessionUser = checkSession();
+  if (sessionUser) {
+    curUser = sessionUser;
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    setupUserUI();
+    boot();
+  }
+
+});
 
 })(); // end IIFE
 </script>
