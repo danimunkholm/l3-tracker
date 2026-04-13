@@ -413,293 +413,37 @@ td{padding:10px 12px;vertical-align:middle}
 </style>
 </head>
 <body>
-
-<div id="app">
-  <header class="tb">
-    <div class="tb-dot"></div>
-    <svg viewBox="0 0 1500 1500" height="22" style="flex-shrink:0"><path fill="var(--tx)" d="M460.5 1134.3C434.2 1134.3 413.1 1123.7 392.1 1107.9C360.5 1076.4 355.2 1029 376.3 992.1L397.3 960.6C402.6 950 407.8 934.2 402.6 923.7C349.9 786.8 392.1 623.7 507.9 507.9C623.7 392.1 792.1 349.9 923.7 402.6C934.2 407.8 950 402.6 960.6 397.3L986.9 381.5C1023.7 360.5 1071.1 365.7 1102.7 397.3C1134.3 428.9 1139.5 476.3 1118.5 513.1L1102.7 539.4C1097.4 550 1092.1 565.8 1097.4 576.3C1150.1 707.9 1107.9 876.3 992.1 992.1C876.3 1107.9 707.9 1150.1 576.3 1097.4C565.8 1092.1 550 1097.4 539.4 1102.7L513.1 1118.5C497.3 1129 481.5 1134.3 460.5 1134.3Z"/><circle cx="750" cy="750" r="118" fill="#F0BB3D"/></svg>
-    <span class="tb-brand" style="margin-left:4px">lem<span style="color:var(--y)">&#9679;</span>nthree</span>
-    <div class="tb-mid">
-      <div class="srch-wrap">
-        <div class="srch-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
-        <input class="srch-inp" id="srchInp" placeholder="Buscar&hellip;" autocomplete="off"/>
-        <button class="srch-x" id="srchX" type="button">&#10005;</button>
-      </div>
-    </div>
-    <div class="tb-right">
-      <div class="dbadge" id="dateBadge"></div>
-      <button class="ico-btn tb-d" id="themeBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
-      <button class="ico-btn tb-d" id="cliModalBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></button>
-      <button class="ico-btn tb-d" id="memModalBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
-      <button class="ico-btn tb-d" id="ntfBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
-      <div class="user-chip" id="userChip"><div class="av" id="userAv"></div><span id="userLbl"></span></div>
-      <button class="add-btn" id="addBtn" type="button">+ Tarea</button>
-    </div>
-  </header>
-  <div class="wrap">
-    <aside class="sb">
-      <div class="sb-sec">
-        <div class="sb-head">Vista</div>
-        <div class="sb-item on" id="nav-all">&#9672; Todas</div>
-        <div class="sb-item" id="nav-kb">&#9632; Kanban</div>
-        <div class="sb-item" id="nav-ms">&#9670; Hitos</div>
-        <div class="sb-item" id="nav-cal">&#128197; Calendario</div>
-        <div class="sb-item" id="nav-done">&#10003; Finalizadas</div>
-        <div class="sb-item" id="nav-fichas">&#128101; Fichas cliente</div>
-        <div class="sb-item" id="nav-leads">&#127919; Leads</div>
-        <div class="sb-item" id="nav-tpl">&#128203; Plantillas</div>
-      </div>
-      <div class="sb-sec">
-        <div class="sb-head"><span>Responsable</span><span class="sb-add" id="sb-add-mem">+</span></div>
-        <div class="sb-mem on" id="filt-mem-all"><div class="av" style="width:22px;height:22px;font-size:7px;background:var(--hv);color:var(--mu)">ALL</div>Todos</div>
-        <div id="memberNav"></div>
-      </div>
-      <div class="sb-sec">
-        <div class="sb-head"><span>Cliente</span><span class="sb-add" id="sb-add-cli">+</span></div>
-        <div class="sb-cli on" id="filt-cli-all"><span class="sb-cli-name">Todos</span></div>
-        <div id="cliNav"></div>
-      </div>
-      <div class="sb-sec">
-        <div class="sb-head">Mes</div>
-        <div id="monNav"></div>
-      </div>
-    </aside>
-    <main class="main" id="mainArea">
-      <div id="statsArea" class="stats"></div>
-      <div id="fbarArea" class="fbar"></div>
-      <div id="contentArea"></div>
-    </main>
-  </div>
-  <nav class="bnav">
-    <div class="bn-i on" id="bnav-all"><div class="bi">&#9672;</div><div class="bl">Tareas</div></div>
-    <div class="bn-i" id="bnav-kb"><div class="bi">&#9632;</div><div class="bl">Kanban</div></div>
-    <div class="bn-i" id="bnav-fichas"><div class="bi">&#128101;</div><div class="bl">Clientes</div></div>
-    <div class="bn-i" id="bnav-leads"><div class="bi">&#127919;</div><div class="bl">Leads</div></div>
-    <div class="bn-i" id="bnav-done"><div class="bi">&#10003;</div><div class="bl">Hecho</div></div>
-    <div class="bn-i" id="bnav-more"><div class="bi">&#8943;</div><div class="bl">M&aacute;s</div></div>
-  </nav>
-  <button class="fab" id="fabBtn" type="button">+</button>
-</div>
-
-<div class="pop" id="pop"><div class="pop-title" id="popTitle"></div><div id="popBody"></div></div>
-
-<div class="ov" id="taskOv">
-  <div class="mo">
-    <div class="mo-handle"></div>
-    <div class="mo-title"><span id="taskMoTitle">+ Nueva <em>tarea</em></span><button class="mo-x" id="taskOvX" type="button">&#10005;</button></div>
-    <div class="fg">
-      <div class="fg2 full"><label class="fg-lbl">Proyecto / Tarea *</label><input class="fi" id="f-task" placeholder="Nombre&hellip;" autocomplete="off"/></div>
-      <div class="fg2"><label class="fg-lbl">Responsable</label><select class="fs" id="f-owner"></select></div>
-      <div class="fg2"><label class="fg-lbl">Estado</label><select class="fs" id="f-status">
-        <option>&#9679; In Progress</option><option>&#9670; Planificado</option><option>&#9679; LIVE</option>
-        <option>&#9680; Revisi&oacute;n</option><option>&#8635; Ongoing</option><option>&#9208; On Hold</option><option>&#10003; Done</option>
-      </select></div>
-      <div class="fg2"><label class="fg-lbl">Prioridad</label><select class="fs" id="f-pri">
-        <option value="Alta">&#128308; Alta</option><option value="Media" selected>&#128993; Media</option><option value="Baja">&#128994; Baja</option>
-      </select></div>
-      <div class="fg2"><label class="fg-lbl">Mes</label><select class="fs" id="f-mon">
-        <option>Enero</option><option>Febrero</option><option>Marzo</option><option>Abril</option>
-        <option>Mayo</option><option>Junio</option><option>Julio</option><option>Agosto</option>
-        <option>Septiembre</option><option>Octubre</option><option>Noviembre</option><option>Diciembre</option>
-      </select></div>
-      <div class="fg2"><label class="fg-lbl">Fecha inicio</label><input class="fi" type="date" id="f-ds"/></div>
-      <div class="fg2"><label class="fg-lbl">Fecha entrega</label><input class="fi" type="date" id="f-de"/></div>
-      <div class="fg2"><label class="fg-lbl">&iquest;Hito clave?</label><select class="fs" id="f-ms"><option value="no">No</option><option value="yes">S&iacute; &#9670;</option></select></div>
-      <div class="fg2 full"><label class="fg-lbl">Clientes</label><div class="cli-cbs" id="f-cli"></div></div>
-      <div class="fg2 full"><label class="fg-lbl">Enlace</label><input class="fi" id="f-link" placeholder="https://&hellip;" autocomplete="off"/></div>
-      <div class="fg2"><label class="fg-lbl">Colaboradores</label><input class="fi" id="f-collab" placeholder="Equipo&hellip;" autocomplete="off"/></div>
-      <div class="fg2 full"><label class="fg-lbl">Descripci&oacute;n</label><textarea class="ft" id="f-desc" placeholder="&iquest;Qu&eacute; se est&aacute; haciendo?"></textarea></div>
-      <div class="fg2 full"><label class="fg-lbl">Pr&oacute;ximos pasos</label><textarea class="ft" id="f-next" placeholder="&iquest;Qu&eacute; viene?" style="min-height:54px"></textarea></div>
-      <div class="fg2 full"><label class="fg-lbl">Bloqueos</label><input class="fi" id="f-block" placeholder="Dependencias&hellip;" autocomplete="off"/></div>
-    </div>
-    <div class="mo-actions"><button class="btn-cancel" id="taskCancelBtn" type="button">Cancelar</button><button class="btn-save" id="taskSaveBtn" type="button">Guardar</button></div>
-  </div>
-</div>
-
-<div class="ov" id="invOv">
-  <div class="mo mo-sm">
-    <div class="mo-handle"></div>
-    <div class="mo-title"><span id="invMoTitle">+ Nueva <em>factura</em></span><button class="mo-x" id="invOvX" type="button">&#10005;</button></div>
-    <div class="fg">
-      <div class="fg2 full"><label class="fg-lbl">Concepto *</label><input class="fi" id="inv-concept" placeholder="Servicios mensuales&hellip;" autocomplete="off"/></div>
-      <div class="fg2"><label class="fg-lbl">Importe (&euro;) *</label><input class="fi" type="number" id="inv-amount" placeholder="0" min="0" step="0.01"/></div>
-      <div class="fg2"><label class="fg-lbl">Tipo</label><select class="fs" id="inv-type"><option value="mensual">Mensual</option><option value="extra">Servicio extra</option></select></div>
-      <div class="fg2"><label class="fg-lbl">Estado</label><select class="fs" id="inv-status"><option value="Pendiente">Pendiente</option><option value="Enviada">Enviada</option><option value="Pagada">Pagada</option></select></div>
-      <div class="fg2"><label class="fg-lbl">Fecha</label><input class="fi" type="date" id="inv-date"/></div>
-    </div>
-    <div class="mo-actions"><button class="btn-cancel" id="invCancelBtn" type="button">Cancelar</button><button class="btn-save" id="invSaveBtn" type="button">Guardar</button></div>
-  </div>
-</div>
-
-<div class="ov" id="notaOv">
-  <div class="mo mo-sm">
-    <div class="mo-handle"></div>
-    <div class="mo-title"><span>+ Nueva <em>nota</em></span><button class="mo-x" id="notaOvX" type="button">&#10005;</button></div>
-    <div class="fg2 full" style="margin-bottom:12px"><label class="fg-lbl">Nota interna</label><textarea class="ft" id="nota-body" placeholder="Escribe una nota&hellip;" style="min-height:90px"></textarea></div>
-    <div class="mo-actions"><button class="btn-cancel" id="notaCancelBtn" type="button">Cancelar</button><button class="btn-save" id="notaSaveBtn" type="button">Guardar</button></div>
-  </div>
-</div>
-
-<div class="ov" id="cmtOv">
-  <div class="mo mo-sm">
-    <div class="mo-handle"></div>
-    <div class="mo-title"><span id="cmtTitle">&#128172; <em>Comentarios</em></span><button class="mo-x" id="cmtOvX" type="button">&#10005;</button></div>
-    <div class="cmts-list" id="cmtsList"><div class="cmt-empty">Sin comentarios.</div></div>
-    <div class="cmt-inp-row"><textarea class="ft" id="cmtInp" placeholder="Escribe un comentario&hellip;" style="min-height:48px"></textarea><button class="cmt-send" id="cmtSendBtn" type="button">Enviar</button></div>
-  </div>
-</div>
-
-<div class="ov" id="ntfOv">
-  <div class="mo mo-sm">
-    <div class="mo-handle"></div>
-    <div class="mo-title"><span>&#128276; <em>Notificaciones</em></span><button class="mo-x" id="ntfOvX" type="button">&#10005;</button></div>
-    <div class="ntf-sec">Telegram</div>
-    <div class="ntf-row"><span>Nueva tarea creada</span><div class="toggle on" id="tog-tg_new"></div></div>
-    <div class="ntf-row"><span>Cambio de estado</span><div class="toggle on" id="tog-tg_status"></div></div>
-    <div class="ntf-row"><span>Recordatorio entrega (1 d&iacute;a antes)</span><div class="toggle on" id="tog-tg_reminder"></div></div>
-    <div class="ntf-sec">Email (Resend)</div>
-    <div class="ntf-row"><span>Al crear una tarea</span><div class="toggle on" id="tog-new"></div></div>
-    <div class="ntf-row"><span>Al cambiar el estado</span><div class="toggle on" id="tog-status"></div></div>
-    <div class="ntf-row"><span>Al asignar responsable</span><div class="toggle on" id="tog-assign"></div></div>
-    <div class="ntf-row"><span>Recordatorio entrega (1 d&iacute;a antes)</span><div class="toggle on" id="tog-reminder"></div></div>
-    <div style="margin-top:11px"><label class="fg-lbl" style="display:block;margin-bottom:7px">Resend API Key</label><input class="fi" id="resendKey" placeholder="re_xxxxxxxxxxxx" style="font-family:'DM Mono',monospace;font-size:12px" autocomplete="off"/></div>
-    <div class="mo-actions"><button class="btn-cancel" id="ntfCancelBtn" type="button">Cerrar</button><button class="btn-save" id="ntfSaveBtn" type="button">Guardar</button></div>
-  </div>
-</div>
-
-<div class="ov" id="leadOv">
-  <div class="mo mo-sm" style="max-width:500px">
-    <div class="mo-handle"></div>
-    <div class="mo-title"><span id="leadMoTitle">+ Nuevo <em>lead</em></span><button class="mo-x" id="leadOvX" type="button">&#10005;</button></div>
-    <div class="fg">
-      <div class="fg2 full"><label class="fg-lbl">Nombre *</label><input class="fi" id="lead-nombre" placeholder="Nombre del contacto&hellip;" autocomplete="off"/></div>
-      <div class="fg2"><label class="fg-lbl">Empresa</label><input class="fi" id="lead-empresa" placeholder="Empresa&hellip;" autocomplete="off"/></div>
-      <div class="fg2"><label class="fg-lbl">Sector</label><input class="fi" id="lead-sector" placeholder="Hosteler&iacute;a, retail&hellip;" autocomplete="off"/></div>
-      <div class="fg2"><label class="fg-lbl">Email</label><input class="fi" type="email" id="lead-email" placeholder="correo@ejemplo.com" autocomplete="off"/></div>
-      <div class="fg2"><label class="fg-lbl">Tel&eacute;fono</label><input class="fi" id="lead-telefono" placeholder="+34 600 000 000" autocomplete="off"/></div>
-      <div class="fg2"><label class="fg-lbl">Estado</label><select class="fs" id="lead-estado">
-        <option>Contactado</option><option>1&ordf; Reuni&oacute;n</option><option>Env&iacute;o Propuesta</option><option>Aprobado</option><option>Rechazado</option>
-      </select></div>
-      <div class="fg2"><label class="fg-lbl">Responsable</label><select class="fs" id="lead-responsable"></select></div>
-      <div class="fg2"><label class="fg-lbl">Importe potencial (&euro;)</label><input class="fi" type="number" id="lead-importe" placeholder="0" min="0" step="0.01"/></div>
-      <div class="fg2"><label class="fg-lbl">Fecha contacto</label><input class="fi" type="date" id="lead-fecha"/></div>
-      <div class="fg2 full"><label class="fg-lbl">Notas</label><textarea class="ft" id="lead-notas" placeholder="Detalles de la reuni&oacute;n&hellip;" style="min-height:80px"></textarea></div>
-    </div>
-    <div class="mo-actions"><button class="btn-cancel" id="leadCancelBtn" type="button">Cancelar</button><button class="btn-save" id="leadSaveBtn" type="button">Guardar</button></div>
-  </div>
-</div>
-
-<div class="ov" id="memOv">
-  <div class="mo mo-sm">
-    <div class="mo-handle"></div>
-    <div class="mo-title"><span>&#128100; <em>Responsables</em></span><button class="mo-x" id="memOvX" type="button">&#10005;</button></div>
-    <div class="list-wrap" id="memList"></div>
-    <div class="list-add"><input class="fi" id="newMemInp" placeholder="Nombre&hellip;" autocomplete="off"/><button class="list-add-btn" id="addMemBtn" type="button">+ A&ntilde;adir</button></div>
-    <div class="mo-actions"><button class="btn-save" id="memCloseBtn" type="button">Cerrar</button></div>
-  </div>
-</div>
-
-<div class="ov" id="cliMoOv">
-  <div class="mo mo-sm">
-    <div class="mo-handle"></div>
-    <div class="mo-title"><span>&#128101; <em>Clientes</em></span><button class="mo-x" id="cliMoX" type="button">&#10005;</button></div>
-    <div class="list-wrap" id="cliMoList"></div>
-    <div class="list-add"><input class="fi" id="newCliInp" placeholder="Nombre del cliente&hellip;" autocomplete="off"/><button class="list-add-btn" id="addCliBtn" type="button">+ A&ntilde;adir</button></div>
-    <div class="mo-actions"><button class="btn-save" id="cliMoCloseBtn" type="button">Cerrar</button></div>
-  </div>
-</div>
-
-<div class="ov" id="tplOv">
-  <div class="mo" style="max-width:520px">
-    <div class="mo-handle"></div>
-    <div class="mo-title"><span>&#128203; <em>Plantillas</em></span><button class="mo-x" id="tplOvX" type="button">&#10005;</button></div>
-    <p style="font-size:12px;color:var(--tx2);margin-bottom:14px">Selecciona una plantilla para rellenar los campos autom&aacute;ticamente.</p>
-    <div class="tpl-grid" id="tplGrid"></div>
-  </div>
-</div>
-
-<div class="ov" id="mmOv">
-  <div class="mo mo-sm">
-    <div class="mo-handle"></div>
-    <div class="mo-title"><span id="mmTitle">Men&uacute;</span><button class="mo-x" id="mmOvX" type="button">&#10005;</button></div>
-    <button class="mob-btn" id="mm-filter" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"/></svg>Filtrar tareas</button>
-    <button class="mob-btn" id="mm-theme" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Cambiar tema</button>
-    <button class="mob-btn" id="mm-tpl" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Plantillas</button>
-    <button class="mob-btn" id="mm-cal" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Calendario</button>
-    <button class="mob-btn" id="mm-ms" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>Hitos</button>
-    <button class="mob-btn" id="mm-mem" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Responsables</button>
-    <button class="mob-btn" id="mm-cli" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Clientes</button>
-    <button class="mob-btn" id="mm-ntf" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notificaciones</button>
-    <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;margin:14px 0 8px;padding:0 4px">Cambiar usuario</div>
-    <div style="display:flex;gap:7px;margin-bottom:7px">
-      <button class="who-btn" id="sw-Carlos" type="button" style="flex:1;padding:10px 4px">Carlos</button>
-      <button class="who-btn" id="sw-Manu" type="button" style="flex:1;padding:10px 4px">Manu</button>
-      <button class="who-btn" id="sw-Dani" type="button" style="flex:1;padding:10px 4px">Dani</button>
-    </div>
-  </div>
-</div>
-
-<div class="ov" id="mfilOv">
-  <div class="mo mo-sm">
-    <div class="mo-handle"></div>
-    <div class="mo-title"><span>&#128269; <em>Filtros</em></span><button class="mo-x" id="mfilOvX" type="button">&#10005;</button></div>
-    <div class="mfil-grid">
-      <div class="mfil-sec"><div class="mfil-lbl">Responsable</div><div class="mfil-row" id="mfil-mem"></div></div>
-      <div class="mfil-sec"><div class="mfil-lbl">Estado</div><div class="mfil-row" id="mfil-stat"></div></div>
-      <div class="mfil-sec"><div class="mfil-lbl">Prioridad</div><div class="mfil-row" id="mfil-pri"></div></div>
-      <div class="mfil-sec"><div class="mfil-lbl">Cliente</div><div class="mfil-row" id="mfil-cli"></div></div>
-      <div class="mfil-sec"><div class="mfil-lbl">Mes</div><div class="mfil-row" id="mfil-mon"></div></div>
-      <div class="mfil-sec"><div class="mfil-lbl">Ordenar por</div><div class="mfil-row" id="mfil-sort"></div></div>
-    </div>
-    <div class="mo-actions"><button class="btn-cancel" id="mfilResetBtn" type="button">Limpiar</button><button class="btn-save" id="mfilApplyBtn" type="button">Aplicar</button></div>
-  </div>
-</div>
-
-<div class="toast" id="toastEl"></div>
-
+<div id="app"><header class="tb"><div class="tb-dot"></div><svg viewBox="0 0 1500 1500" height="22" style="flex-shrink:0"><path fill="var(--tx)" d="M460.5 1134.3C434.2 1134.3 413.1 1123.7 392.1 1107.9C360.5 1076.4 355.2 1029 376.3 992.1L397.3 960.6C402.6 950 407.8 934.2 402.6 923.7C349.9 786.8 392.1 623.7 507.9 507.9C623.7 392.1 792.1 349.9 923.7 402.6C934.2 407.8 950 402.6 960.6 397.3L986.9 381.5C1023.7 360.5 1071.1 365.7 1102.7 397.3C1134.3 428.9 1139.5 476.3 1118.5 513.1L1102.7 539.4C1097.4 550 1092.1 565.8 1097.4 576.3C1150.1 707.9 1107.9 876.3 992.1 992.1C876.3 1107.9 707.9 1150.1 576.3 1097.4C565.8 1092.1 550 1097.4 539.4 1102.7L513.1 1118.5C497.3 1129 481.5 1134.3 460.5 1134.3Z"/><circle cx="750" cy="750" r="118" fill="#F0BB3D"/></svg><span class="tb-brand" style="margin-left:4px">lem<span style="color:var(--y)">&#9679;</span>nthree</span><div class="tb-mid"><div class="srch-wrap"><div class="srch-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div><input class="srch-inp" id="srchInp" placeholder="Buscar&hellip;" autocomplete="off"/><button class="srch-x" id="srchX" type="button">&#10005;</button></div></div><div class="tb-right"><div class="dbadge" id="dateBadge"></div><button class="ico-btn tb-d" id="themeBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button><button class="ico-btn tb-d" id="cliModalBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></button><button class="ico-btn tb-d" id="memModalBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button><button class="ico-btn tb-d" id="ntfBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button><div class="user-chip" id="userChip"><div class="av" id="userAv"></div><span id="userLbl"></span></div><button class="add-btn" id="addBtn" type="button">+ Tarea</button></div></header><div class="wrap"><aside class="sb"><div class="sb-sec"><div class="sb-head">Vista</div><div class="sb-item on" id="nav-all">&#9672; Todas</div><div class="sb-item" id="nav-kb">&#9632; Kanban</div><div class="sb-item" id="nav-ms">&#9670; Hitos</div><div class="sb-item" id="nav-cal">&#128197; Calendario</div><div class="sb-item" id="nav-done">&#10003; Finalizadas</div><div class="sb-item" id="nav-fichas">&#128101; Fichas cliente</div><div class="sb-item" id="nav-leads">&#127919; Leads</div><div class="sb-item" id="nav-tpl">&#128203; Plantillas</div></div><div class="sb-sec"><div class="sb-head"><span>Responsable</span><span class="sb-add" id="sb-add-mem">+</span></div><div class="sb-mem on" id="filt-mem-all"><div class="av" style="width:22px;height:22px;font-size:7px;background:var(--hv);color:var(--mu)">ALL</div>Todos</div><div id="memberNav"></div></div><div class="sb-sec"><div class="sb-head"><span>Cliente</span><span class="sb-add" id="sb-add-cli">+</span></div><div class="sb-cli on" id="filt-cli-all"><span class="sb-cli-name">Todos</span></div><div id="cliNav"></div></div><div class="sb-sec"><div class="sb-head">Mes</div><div id="monNav"></div></div></aside><main class="main" id="mainArea"><div id="statsArea" class="stats"></div><div id="fbarArea" class="fbar"></div><div id="contentArea"></div></main></div><nav class="bnav"><div class="bn-i on" id="bnav-all"><div class="bi">&#9672;</div><div class="bl">Tareas</div></div><div class="bn-i" id="bnav-kb"><div class="bi">&#9632;</div><div class="bl">Kanban</div></div><div class="bn-i" id="bnav-fichas"><div class="bi">&#128101;</div><div class="bl">Clientes</div></div><div class="bn-i" id="bnav-leads"><div class="bi">&#127919;</div><div class="bl">Leads</div></div><div class="bn-i" id="bnav-done"><div class="bi">&#10003;</div><div class="bl">Hecho</div></div><div class="bn-i" id="bnav-more"><div class="bi">&#8943;</div><div class="bl">M&aacute;s</div></div></nav><button class="fab" id="fabBtn" type="button">+</button></div><div class="pop" id="pop"><div class="pop-title" id="popTitle"></div><div id="popBody"></div></div><div class="ov" id="taskOv"><div class="mo"><div class="mo-handle"></div><div class="mo-title"><span id="taskMoTitle">+ Nueva <em>tarea</em></span><button class="mo-x" id="taskOvX" type="button">&#10005;</button></div><div class="fg"><div class="fg2 full"><label class="fg-lbl">Tarea *</label><input class="fi" id="f-task" placeholder="Nombre&hellip;" autocomplete="off"/></div><div class="fg2"><label class="fg-lbl">Responsable</label><select class="fs" id="f-owner"></select></div><div class="fg2"><label class="fg-lbl">Estado</label><select class="fs" id="f-status"><option>&#9679; In Progress</option><option>&#9670; Planificado</option><option>&#9679; LIVE</option><option>&#9680; Revisi&oacute;n</option><option>&#8635; Ongoing</option><option>&#9208; On Hold</option><option>&#10003; Done</option></select></div><div class="fg2"><label class="fg-lbl">Prioridad</label><select class="fs" id="f-pri"><option value="Alta">Alta</option><option value="Media" selected>Media</option><option value="Baja">Baja</option></select></div><div class="fg2"><label class="fg-lbl">Mes</label><select class="fs" id="f-mon"><option>Enero</option><option>Febrero</option><option>Marzo</option><option>Abril</option><option>Mayo</option><option>Junio</option><option>Julio</option><option>Agosto</option><option>Septiembre</option><option>Octubre</option><option>Noviembre</option><option>Diciembre</option></select></div><div class="fg2"><label class="fg-lbl">Fecha inicio</label><input class="fi" type="date" id="f-ds"/></div><div class="fg2"><label class="fg-lbl">Fecha entrega</label><input class="fi" type="date" id="f-de"/></div><div class="fg2"><label class="fg-lbl">Hito?</label><select class="fs" id="f-ms"><option value="no">No</option><option value="yes">Si</option></select></div><div class="fg2 full"><label class="fg-lbl">Clientes</label><div class="cli-cbs" id="f-cli"></div></div><div class="fg2 full"><label class="fg-lbl">Enlace</label><input class="fi" id="f-link" placeholder="https://&hellip;" autocomplete="off"/></div><div class="fg2"><label class="fg-lbl">Colaboradores</label><input class="fi" id="f-collab" placeholder="Equipo&hellip;" autocomplete="off"/></div><div class="fg2 full"><label class="fg-lbl">Descripcion</label><textarea class="ft" id="f-desc" placeholder="Que se esta haciendo?"></textarea></div><div class="fg2 full"><label class="fg-lbl">Proximos pasos</label><textarea class="ft" id="f-next" placeholder="Que viene?" style="min-height:54px"></textarea></div><div class="fg2 full"><label class="fg-lbl">Bloqueos</label><input class="fi" id="f-block" placeholder="Dependencias&hellip;" autocomplete="off"/></div></div><div class="mo-actions"><button class="btn-cancel" id="taskCancelBtn" type="button">Cancelar</button><button class="btn-save" id="taskSaveBtn" type="button">Guardar</button></div></div></div><div class="ov" id="invOv"><div class="mo mo-sm"><div class="mo-handle"></div><div class="mo-title"><span id="invMoTitle">+ Nueva <em>factura</em></span><button class="mo-x" id="invOvX" type="button">&#10005;</button></div><div class="fg"><div class="fg2 full"><label class="fg-lbl">Concepto *</label><input class="fi" id="inv-concept" placeholder="Servicios&hellip;" autocomplete="off"/></div><div class="fg2"><label class="fg-lbl">Importe (EUR) *</label><input class="fi" type="number" id="inv-amount" placeholder="0" min="0" step="0.01"/></div><div class="fg2"><label class="fg-lbl">Tipo</label><select class="fs" id="inv-type"><option value="mensual">Mensual</option><option value="extra">Extra</option></select></div><div class="fg2"><label class="fg-lbl">Estado</label><select class="fs" id="inv-status"><option value="Pendiente">Pendiente</option><option value="Enviada">Enviada</option><option value="Pagada">Pagada</option></select></div><div class="fg2"><label class="fg-lbl">Fecha</label><input class="fi" type="date" id="inv-date"/></div></div><div class="mo-actions"><button class="btn-cancel" id="invCancelBtn" type="button">Cancelar</button><button class="btn-save" id="invSaveBtn" type="button">Guardar</button></div></div></div><div class="ov" id="notaOv"><div class="mo mo-sm"><div class="mo-handle"></div><div class="mo-title"><span>+ Nueva <em>nota</em></span><button class="mo-x" id="notaOvX" type="button">&#10005;</button></div><div class="fg2 full" style="margin-bottom:12px"><label class="fg-lbl">Nota interna</label><textarea class="ft" id="nota-body" placeholder="Escribe una nota&hellip;" style="min-height:90px"></textarea></div><div class="mo-actions"><button class="btn-cancel" id="notaCancelBtn" type="button">Cancelar</button><button class="btn-save" id="notaSaveBtn" type="button">Guardar</button></div></div></div><div class="ov" id="cmtOv"><div class="mo mo-sm"><div class="mo-handle"></div><div class="mo-title"><span id="cmtTitle">Comentarios</span><button class="mo-x" id="cmtOvX" type="button">&#10005;</button></div><div class="cmts-list" id="cmtsList"><div class="cmt-empty">Sin comentarios.</div></div><div class="cmt-inp-row"><textarea class="ft" id="cmtInp" placeholder="Comentario&hellip;" style="min-height:48px"></textarea><button class="cmt-send" id="cmtSendBtn" type="button">Enviar</button></div></div></div><div class="ov" id="ntfOv"><div class="mo mo-sm"><div class="mo-handle"></div><div class="mo-title"><span>Notificaciones</span><button class="mo-x" id="ntfOvX" type="button">&#10005;</button></div><div class="ntf-sec">Telegram</div><div class="ntf-row"><span>Nueva tarea</span><div class="toggle on" id="tog-tg_new"></div></div><div class="ntf-row"><span>Cambio estado</span><div class="toggle on" id="tog-tg_status"></div></div><div class="ntf-row"><span>Recordatorio</span><div class="toggle on" id="tog-tg_reminder"></div></div><div class="ntf-sec">Email</div><div class="ntf-row"><span>Al crear</span><div class="toggle on" id="tog-new"></div></div><div class="ntf-row"><span>Estado</span><div class="toggle on" id="tog-status"></div></div><div class="ntf-row"><span>Asignacion</span><div class="toggle on" id="tog-assign"></div></div><div class="ntf-row"><span>Recordatorio</span><div class="toggle on" id="tog-reminder"></div></div><div style="margin-top:11px"><label class="fg-lbl" style="display:block;margin-bottom:7px">Resend API Key</label><input class="fi" id="resendKey" placeholder="re_xxxxxxxxxxxx" style="font-size:12px" autocomplete="off"/></div><div class="mo-actions"><button class="btn-cancel" id="ntfCancelBtn" type="button">Cerrar</button><button class="btn-save" id="ntfSaveBtn" type="button">Guardar</button></div></div></div><div class="ov" id="leadOv"><div class="mo mo-sm" style="max-width:500px"><div class="mo-handle"></div><div class="mo-title"><span id="leadMoTitle">+ Nuevo <em>lead</em></span><button class="mo-x" id="leadOvX" type="button">&#10005;</button></div><div class="fg"><div class="fg2 full"><label class="fg-lbl">Nombre *</label><input class="fi" id="lead-nombre" placeholder="Nombre del contacto&hellip;" autocomplete="off"/></div><div class="fg2"><label class="fg-lbl">Empresa</label><input class="fi" id="lead-empresa" placeholder="Empresa&hellip;" autocomplete="off"/></div><div class="fg2"><label class="fg-lbl">Sector</label><input class="fi" id="lead-sector" placeholder="Hosteleria&hellip;" autocomplete="off"/></div><div class="fg2"><label class="fg-lbl">Email</label><input class="fi" type="email" id="lead-email" placeholder="correo@ejemplo.com" autocomplete="off"/></div><div class="fg2"><label class="fg-lbl">Telefono</label><input class="fi" id="lead-telefono" placeholder="+34 600 000 000" autocomplete="off"/></div><div class="fg2"><label class="fg-lbl">Estado</label><select class="fs" id="lead-estado"><option>Contactado</option><option>1a Reunion</option><option>Envio Propuesta</option><option>Aprobado</option><option>Rechazado</option></select></div><div class="fg2"><label class="fg-lbl">Responsable</label><select class="fs" id="lead-responsable"></select></div><div class="fg2"><label class="fg-lbl">Importe (EUR)</label><input class="fi" type="number" id="lead-importe" placeholder="0" min="0" step="0.01"/></div><div class="fg2"><label class="fg-lbl">Fecha contacto</label><input class="fi" type="date" id="lead-fecha"/></div><div class="fg2 full"><label class="fg-lbl">Notas</label><textarea class="ft" id="lead-notas" placeholder="Detalles&hellip;" style="min-height:80px"></textarea></div></div><div class="mo-actions"><button class="btn-cancel" id="leadCancelBtn" type="button">Cancelar</button><button class="btn-save" id="leadSaveBtn" type="button">Guardar</button></div></div></div><div class="ov" id="memOv"><div class="mo mo-sm"><div class="mo-handle"></div><div class="mo-title"><span>Responsables</span><button class="mo-x" id="memOvX" type="button">&#10005;</button></div><div class="list-wrap" id="memList"></div><div class="list-add"><input class="fi" id="newMemInp" placeholder="Nombre&hellip;" autocomplete="off"/><button class="list-add-btn" id="addMemBtn" type="button">+ Anadir</button></div><div class="mo-actions"><button class="btn-save" id="memCloseBtn" type="button">Cerrar</button></div></div></div><div class="ov" id="cliMoOv"><div class="mo mo-sm"><div class="mo-handle"></div><div class="mo-title"><span>Clientes</span><button class="mo-x" id="cliMoX" type="button">&#10005;</button></div><div class="list-wrap" id="cliMoList"></div><div class="list-add"><input class="fi" id="newCliInp" placeholder="Nombre cliente&hellip;" autocomplete="off"/><button class="list-add-btn" id="addCliBtn" type="button">+ Anadir</button></div><div class="mo-actions"><button class="btn-save" id="cliMoCloseBtn" type="button">Cerrar</button></div></div></div><div class="ov" id="tplOv"><div class="mo" style="max-width:520px"><div class="mo-handle"></div><div class="mo-title"><span>Plantillas</span><button class="mo-x" id="tplOvX" type="button">&#10005;</button></div><p style="font-size:12px;color:var(--tx2);margin-bottom:14px">Selecciona una plantilla.</p><div class="tpl-grid" id="tplGrid"></div></div></div><div class="ov" id="mmOv"><div class="mo mo-sm"><div class="mo-handle"></div><div class="mo-title"><span id="mmTitle">Menu</span><button class="mo-x" id="mmOvX" type="button">&#10005;</button></div><button class="mob-btn" id="mm-filter" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"/></svg>Filtrar</button><button class="mob-btn" id="mm-theme" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Cambiar tema</button><button class="mob-btn" id="mm-tpl" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Plantillas</button><button class="mob-btn" id="mm-cal" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Calendario</button><button class="mob-btn" id="mm-ms" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>Hitos</button><button class="mob-btn" id="mm-mem" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Responsables</button><button class="mob-btn" id="mm-cli" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Clientes</button><button class="mob-btn" id="mm-ntf" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notificaciones</button><div style="font-family:DM Mono,monospace;font-size:8px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;margin:14px 0 8px">Cambiar usuario</div><div style="display:flex;gap:7px;margin-bottom:7px"><button class="who-btn" id="sw-Carlos" style="flex:1;padding:10px 4px" type="button">Carlos</button><button class="who-btn" id="sw-Manu" style="flex:1;padding:10px 4px" type="button">Manu</button><button class="who-btn" id="sw-Dani" style="flex:1;padding:10px 4px" type="button">Dani</button></div></div></div><div class="ov" id="mfilOv"><div class="mo mo-sm"><div class="mo-handle"></div><div class="mo-title"><span>Filtros</span><button class="mo-x" id="mfilOvX" type="button">&#10005;</button></div><div class="mfil-grid"><div class="mfil-sec"><div class="mfil-lbl">Responsable</div><div class="mfil-row" id="mfil-mem"></div></div><div class="mfil-sec"><div class="mfil-lbl">Estado</div><div class="mfil-row" id="mfil-stat"></div></div><div class="mfil-sec"><div class="mfil-lbl">Prioridad</div><div class="mfil-row" id="mfil-pri"></div></div><div class="mfil-sec"><div class="mfil-lbl">Cliente</div><div class="mfil-row" id="mfil-cli"></div></div><div class="mfil-sec"><div class="mfil-lbl">Mes</div><div class="mfil-row" id="mfil-mon"></div></div><div class="mfil-sec"><div class="mfil-lbl">Ordenar</div><div class="mfil-row" id="mfil-sort"></div></div></div><div class="mo-actions"><button class="btn-cancel" id="mfilResetBtn" type="button">Limpiar</button><button class="btn-save" id="mfilApplyBtn" type="button">Aplicar</button></div></div></div><div class="toast" id="toastEl"></div>
 <script>
-document.documentElement.setAttribute('data-theme', localStorage.getItem('l3_theme') || 'dark');
+var SBU='https://hyvbxpsjgoqsazvmkjgb.supabase.co';
+var SBK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5dmJ4cHNqZ29xc2F6dm1ramdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MTAxODgsImV4cCI6MjA5MDE4NjE4OH0.1iM_hO2Wu3kcVYbXrfhjYqiPT3BU5asANkgvqMt_0qY';
+var TG_TOKEN='8636177069:AAGE7lG9A82Zug88GfgQ0A6L80toBKRmL5A';
+var TG_CHAT='-5142480046';
+var MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+var DOW=['Lun','Mar','Mi\u00e9','Jue','Vie','S\u00e1b','Dom'];
+var DEF_CLI=['Lemonthree','Melia Isla Canela','Melia Benidorm','Clinica Sagur','Alessandro Thione','Lucia Piccoli Miracoli','Asociaci\u00f3n Comerciantes Benalua'];
+var DEF_MEM=['Carlos','Manu','Dani'];
+var STATUS_MAP={'\u25cf LIVE':'s-live','\u25cf In Progress':'s-wip','\u25d0 Revisi\u00f3n':'s-rev','\u25c6 Planificado':'s-plan','\u21bb Ongoing':'s-ong','\u23f8 On Hold':'s-hold','\u2713 Done':'s-done'};
+var PRI_MAP={Alta:{cls:'pri-h',ico:'\ud83d\udd34'},Media:{cls:'pri-m',ico:'\ud83d\udfe1'},Baja:{cls:'pri-l',ico:'\ud83d\udfe2'}};
+var PRI_ORD={Alta:0,Media:1,Baja:2};
+var MEM_MAP={Carlos:{badge:'badge-C',av:'av-C'},Manu:{badge:'badge-M',av:'av-M'},Dani:{badge:'badge-D',av:'av-D'}};
+var KB_COLS=[{s:'\u25c6 Planificado',c:'#aaa'},{s:'\u25cf In Progress',c:'#F0BB3D'},{s:'\u25d0 Revisi\u00f3n',c:'#5dade2'},{s:'\u25cf LIVE',c:'#2ecc71'},{s:'\u23f8 On Hold',c:'#e74c3c'}];
+var LEAD_ESTADOS=[{key:'Contactado',cls:'le-contactado',col:'#5dade2'},{key:'1\u00aa Reuni\u00f3n',cls:'le-reunion',col:'#F0BB3D'},{key:'Env\u00edo Propuesta',cls:'le-propuesta',col:'#e67e22'},{key:'Aprobado',cls:'le-aprobado',col:'#27ae60'},{key:'Rechazado',cls:'le-rechazado',col:'#e74c3c'}];
+var LEAD_CSS={'Contactado':'lc-contactado','1\u00aa Reuni\u00f3n':'lc-reunion','Env\u00edo Propuesta':'lc-propuesta','Aprobado':'lc-aprobado','Rechazado':'lc-rechazado'};
+var EMAILS={Carlos:'carlos@lemonthree.es',Manu:'manu@lemonthree.es',Dani:'dani@lemonthree.es'};
+var TEMPLATES=[{ico:'\U0001f4c5',name:'Calendario Redes',desc:'Planificaci\u00f3n mensual',status:'\u25c6 Planificado',pri:'Alta',dl:'Planificaci\u00f3n del calendario de contenidos.',next:'Enviar propuesta al cliente.'},{ico:'\U0001f4e3',name:'Campa\u00f1a Paid Media',desc:'Configuraci\u00f3n y gesti\u00f3n',status:'\u25c6 Planificado',pri:'Alta',dl:'Configuraci\u00f3n y lanzamiento de campa\u00f1a paid.',next:'Definir objetivos con el cliente.'},{ico:'\U0001f4ca',name:'Reporte Mensual',desc:'Informe de resultados',status:'\u25c6 Planificado',pri:'Media',dl:'Elaboraci\u00f3n del informe mensual.',next:'Recopilar datos de plataformas.'},{ico:'\U0001f9fe',name:'Creaci\u00f3n Factura',desc:'Preparar factura del mes',status:'\u25c6 Planificado',pri:'Alta',dl:'Preparaci\u00f3n de factura mensual.',next:'Revisar servicios prestados.'},{ico:'\U0001f4e4',name:'Env\u00edo Factura',desc:'Enviar y registrar',status:'\u25c6 Planificado',pri:'Alta',dl:'Env\u00edo de factura al cliente.',next:'Enviar por email y confirmar.'}];
+var tasks=[],clients=DEF_CLI.slice(),members=DEF_MEM.slice(),invoices=[],leads=[],notes={},contactInfo={};
+var curUser='',editTaskId=null,editInvId=null,editLeadId=null,curFicha=null,curCmtTask=null,curInvClient=null,curNoteClient=null;
+var popId=null,popField=null,popCliSel=[];
+var vView='all',vMem='all',vMon='all',vStat='all',vCli='all',vPri='all',vSort='created',vSearch='',vLeadEst='all';
+var calY=new Date().getFullYear(),calM=new Date().getMonth();
+var ntfPrefs={new:true,status:true,assign:true,reminder:true,tg_new:true,tg_status:true,tg_reminder:true};
+var resendKey='',lastNewId=null;
+document.documentElement.setAttribute('data-theme',localStorage.getItem('l3_theme')||'dark');
+function toggleTheme(){var t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',t);localStorage.setItem('l3_theme',t);}
+function setupUserUI(){var av=document.getElementById('userAv'),lbl=document.getElementById('userLbl');var cfg=MEM_MAP[curUser]||{};if(av){av.className='av '+(cfg.av||'av-D');av.textContent=curUser.slice(0,1);}if(lbl)lbl.textContent=curUser;var mm=document.getElementById('mmTitle');if(mm)mm.innerHTML='<em>'+curUser+'</em>';}
+function logout(){localStorage.removeItem('l3_user');location.reload();}
 
-
-document.documentElement.setAttribute('data-theme', localStorage.getItem('l3_theme') || 'dark');
-
-
-// Theme
-
-// ── AUTO SESSION ──────────────────────────────────────────────────────────
-// No login screen - load saved user or default to Carlos
-curUser = (_savedUser === 'Carlos' || _savedUser === 'Manu' || _savedUser === 'Dani') ? _savedUser : 'Carlos';
-
-function logout() {
-  localStorage.removeItem('l3_user');
-  location.reload();
-}
-
-
-var CREDS = { Carlos: 'LemonCarlos123.', Manu: 'LemonManu123.', Dani: 'LemonDani123.' };
-
-
-
-function toggleTheme(){
-  var t = document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
-  localStorage.setItem('l3_theme',t);
-}
-
-var curUser='';
-
-function startApp(u) {
-  curUser = u || _selUser;
-  var av=document.getElementById('userAv'), lbl=document.getElementById('userLbl');
-  var cfg=MEM_MAP[curUser]||{};
-  if(av){av.className='av '+(cfg.av||'av-D'); av.textContent=curUser.slice(0,1);}
-  if(lbl) lbl.textContent=curUser;
-  var mm=document.getElementById('mmTitle'); if(mm)mm.innerHTML='<em>'+curUser+'</em>';
-  boot(); wireApp();
-}
-
-function logout(){localStorage.removeItem('l3_user');localStorage.removeItem('l3_exp');location.reload();}
-
-// ── SUPABASE ──────────────────────────────────────────────────────────────
 function sbFetch(path,opts){
   opts=opts||{};
   var ctrl=new AbortController(),t=setTimeout(function(){ctrl.abort();},14000);
@@ -1065,13 +809,13 @@ function openTaskModal(task){
   document.getElementById('f-status').value=task?task.status:'● In Progress';
   document.getElementById('f-pri').value=task?(task.priority||'Media'):'Media';
   document.getElementById('f-mon').value=task?task.month:MONTHS[new Date().getMonth()];
-  document.getElementById('f-ds').value=task?(task.date_start||'')':'';
-  document.getElementById('f-de').value=task?(task.date_end||'')':'';
-  document.getElementById('f-link').value=task?(task.link||'')':'';
-  document.getElementById('f-desc').value=task?(task.description||'')':'';
-  document.getElementById('f-next').value=task?(task.next_steps||'')':'';
-  document.getElementById('f-block').value=task?(task.blockers||'')':'';
-  document.getElementById('f-collab').value=task?(task.collab||'')':'';
+  document.getElementById('f-ds').value=task?(task.date_start||'')';
+  document.getElementById('f-de').value=task?(task.date_end||'')';
+  document.getElementById('f-link').value=task?(task.link||'')';
+  document.getElementById('f-desc').value=task?(task.description||'')';
+  document.getElementById('f-next').value=task?(task.next_steps||'')';
+  document.getElementById('f-block').value=task?(task.blockers||'')';
+  document.getElementById('f-collab').value=task?(task.collab||'')';
   document.getElementById('f-ms').value=task?(task.milestone||'no'):'no';
   var own=document.getElementById('f-owner');
   own.innerHTML='<option value="">— Seleccionar —</option>'+members.map(function(m){return'<option value="'+esc(m)+'"'+(task&&task.owner===m?' selected':'')+'>'+m+'</option>';}).join('');
@@ -1111,15 +855,15 @@ function delNote(cli,idx){if(!confirm('¿Eliminar esta nota?'))return;if(notes[c
 function openLeadModal(lead){
   editLeadId=lead?lead.id:null;
   document.getElementById('leadMoTitle').innerHTML=lead?'✎ Editar <em>lead</em>':'+ Nuevo <em>lead</em>';
-  document.getElementById('lead-nombre').value=lead?(lead.nombre||'')':'';
-  document.getElementById('lead-empresa').value=lead?(lead.empresa||'')':'';
-  document.getElementById('lead-sector').value=lead?(lead.sector||'')':'';
-  document.getElementById('lead-email').value=lead?(lead.email||'')':'';
-  document.getElementById('lead-telefono').value=lead?(lead.telefono||'')':'';
+  document.getElementById('lead-nombre').value=lead?(lead.nombre||'')';
+  document.getElementById('lead-empresa').value=lead?(lead.empresa||'')';
+  document.getElementById('lead-sector').value=lead?(lead.sector||'')';
+  document.getElementById('lead-email').value=lead?(lead.email||'')';
+  document.getElementById('lead-telefono').value=lead?(lead.telefono||'')';
   document.getElementById('lead-estado').value=lead?(lead.estado||'Contactado'):'Contactado';
-  document.getElementById('lead-importe').value=lead?(lead.importe||'')':'';
+  document.getElementById('lead-importe').value=lead?(lead.importe||'')';
   document.getElementById('lead-fecha').value=lead?(lead.fecha_contacto||new Date().toISOString().split('T')[0]):new Date().toISOString().split('T')[0];
-  document.getElementById('lead-notas').value=lead?(lead.notas||'')':'';
+  document.getElementById('lead-notas').value=lead?(lead.notas||'')';
   var resp=document.getElementById('lead-responsable');
   resp.innerHTML='<option value="">— Seleccionar —</option>'+members.map(function(m){return'<option value="'+esc(m)+'"'+(lead&&lead.responsable===m?' selected':'')+'>'+m+'</option>';}).join('');
   if(!lead&&curUser)resp.value=curUser;
@@ -1297,194 +1041,8 @@ function wireApp(){
 
 
 
-// ── APP WIRING ────────────────────────────────────────────────────────────
-function wireApp(){
-  function on(id,fn){var el=document.getElementById(id);if(el)el.addEventListener('click',fn);}
-  on('themeBtn',toggleTheme);
-  on('cliModalBtn',function(){renderCliList();openOv('cliMoOv');setTimeout(function(){document.getElementById('newCliInp').focus();},300);});
-  on('memModalBtn',function(){renderMemList();openOv('memOv');setTimeout(function(){document.getElementById('newMemInp').focus();},300);});
-  on('ntfBtn',openNtfModal);
-  on('addBtn',function(){openTaskModal(null);});
-  on('fabBtn',function(){openTaskModal(null);});
-  on('userChip',function(){openOv('mmOv');});
-  on('taskOvX',function(){closeOv('taskOv');});on('taskCancelBtn',function(){closeOv('taskOv');});on('taskSaveBtn',saveTask);
-  on('invOvX',function(){closeOv('invOv');});on('invCancelBtn',function(){closeOv('invOv');});on('invSaveBtn',saveInvoice);
-  on('notaOvX',function(){closeOv('notaOv');});on('notaCancelBtn',function(){closeOv('notaOv');});on('notaSaveBtn',saveNota);
-  on('leadOvX',function(){closeOv('leadOv');});on('leadCancelBtn',function(){closeOv('leadOv');});on('leadSaveBtn',saveLead);
-  on('cmtOvX',function(){closeOv('cmtOv');});on('cmtSendBtn',sendCmt);
-  document.getElementById('cmtInp').addEventListener('keydown',function(e){if(e.key==='Enter'&&(e.metaKey||e.ctrlKey))sendCmt();});
-  on('ntfOvX',function(){closeOv('ntfOv');});on('ntfCancelBtn',function(){closeOv('ntfOv');});on('ntfSaveBtn',saveNtf);
-  document.querySelectorAll('[id^="tog-"]').forEach(function(el){el.addEventListener('click',function(){togNtf(el.id.replace('tog-',''));});});
-  on('mmOvX',function(){closeOv('mmOv');});
-  on('mm-filter',function(){buildMfilContent();openOv('mfilOv');closeOv('mmOv');});
-  on('mm-theme',function(){toggleTheme();closeOv('mmOv');});
-  on('mm-tpl',function(){openTpl();closeOv('mmOv');});
-  on('mm-cal',function(){setView('cal');closeOv('mmOv');});
-  on('mm-ms',function(){setView('ms');closeOv('mmOv');});
-  on('mm-mem',function(){renderMemList();openOv('memOv');closeOv('mmOv');});
-  on('mm-cli',function(){renderCliList();openOv('cliMoOv');closeOv('mmOv');});
-  on('mm-ntf',function(){openNtfModal();closeOv('mmOv');});
-  on('mm-logout',logout);
-  // User switcher
-  ['Carlos','Manu','Dani'].forEach(function(u) {
-    var el = document.getElementById('sw-' + u);
-    if (el) el.addEventListener('click', function() {
-      curUser = u;
-      localStorage.setItem('l3_user', u);
-      setupUserUI();
-      closeOv('mmOv');
-      toast('Hola, ' + u + ' 👋');
-      document.querySelectorAll('[id^="sw-"]').forEach(function(b){ b.classList.remove('sel'); });
-      el.classList.add('sel');
-    });
-  });
-  on('mfilOvX',function(){closeOv('mfilOv');});
-  on('mfilResetBtn',function(){vMem='all';vStat='all';vPri='all';vCli='all';vMon='all';vSort='created';buildMfilContent();render();});
-  on('mfilApplyBtn',function(){closeOv('mfilOv');});
-  on('memOvX',function(){closeOv('memOv');});on('addMemBtn',addMember);on('memCloseBtn',function(){closeOv('memOv');});
-  document.getElementById('newMemInp').addEventListener('keydown',function(e){if(e.key==='Enter')addMember();});
-  on('cliMoX',function(){closeOv('cliMoOv');});on('addCliBtn',addClient);on('cliMoCloseBtn',function(){closeOv('cliMoOv');});
-  document.getElementById('newCliInp').addEventListener('keydown',function(e){if(e.key==='Enter')addClient();});
-  on('tplOvX',function(){closeOv('tplOv');});
-  ['all','kb','fichas','leads','done'].forEach(function(v){on('bnav-'+v,function(){setView(v);});});
-  on('bnav-more',function(){openOv('mmOv');});
-  ['all','kb','ms','cal','done','fichas','leads'].forEach(function(v){on('nav-'+v,function(){setView(v);});});
-  on('nav-tpl',openTpl);
-  on('sb-add-mem',function(){renderMemList();openOv('memOv');});
-  on('sb-add-cli',function(){renderCliList();openOv('cliMoOv');});
-  on('filt-mem-all',function(){vMem='all';document.querySelectorAll('[data-mem]').forEach(function(x){x.classList.remove('on');});document.getElementById('filt-mem-all').classList.add('on');render();});
-  on('filt-cli-all',function(){vCli='all';document.querySelectorAll('[data-cli]').forEach(function(x){x.classList.remove('on');});document.getElementById('filt-cli-all').classList.add('on');render();});
-  var si=document.getElementById('srchInp'),sx=document.getElementById('srchX');
-  si.addEventListener('input',function(){vSearch=this.value.trim().toLowerCase();sx.classList.toggle('on',!!vSearch);render();});
-  sx.addEventListener('click',function(){si.value='';vSearch='';sx.classList.remove('on');render();si.focus();});
-  document.addEventListener('keydown',function(e){
-    if(e.key==='Escape'){document.querySelectorAll('.ov.on').forEach(function(el){el.classList.remove('on');});closePop();}
-    if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){var ov=document.getElementById('taskOv');if(ov&&ov.classList.contains('on'))saveTask();}
-  });
-  document.addEventListener('click',function(e){
-    if(document.getElementById('loginScreen')&&document.getElementById('loginScreen').style.display!=='none')return;
-    var t=e.target;
-    if(!t.closest('.pop')&&!t.closest('.ed')&&!t.closest('.ed-add')&&!t.closest('.status')&&!t.closest('.pri'))closePop();
-    if(t.classList.contains('ov')){t.classList.remove('on');return;}
-    var pe=t.closest('[data-pop]');if(pe){openPop(e,pe.dataset.pop,pe.dataset.id);return;}
-    var po=t.closest('.pop-opt');if(po&&po.dataset.val!==undefined&&!t.closest('#popCliCancel')&&!t.closest('#popCliSave')&&!t.closest('#popDateSave')&&!t.closest('#popLinkSave')){doInline(popField,po.dataset.val);return;}
-    if(t.id==='popCliSave'){var vals=Array.from(document.querySelectorAll('[data-clival]:checked')).map(function(x){return x.dataset.clival;});doInline('client',JSON.stringify(vals));return;}
-    if(t.id==='popCliCancel'||t.id==='popDateCancel'||t.id==='popLinkCancel'){closePop();return;}
-    if(t.id==='popDateSave'){doInline(popField,document.getElementById('popDateInp').value||null);return;}
-    if(t.id==='popLinkSave'){doInline('link',document.getElementById('popLinkInp').value.trim());return;}
-    if(t.dataset.clival!==undefined&&t.type==='checkbox'){if(t.checked){if(!popCliSel.includes(t.dataset.clival))popCliSel.push(t.dataset.clival);}else{popCliSel=popCliSel.filter(function(x){return x!==t.dataset.clival;});}return;}
-    var aa=t.closest('[data-cmt],[data-dup],[data-edt],[data-del],[data-rop]');
-    if(aa){if(aa.dataset.cmt){openCmt(aa.dataset.cmt);return;}if(aa.dataset.dup){dupTask(aa.dataset.dup);return;}if(aa.dataset.edt){editTask(aa.dataset.edt);return;}if(aa.dataset.del){delTask(aa.dataset.del);return;}if(aa.dataset.rop){reopenTask(aa.dataset.rop);return;}}
-    var fc=t.closest('[data-ficha]');if(fc){curInvClient=fc.dataset.ficha;curFicha=fc.dataset.ficha;buildFichaDetail(document.getElementById('contentArea'),fc.dataset.ficha);return;}
-    if(t.closest('[data-fd-back]')){curFicha=null;buildFichas(document.getElementById('contentArea'));return;}
-    var ia=t.closest('[data-edt-inv],[data-del-inv]');if(ia){if(ia.dataset.edtInv){openInvEdit(ia.dataset.edtInv);return;}if(ia.dataset.delInv){delInvoice(ia.dataset.delInv);return;}}
-    var addInv=t.closest('[data-add-inv]');if(addInv){openInvModal(addInv.dataset.addInv);return;}
-    var addNota=t.closest('[data-add-nota]');if(addNota){openNotaModal(addNota.dataset.addNota);return;}
-    var ec=t.closest('[data-edit-contact]');if(ec){editContact(ec.dataset.editCli,ec.dataset.editContact);return;}
-    var sc=t.closest('[data-save-contact]');if(sc){saveContact(sc.dataset.saveCli,sc.dataset.saveContact);return;}
-    var dn=t.closest('[data-del-nota]');if(dn){delNote(dn.dataset.notaCli,parseInt(dn.dataset.delNota,10));return;}
-    var la=t.closest('[data-edt-lead],[data-del-lead]');if(la){if(la.dataset.edtLead){editLead(la.dataset.edtLead);return;}if(la.dataset.delLead){delLead(la.dataset.delLead);return;}}
-    if(t.id==='addLeadBtn'){openLeadModal(null);return;}
-    if(t.id==='addBtnMain'){openTaskModal(null);return;}
-    var lef=t.closest('[data-lead-est]');if(lef){vLeadEst=lef.dataset.leadEst;buildLeads(document.getElementById('contentArea'));return;}
-    if(t.dataset.stat!==undefined){vStat=t.dataset.stat;document.querySelectorAll('[data-stat]').forEach(function(el){el.classList.toggle('on',el.dataset.stat===vStat);});render();return;}
-    if(t.dataset.sort!==undefined){vSort=t.dataset.sort;document.querySelectorAll('[data-sort]').forEach(function(el){el.classList.toggle('on',el.dataset.sort===vSort);});render();return;}
-    if(t.dataset.pri!==undefined){vPri=t.dataset.pri;document.querySelectorAll('[data-pri]').forEach(function(el){el.classList.toggle('on',el.dataset.pri===vPri);});render();return;}
-    if(t.dataset.mfilMem!==undefined){vMem=t.dataset.mfilMem;buildMfilContent();render();return;}
-    if(t.dataset.mfilStat!==undefined){vStat=t.dataset.mfilStat;buildMfilContent();render();return;}
-    if(t.dataset.mfilPri!==undefined){vPri=t.dataset.mfilPri;buildMfilContent();render();return;}
-    if(t.dataset.mfilCli!==undefined){vCli=t.dataset.mfilCli;buildMfilContent();render();return;}
-    if(t.dataset.mfilMon!==undefined){vMon=t.dataset.mfilMon;buildMfilContent();render();return;}
-    if(t.dataset.mfilSort!==undefined){vSort=t.dataset.mfilSort;buildMfilContent();render();return;}
-    var rm=t.closest('[data-rem-mem]');if(rm){removeMember(parseInt(rm.dataset.remMem,10));return;}
-    var rc=t.closest('[data-rem-cli]');if(rc){removeClient(parseInt(rc.dataset.remCli,10));return;}
-    var tpl=t.closest('[data-tpl]');if(tpl){useTpl(parseInt(tpl.dataset.tpl,10));return;}
-    if(t.id==='calPrev'||t.closest('#calPrev')){calPrev();return;}
-    if(t.id==='calNext'||t.closest('#calNext')){calNext();return;}
-    if(t.id==='calToday'||t.closest('#calToday')){calGotoToday();return;}
-  });
-}
-
-
-
-
-setupUserUI();
-boot();
-wireApp();
-
-
-
-(function(){
-  var saved = localStorage.getItem('l3_user');
-  curUser = (saved === 'Carlos' || saved === 'Manu' || saved === 'Dani') ? saved : 'Carlos';
-  setupUserUI();
-  boot();
-  wireApp();
-  ['Carlos','Manu','Dani'].forEach(function(u) {
-    var el = document.getElementById('sw-' + u);
-    if (!el) return;
-    el.addEventListener('click', function() {
-      curUser = u; localStorage.setItem('l3_user', u);
-      setupUserUI(); render(); closeOv('mmOv');
-      toast('Hola, ' + u + ' 👋');
-    });
-  });
-  var si = document.getElementById('srchInp'), sx = document.getElementById('srchX');
-  if (si) si.addEventListener('input', function() { vSearch=this.value.trim().toLowerCase(); if(sx)sx.classList.toggle('on',!!vSearch); render(); });
-  if (sx) sx.addEventListener('click', function() { si.value=''; vSearch=''; sx.classList.remove('on'); render(); si.focus(); });
-  document.addEventListener('keydown', function(e) {
-    if (e.key==='Escape') { document.querySelectorAll('.ov.on').forEach(function(el){el.classList.remove('on');}); var p=document.getElementById('pop'); if(p)p.classList.remove('on'); }
-    if ((e.metaKey||e.ctrlKey)&&e.key==='Enter') { var to=document.getElementById('taskOv'); if(to&&to.classList.contains('on')) saveTask(); }
-  });
-})();
-
-
-// ── ARRANQUE ───────────────────────────────────────────────────────────────
-(function() {
-  var saved = localStorage.getItem('l3_user');
-  curUser = (saved === 'Carlos' || saved === 'Manu' || saved === 'Dani') ? saved : 'Carlos';
-  setupUserUI();
-  boot();
-  wireApp();
-
-  // Cambiar usuario desde menú
-  ['Carlos','Manu','Dani'].forEach(function(u) {
-    var el = document.getElementById('sw-' + u);
-    if (!el) return;
-    el.addEventListener('click', function() {
-      curUser = u;
-      localStorage.setItem('l3_user', u);
-      setupUserUI();
-      render();
-      closeOv('mmOv');
-      toast('Hola, ' + u + ' 👋');
-    });
-  });
-
-  // Búsqueda
-  var si = document.getElementById('srchInp');
-  var sx = document.getElementById('srchX');
-  if (si) si.addEventListener('input', function() {
-    vSearch = this.value.trim().toLowerCase();
-    if (sx) sx.classList.toggle('on', !!vSearch);
-    render();
-  });
-  if (sx) sx.addEventListener('click', function() {
-    si.value = ''; vSearch = ''; sx.classList.remove('on'); render(); si.focus();
-  });
-
-  // Teclado
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.ov.on').forEach(function(el) { el.classList.remove('on'); });
-      var p = document.getElementById('pop'); if (p) p.classList.remove('on');
-    }
-    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
-      var to = document.getElementById('taskOv');
-      if (to && to.classList.contains('on')) saveTask();
-    }
-  });
-})();
+// ── APP WIRING ────────────────────────────────────────────────────────
+(function(){var s=localStorage.getItem('l3_user');curUser=(s==='Carlos'||s==='Manu'||s==='Dani')?s:'Carlos';setupUserUI();boot();wireApp();['Carlos','Manu','Dani'].forEach(function(u){var el=document.getElementById('sw-'+u);if(!el)return;el.addEventListener('click',function(){curUser=u;localStorage.setItem('l3_user',u);setupUserUI();render();closeOv('mmOv');toast('Hola, '+u+' 👋');});});})();
 </script>
 </body>
 </html>
