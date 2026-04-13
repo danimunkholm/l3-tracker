@@ -846,6 +846,17 @@ td{padding:10px 12px;vertical-align:middle}
   </div>
 </div>
 
+
+<!-- LEAD COMMENTS MODAL -->
+<div class="ov" id="leadCmtOv">
+  <div class="mo mo-sm">
+    <div class="mo-handle"></div>
+    <div class="mo-title"><span id="leadCmtTitle">💬 <em>Comentarios</em></span><button class="mo-x" id="leadCmtOvX" type="button">✕</button></div>
+    <div class="cmts-list" id="leadCmtsList" style="max-height:220px;overflow-y:auto;margin-bottom:12px;display:flex;flex-direction:column;gap:9px"><div class="cmt-empty">Sin comentarios.</div></div>
+    <div class="cmt-inp-row"><textarea class="ft" id="leadCmtInp" placeholder="Escribe un comentario…" style="min-height:48px"></textarea><button class="cmt-send" id="leadCmtSendBtn" type="button">Enviar</button></div>
+  </div>
+</div>
+
 <div class="toast" id="toastEl"></div>
 
 <script>
@@ -995,6 +1006,8 @@ var sb = {
   addMem:      function(n) { return sbFetch('members', { method:'POST', prefer:'return=representation', body:JSON.stringify({name:n}) }); },
   delMem:      function(id) { return sbFetch('members?id=eq.' + id, { method:'DELETE' }); },
   addCmt:      function(d) { return sbFetch('comments', { method:'POST', prefer:'return=representation', body:JSON.stringify(d) }); },
+  getLeadCmts: function(id) { return sbFetch('lead_comments?lead_id=eq.'+id+'&order=created_at.asc&select=*'); },
+  addLeadCmt:  function(d) { return sbFetch('lead_comments', { method:'POST', prefer:'return=representation', body:JSON.stringify(d) }); },
   getLeads:    function() { return sbFetch('leads?order=created_at.desc&select=*'); },
   addLead:     function(d) { return sbFetch('leads', { method:'POST', prefer:'return=representation', body:JSON.stringify(d) }); },
   updLead:     function(id,d) { return sbFetch('leads?id=eq.' + id, { method:'PATCH', prefer:'return=representation', body:JSON.stringify(d) }); },
@@ -1498,16 +1511,16 @@ function buildFichaDetail(c, cli) {
     '<span class="fd-active">Activo</span></div>' +
     '<div class="fd-contacts">' +
     '<div class="fd-box" id="box-contacto"><div class="fd-box-lbl">Contacto</div>' +
-      '<div class="fd-box-trigger" onclick="editContact(\'' + esc(cli) + '\',\'contacto\')">' +
-        '<div class="fd-box-val">' + esc((contactInfo[cli]||{}).contacto||'—') + '</div>' +
+      '<div class="fd-box-trigger" data-edit-contact="contacto" data-edit-cli="'+esc(cli)+'">' +
+        '<div class="fd-box-val" style="cursor:pointer">' + esc((contactInfo[cli]||{}).contacto||'— clic para editar') + '</div>' +
       '</div></div>' +
     '<div class="fd-box" id="box-email"><div class="fd-box-lbl">Email</div>' +
-      '<div class="fd-box-trigger" onclick="editContact(\'' + esc(cli) + '\',\'email\')">' +
-        '<div class="fd-box-val" style="font-size:11px">' + esc((contactInfo[cli]||{}).email||'—') + '</div>' +
+      '<div class="fd-box-trigger" data-edit-contact="email" data-edit-cli="'+esc(cli)+'">' +
+        '<div class="fd-box-val" style="font-size:11px;cursor:pointer">' + esc((contactInfo[cli]||{}).email||'— clic para editar') + '</div>' +
       '</div></div>' +
     '<div class="fd-box" id="box-telefono"><div class="fd-box-lbl">Teléfono</div>' +
-      '<div class="fd-box-trigger" onclick="editContact(\'' + esc(cli) + '\',\'telefono\')">' +
-        '<div class="fd-box-val">' + esc((contactInfo[cli]||{}).telefono||'—') + '</div>' +
+      '<div class="fd-box-trigger" data-edit-contact="telefono" data-edit-cli="'+esc(cli)+'">' +
+        '<div class="fd-box-val" style="cursor:pointer">' + esc((contactInfo[cli]||{}).telefono||'— clic para editar') + '</div>' +
       '</div></div>' +
     '</div></div>' +
 
@@ -1558,6 +1571,24 @@ function buildFichaDetail(c, cli) {
         '<div class="nota-body">' + esc(n.body) + '</div></div>';
     }).join('');
   }
+  // Documentos
+  var ci2 = contactInfo[cli] || {};
+  h += '<div class="fd-section"><div class="fd-sec-head"><span>Documentos</span></div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">' +
+    '<div class="fd-box"><div class="fd-box-lbl">Contrato</div>' +
+    (ci2.contrato
+      ? '<a href="'+esc(ci2.contrato)+'" target="_blank" rel="noopener" class="link-a" style="font-size:11px;display:block;margin-top:3px">↗ Ver contrato</a>' +
+        '<div class="fd-box-trigger" data-edit-contact="contrato" data-edit-cli="'+esc(cli)+'" style="margin-top:5px"><div class="fd-box-val" style="cursor:pointer;font-size:10px;color:var(--mu)">✎ Editar enlace</div></div>'
+      : '<div class="fd-box-trigger" data-edit-contact="contrato" data-edit-cli="'+esc(cli)+'"><div class="fd-box-val" style="cursor:pointer;color:var(--mu)">+ Añadir enlace</div></div>'
+    ) + '</div>' +
+    '<div class="fd-box"><div class="fd-box-lbl">Propuesta comercial</div>' +
+    (ci2.propuesta
+      ? '<a href="'+esc(ci2.propuesta)+'" target="_blank" rel="noopener" class="link-a" style="font-size:11px;display:block;margin-top:3px">↗ Ver propuesta</a>' +
+        '<div class="fd-box-trigger" data-edit-contact="propuesta" data-edit-cli="'+esc(cli)+'" style="margin-top:5px"><div class="fd-box-val" style="cursor:pointer;font-size:10px;color:var(--mu)">✎ Editar enlace</div></div>'
+      : '<div class="fd-box-trigger" data-edit-contact="propuesta" data-edit-cli="'+esc(cli)+'"><div class="fd-box-val" style="cursor:pointer;color:var(--mu)">+ Añadir enlace</div></div>'
+    ) + '</div>' +
+    '</div></div>';
+
   h += '</div>';
   c.innerHTML = h;
 }
@@ -1565,12 +1596,12 @@ function buildFichaDetail(c, cli) {
 
 // ── CONTACT EDIT ──────────────────────────────────────────────────────────
 function editContact(cli, field) {
-  var labels = {contacto:'Contacto',email:'Email',telefono:'Teléfono'};
+  var labels = {contacto:'Contacto',email:'Email',telefono:'Teléfono',contrato:'Enlace contrato',propuesta:'Enlace propuesta'};
   var boxId = 'box-' + field;
   var box = document.getElementById(boxId);
   if (!box) return;
   var cur = (contactInfo[cli] || {})[field] || '';
-  var placeholder = field==='email'?'correo@ejemplo.com':field==='telefono'?'+34 600 000 000':'Nombre del contacto';
+  var placeholder = field==='email'?'correo@ejemplo.com':field==='telefono'?'+34 600 000 000':(field==='contrato'||field==='propuesta')?'https://drive.google.com/…':'Nombre del contacto';
   box.innerHTML = '<div class="fd-box-lbl">' + labels[field] + '</div>' +
     '<div class="fd-box-edit-wrap">' +
     '<input class="fd-box-edit" id="ci-' + field + '" value="' + esc(cur) + '" placeholder="' + placeholder + '" autocomplete="off"/>' +
@@ -1990,7 +2021,7 @@ function buildLeads(c) {
       var ec = LEAD_ESTADOS.find(function(e){return e.key===l.estado;})||LEAD_ESTADOS[0];
       var lc = LEAD_CSS[l.estado]||'lc-contactado';
       return '<div class="lead-card '+lc+'">'+
-        '<div class="lead-actions"><button class="ib" data-edt-lead="'+l.id+'">'+I.edt+'</button><button class="ib d" data-del-lead="'+l.id+'">'+I.del+'</button></div>'+
+        '<div class="lead-actions"><button class="ib" data-lead-cmt="'+l.id+'" title="Comentarios">'+I.cmt+'</button><button class="ib" data-edt-lead="'+l.id+'">'+I.edt+'</button><button class="ib d" data-del-lead="'+l.id+'">'+I.del+'</button></div>'+
         '<div class="lead-name">'+esc(l.nombre)+'</div>'+
         '<div class="lead-empresa">'+esc(l.empresa||'—')+(l.sector?' · '+esc(l.sector):'')+'</div>'+
         '<div class="lead-estado '+ec.cls+'">'+l.estado+'</div>'+
@@ -2067,6 +2098,46 @@ function delLead(id) {
     buildLeads(document.getElementById('contentArea'));
     toast('Eliminado');
   }).catch(function(e){toast('Error: '+e.message,'err');});
+}
+
+
+// ── LEAD COMMENTS ─────────────────────────────────────────────────────────
+var curLeadCmt = null;
+
+function openLeadCmt(id) {
+  curLeadCmt = id;
+  var lead = leads.find(function(x){return x.id===id;});
+  document.getElementById('leadCmtTitle').innerHTML = '💬 <em>' + esc(lead?lead.nombre:'') + '</em>';
+  document.getElementById('leadCmtInp').value = '';
+  openOv('leadCmtOv');
+  loadLeadCmts();
+  setTimeout(function(){document.getElementById('leadCmtInp').focus();}, 300);
+}
+
+function loadLeadCmts() {
+  var list = document.getElementById('leadCmtsList');
+  list.innerHTML = '<div class="cmt-empty"><div class="spin" style="margin:0 auto 7px;width:22px;height:22px;border-width:2px"></div></div>';
+  sb.getLeadCmts(curLeadCmt).then(function(cmts) {
+    if (!cmts || !cmts.length) { list.innerHTML = '<div class="cmt-empty">Sin comentarios aún.</div>'; return; }
+    list.innerHTML = cmts.map(function(c) {
+      return '<div class="cmt"><div class="cmt-hdr"><span class="cmt-auth">' + esc(c.author||'?') + '</span><span class="cmt-time">' +
+        new Date(c.created_at).toLocaleDateString('es-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) +
+        '</span></div><div class="cmt-body">' + esc(c.body).replace(/
+/g,'<br>') + '</div></div>';
+    }).join('');
+    list.scrollTop = list.scrollHeight;
+  }).catch(function() { list.innerHTML = '<div class="cmt-empty">Error cargando.</div>'; });
+}
+
+function sendLeadCmt() {
+  var inp = document.getElementById('leadCmtInp');
+  var body = inp.value.trim();
+  if (!body || !curLeadCmt) return;
+  inp.disabled = true;
+  sb.addLeadCmt({lead_id: curLeadCmt, author: curUser||'?', body: body})
+    .then(function() { inp.value = ''; loadLeadCmts(); })
+    .catch(function(e){ toast('Error: '+e.message,'err'); })
+    .finally(function(){ inp.disabled = false; });
 }
 
 function checkTgReminders() {
@@ -2151,8 +2222,12 @@ document.addEventListener('click', function(e) {
     return;
   }
 
+  // Lead comments
+  var lcEl = t.closest('[data-lead-cmt]');
+  if (lcEl) { openLeadCmt(lcEl.dataset.leadCmt); return; }
+
   // Lead actions
-    var leadEl = t.closest('[data-edt-lead],[data-del-lead]');
+  var leadEl = t.closest('[data-edt-lead],[data-del-lead]');
     if (leadEl) {
       if (leadEl.dataset.edtLead) { editLead(leadEl.dataset.edtLead); return; }
       if (leadEl.dataset.delLead) { delLead(leadEl.dataset.delLead); return; }
@@ -2170,6 +2245,12 @@ document.addEventListener('click', function(e) {
     if (actEl.dataset.del) { delTask(actEl.dataset.del); return; }
     if (actEl.dataset.rop) { reopenTask(actEl.dataset.rop); return; }
   }
+
+  // Contact edit
+  var ecEl = t.closest('[data-edit-contact]');
+  if (ecEl) { editContact(ecEl.dataset.editCli, ecEl.dataset.editContact); return; }
+  var scEl = t.closest('[data-save-contact]');
+  if (scEl) { saveContact(scEl.dataset.saveCli, scEl.dataset.saveContact); return; }
 
   // Ficha card
   var fichaEl = t.closest('[data-ficha]');
@@ -2290,6 +2371,8 @@ wireBtn('addCliBtn',    addClient);
 wireBtn('cliMoCloseBtn',function(){ closeOv('cliMoOv'); });
 document.getElementById('newCliInp').addEventListener('keydown', function(e){ if(e.key==='Enter') addClient(); });
 
+wireBtn('leadCmtOvX',   function(){ closeOv('leadCmtOv'); });
+wireBtn('leadCmtSendBtn', sendLeadCmt);
 wireBtn('leadOvX',      function(){ closeOv('leadOv'); });
 wireBtn('leadCancelBtn',function(){ closeOv('leadOv'); });
 wireBtn('leadSaveBtn',  saveLead);
@@ -2327,6 +2410,7 @@ wireBtn('srchX', function() { srchInp.value=''; vSearch=''; srchX.classList.remo
 
 // Cmts enter
 document.getElementById('cmtInp').addEventListener('keydown', function(e) { if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)) sendCmt(); });
+document.getElementById('leadCmtInp').addEventListener('keydown', function(e) { if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)) sendLeadCmt(); });
 
 // Keyboard shortcuts
 document.addEventListener('keydown', function(e) {
