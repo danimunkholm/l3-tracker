@@ -7,6 +7,7 @@
 <title>lemonthree — Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
+
 :root{--y:#F0BB3D;--yd:rgba(240,187,61,0.12);--yh:#e0ad30;--r:12px;--r2:8px;--tb:56px;--bn:62px;--sbi:env(safe-area-inset-bottom,0px)}
 [data-theme=dark]{--bg:#16161a;--bg2:#1e1e23;--bg3:#26262d;--bg4:#32323b;--tx:#f0efec;--tx2:#a8a5a0;--mu:#68665f;--bd:rgba(255,255,255,0.06);--bd2:rgba(255,255,255,0.11);--hv:rgba(255,255,255,0.04);--sh:rgba(0,0,0,0.55)}
 [data-theme=light]{--bg:#f2f1eb;--bg2:#ffffff;--bg3:#e9e8e2;--bg4:#d9d8d2;--tx:#1a1a1e;--tx2:#58564f;--mu:#96948d;--bd:rgba(0,0,0,0.07);--bd2:rgba(0,0,0,0.13);--hv:rgba(0,0,0,0.03);--sh:rgba(0,0,0,0.08)}
@@ -406,106 +407,32 @@ td{padding:10px 12px;vertical-align:middle}
 @keyframes spinning{to{transform:rotate(360deg)}}
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:9px}
+
 </style>
 </head>
 <body>
 
-<!-- LOGIN - simple, no JS dependencies, just a form -->
-<div id="loginScreen">
-  <div class="lc">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">
-      <svg viewBox="0 0 1500 1500" width="28" height="28"><path fill="var(--tx)" d="M460.5 1134.3C434.2 1134.3 413.1 1123.7 392.1 1107.9C360.5 1076.4 355.2 1029 376.3 992.1L397.3 960.6C402.6 950 407.8 934.2 402.6 923.7C349.9 786.8 392.1 623.7 507.9 507.9C623.7 392.1 792.1 349.9 923.7 402.6C934.2 407.8 950 402.6 960.6 397.3L986.9 381.5C1023.7 360.5 1071.1 365.7 1102.7 397.3C1134.3 428.9 1139.5 476.3 1118.5 513.1L1102.7 539.4C1097.4 550 1092.1 565.8 1097.4 576.3C1150.1 707.9 1107.9 876.3 992.1 992.1C876.3 1107.9 707.9 1150.1 576.3 1097.4C565.8 1092.1 550 1097.4 539.4 1102.7L513.1 1118.5C497.3 1129 481.5 1134.3 460.5 1134.3Z"/><circle cx="750" cy="750" r="118" fill="#F0BB3D"/></svg>
-      <div class="lc-brand">lem<span>&#9679;</span>nthree</div>
-    </div>
-    <div class="lc-sub" style="margin-bottom:22px">Project Tracker</div>
-    <label class="lc-label">¿Quién eres?</label>
-    <div class="lc-who" id="whoWrap" style="margin-bottom:20px">
-      <button class="who-btn" id="wb-Carlos" type="button">Carlos</button>
-      <button class="who-btn" id="wb-Manu" type="button">Manu</button>
-      <button class="who-btn" id="wb-Dani" type="button">Dani</button>
-    </div>
-    <label class="lc-label">Contraseña</label>
-    <input class="lc-input" type="password" id="pwdInp" placeholder="••••••••" autocomplete="current-password"/>
-    <button class="lc-btn" id="loginBtn" type="button">Entrar →</button>
-    <div class="lc-err" id="loginErr">Contraseña incorrecta.</div>
-  </div>
-</div>
-
-
-<div class="toast" id="toastEl"></div>
-
 <script>
+document.documentElement.setAttribute('data-theme', localStorage.getItem('l3_theme') || 'dark');
+
 
 // Theme
 document.documentElement.setAttribute('data-theme', localStorage.getItem('l3_theme') || 'dark');
 
-// ── LOGIN ─────────────────────────────────────────────────────────────────
-// Simple: select user, type password, click Entrar
-// All functions are global - no IIFE, no closures
+// ── AUTO SESSION ──────────────────────────────────────────────────────────
+// No login screen - load saved user or default to Carlos
+var _savedUser = localStorage.getItem('l3_user');
+curUser = (_savedUser === 'Carlos' || _savedUser === 'Manu' || _savedUser === 'Dani') ? _savedUser : 'Carlos';
 
-var _who = ''; // selected user
-
-window.addEventListener('load', function() {
-  var wbs = document.querySelectorAll('.who-btn');
-  var loginBtn = document.getElementById('loginBtn');
-  var pwdInp = document.getElementById('pwdInp');
-  var loginErr = document.getElementById('loginErr');
-
-  // Select user buttons
-  wbs.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      _who = btn.textContent.trim();
-      wbs.forEach(function(b) { b.classList.remove('sel'); });
-      btn.classList.add('sel');
-      pwdInp.focus();
-    });
-  });
-
-  // Login button
-  loginBtn.addEventListener('click', function() {
-    login(_who, pwdInp.value, loginErr, pwdInp);
-  });
-
-  // Enter key on password
-  pwdInp.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') login(_who, pwdInp.value, loginErr, pwdInp);
-  });
-
-  // Check existing session
-  var saved = localStorage.getItem('l3_user');
-  var exp = parseInt(localStorage.getItem('l3_exp') || '0');
-  if (saved && CREDS[saved] && Date.now() < exp) {
-    startSession(saved);
-  }
-});
-
-function login(who, pwd, errEl, pwdInp) {
-  if (!who) { alert('Selecciona un usuario primero'); return; }
-  if (CREDS[who] && pwd === CREDS[who]) {
-    var SESSION_30D = 30 * 24 * 60 * 60 * 1000;
-    localStorage.setItem('l3_user', who);
-    localStorage.setItem('l3_exp', String(Date.now() + SESSION_30D));
-    startSession(who);
-  } else {
-    errEl.style.display = 'block';
-    pwdInp.value = '';
-    pwdInp.focus();
-    setTimeout(function() { errEl.style.display = 'none'; }, 3000);
-  }
+function logout() {
+  localStorage.removeItem('l3_user');
+  location.reload();
 }
 
 function startSession(who) {
   curUser = who;
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
+  localStorage.setItem('l3_user', who);
   setupUserUI();
-  boot();
-}
-
-function logout() {
-  localStorage.removeItem('l3_user');
-  localStorage.removeItem('l3_exp');
-  location.reload();
 }
 
 var CREDS = { Carlos: 'LemonCarlos123.', Manu: 'LemonManu123.', Dani: 'LemonDani123.' };
@@ -1048,6 +975,19 @@ function wireApp(){
   on('mm-cli',function(){renderCliList();openOv('cliMoOv');closeOv('mmOv');});
   on('mm-ntf',function(){openNtfModal();closeOv('mmOv');});
   on('mm-logout',logout);
+  // User switcher
+  ['Carlos','Manu','Dani'].forEach(function(u) {
+    var el = document.getElementById('sw-' + u);
+    if (el) el.addEventListener('click', function() {
+      curUser = u;
+      localStorage.setItem('l3_user', u);
+      setupUserUI();
+      closeOv('mmOv');
+      toast('Hola, ' + u + ' 👋');
+      document.querySelectorAll('[id^="sw-"]').forEach(function(b){ b.classList.remove('sel'); });
+      el.classList.add('sel');
+    });
+  });
   on('mfilOvX',function(){closeOv('mfilOv');});
   on('mfilResetBtn',function(){vMem='all';vStat='all';vPri='all';vCli='all';vMon='all';vSort='created';buildMfilContent();render();});
   on('mfilApplyBtn',function(){closeOv('mfilOv');});
@@ -1146,6 +1086,19 @@ function wireApp(){
   on('mm-cli',function(){renderCliList();openOv('cliMoOv');closeOv('mmOv');});
   on('mm-ntf',function(){openNtfModal();closeOv('mmOv');});
   on('mm-logout',logout);
+  // User switcher
+  ['Carlos','Manu','Dani'].forEach(function(u) {
+    var el = document.getElementById('sw-' + u);
+    if (el) el.addEventListener('click', function() {
+      curUser = u;
+      localStorage.setItem('l3_user', u);
+      setupUserUI();
+      closeOv('mmOv');
+      toast('Hola, ' + u + ' 👋');
+      document.querySelectorAll('[id^="sw-"]').forEach(function(b){ b.classList.remove('sel'); });
+      el.classList.add('sel');
+    });
+  });
   on('mfilOvX',function(){closeOv('mfilOv');});
   on('mfilResetBtn',function(){vMem='all';vStat='all';vPri='all';vCli='all';vMon='all';vSort='created';buildMfilContent();render();});
   on('mfilApplyBtn',function(){closeOv('mfilOv');});
@@ -1216,9 +1169,35 @@ function wireApp(){
 
 
 
+setupUserUI();
+boot();
 wireApp();
 
 
+
+(function(){
+  var saved = localStorage.getItem('l3_user');
+  curUser = (saved === 'Carlos' || saved === 'Manu' || saved === 'Dani') ? saved : 'Carlos';
+  setupUserUI();
+  boot();
+  wireApp();
+  ['Carlos','Manu','Dani'].forEach(function(u) {
+    var el = document.getElementById('sw-' + u);
+    if (!el) return;
+    el.addEventListener('click', function() {
+      curUser = u; localStorage.setItem('l3_user', u);
+      setupUserUI(); render(); closeOv('mmOv');
+      toast('Hola, ' + u + ' 👋');
+    });
+  });
+  var si = document.getElementById('srchInp'), sx = document.getElementById('srchX');
+  if (si) si.addEventListener('input', function() { vSearch=this.value.trim().toLowerCase(); if(sx)sx.classList.toggle('on',!!vSearch); render(); });
+  if (sx) sx.addEventListener('click', function() { si.value=''; vSearch=''; sx.classList.remove('on'); render(); si.focus(); });
+  document.addEventListener('keydown', function(e) {
+    if (e.key==='Escape') { document.querySelectorAll('.ov.on').forEach(function(el){el.classList.remove('on');}); var p=document.getElementById('pop'); if(p)p.classList.remove('on'); }
+    if ((e.metaKey||e.ctrlKey)&&e.key==='Enter') { var to=document.getElementById('taskOv'); if(to&&to.classList.contains('on')) saveTask(); }
+  });
+})();
 </script>
 </body>
 </html>
