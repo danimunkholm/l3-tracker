@@ -646,6 +646,7 @@ td{padding:10px 12px;vertical-align:middle}
     <aside class="sb">
       <div class="sb-sec">
         <div class="sb-head">Vista</div>
+        <div class="sb-item" id="nav-home"><span>⬡</span> Dashboard</div>
         <div class="sb-item on" id="nav-all"><span>◈</span> Todas</div>
         <div class="sb-item" id="nav-kb"><span>⬛</span> Kanban</div>
         <div class="sb-item" id="nav-ms"><span>◆</span> Hitos</div>
@@ -679,6 +680,7 @@ td{padding:10px 12px;vertical-align:middle}
   </div>
 
   <nav class="bnav">
+    <div class="bn-i" id="bnav-home"><div class="bi">⬡</div><div class="bl">Inicio</div></div>
     <div class="bn-i on" id="bnav-all"><div class="bi">◈</div><div class="bl">Tareas</div></div>
     <div class="bn-i" id="bnav-kb"><div class="bi">⬛</div><div class="bl">Kanban</div></div>
     <div class="bn-i" id="bnav-fichas"><div class="bi">👥</div><div class="bl">Clientes</div></div>
@@ -1248,6 +1250,7 @@ function buildSidebarNavs() {
 
 function buildStats() {
   var el = document.getElementById('statsArea'); if (!el) return;
+  if (vView === 'home') { el.innerHTML = ''; return; }
   var act = tasks.filter(function(t) { return t.status !== '✓ Done'; });
   var tot = act.length;
   var live = act.filter(function(t) { return t.status === '● LIVE' || t.status === '● In Progress'; }).length;
@@ -1264,7 +1267,7 @@ function buildStats() {
 
 function buildFbar() {
   var el = document.getElementById('fbarArea'); if (!el) return;
-  if (vView === 'done' || vView === 'fichas' || vView === 'leads') { el.innerHTML = ''; return; }
+  if (vView === 'done' || vView === 'fichas' || vView === 'leads' || vView === 'home') { el.innerHTML = ''; return; }
   var ss = ['all','● LIVE','● In Progress','◐ Revisión','◆ Planificado','↻ Ongoing','⏸ On Hold'];
   el.innerHTML = '<span class="fb-label">Estado</span>' +
     ss.map(function(s) { return '<button class="chip' + (vStat===s?' on':'') + '" data-stat="' + esc(s) + '">' + (s==='all'?'Todos':s) + '</button>'; }).join('') +
@@ -1276,6 +1279,7 @@ function buildFbar() {
 
 function buildContent() {
   var c = document.getElementById('contentArea'); if (!c) return;
+  if (vView === 'home') { buildDashboard(c); return; }
   if (vView === 'kb')    { buildKB(c); return; }
   if (vView === 'ms')    { buildMS(c); return; }
   if (vView === 'cal')   { buildCal(c); return; }
@@ -1475,6 +1479,105 @@ function buildDone(c) {
         '<div class="card-field"><span class="card-lbl">F. Entrega</span>' + rDateRel(t.date_end, t.id, 'date_end') + '</div></div></div>';
     }).join('') + '</div>';
   }
+  c.innerHTML = h;
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────
+function buildDashboard(c) {
+  if (!c) return;
+  var today = new Date(); today.setHours(0,0,0,0);
+  var in7 = new Date(today); in7.setDate(in7.getDate()+7);
+  var act = tasks.filter(function(t){return t.status!=='✓ Done';});
+  var pendInv = invoices.filter(function(i){return i.status!=='Pagada';});
+  var pendTotal = pendInv.reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
+  var pipeline = leads.filter(function(l){return l.estado!=='Rechazado';}).reduce(function(s,l){return s+(parseFloat(l.importe)||0);},0);
+  var leadsAct = leads.filter(function(l){return l.estado!=='Rechazado';}).length;
+  var urgentes = act.filter(function(t){
+    if (t.priority==='Alta') return true;
+    if (t.date_end) { var d=new Date(t.date_end); d.setHours(0,0,0,0); return d<=in7; }
+    return false;
+  }).sort(function(a,b){
+    var da=a.date_end?new Date(a.date_end):new Date('9999-12-31');
+    var db=b.date_end?new Date(b.date_end):new Date('9999-12-31');
+    return da-db;
+  }).slice(0,6);
+  var leadsAvz = leads.filter(function(l){return l.estado==='Envío Propuesta'||l.estado==='Aprobado';});
+
+  var kpi = function(lbl,val,sub,warn){
+    return '<div style="background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:14px 16px;flex:1;min-width:130px">'+
+      '<div style="font-family:\'DM Mono\',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--mu);margin-bottom:6px">'+lbl+'</div>'+
+      '<div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:22px;color:'+(warn?'#e67e22':'var(--y)')+'">'+val+'</div>'+
+      (sub?'<div style="font-size:10px;color:var(--tx2);margin-top:3px">'+sub+'</div>':'')+
+    '</div>';
+  };
+
+  var secHead = function(txt){
+    return '<div style="font-family:\'DM Mono\',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mu);margin:20px 0 10px">'+txt+'</div>';
+  };
+
+  var h = '<div style="max-width:860px">';
+  h += '<div style="font-family:\'Syne\',sans-serif;font-weight:800;font-size:22px;margin-bottom:16px">'+
+    'Hola, <span style="color:var(--y)">'+esc(curUser)+'</span> 👋</div>';
+
+  // KPIs
+  h += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:4px">';
+  h += kpi('Tareas activas', act.length, act.filter(function(t){return t.priority==='Alta';}).length+' de alta prioridad');
+  h += kpi('Pendiente cobro', fmtEur(pendTotal), pendInv.length+' factura'+(pendInv.length!==1?'s':''), pendTotal>0);
+  h += kpi('Pipeline leads', pipeline>0?fmtEur(pipeline):'—', leadsAct+' lead'+(leadsAct!==1?'s':'')+' activos');
+  h += kpi('En propuesta', leadsAvz.length, leadsAvz.filter(function(l){return l.estado==='Aprobado';}).length+' aprobados');
+  h += '</div>';
+
+  // Tareas urgentes
+  h += secHead('Tareas urgentes');
+  if (!urgentes.length) {
+    h += '<div style="color:var(--mu);font-size:12px;padding:10px 0">Sin tareas urgentes ni con entrega próxima.</div>';
+  } else {
+    h += urgentes.map(function(t){
+      var daysLeft = '';
+      if (t.date_end) {
+        var d=new Date(t.date_end); d.setHours(0,0,0,0);
+        var diff=Math.round((d-today)/(1000*60*60*24));
+        daysLeft = diff<0?'<span style="color:#e74c3c;font-size:10px">Vencida</span>':
+          diff===0?'<span style="color:#e74c3c;font-size:10px">Hoy</span>':
+          diff<=3?'<span style="color:#e67e22;font-size:10px">'+diff+'d</span>':
+          '<span style="font-size:10px;color:var(--tx2)">'+diff+'d</span>';
+      }
+      return '<div style="background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r2);padding:11px 14px;margin-bottom:6px;display:flex;align-items:center;gap:10px">'+
+        '<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(t.task)+'</div>'+
+        '<div style="font-size:10px;color:var(--tx2);margin-top:2px">'+(t.owner||'')+(t.client?' · '+esc(t.client):'')+'</div></div>'+
+        '<div style="display:flex;align-items:center;gap:7px;flex-shrink:0">'+
+        (t.priority==='Alta'?'<span style="font-size:9px;color:#e74c3c;background:rgba(231,76,60,.12);padding:2px 6px;border-radius:4px">Alta</span>':'')+
+        (daysLeft||'')+'</div></div>';
+    }).join('');
+  }
+
+  // Facturas pendientes
+  if (pendInv.length) {
+    h += secHead('Facturas pendientes de cobro');
+    h += pendInv.slice(0,5).map(function(inv){
+      return '<div style="background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r2);padding:11px 14px;margin-bottom:6px;display:flex;align-items:center;gap:10px">'+
+        '<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">'+esc(inv.concept)+'</div>'+
+        '<div style="font-size:10px;color:var(--tx2);margin-top:2px">'+esc(inv.client)+' · '+fmtDate(inv.date)+'</div></div>'+
+        '<div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:14px;color:#e67e22">'+fmtEur(inv.amount)+'</div></div>';
+    }).join('');
+  }
+
+  // Leads avanzados
+  if (leadsAvz.length) {
+    h += secHead('Leads en fase avanzada');
+    h += leadsAvz.map(function(l){
+      var ec=LEAD_ESTADOS.find(function(e){return e.key===l.estado;})||LEAD_ESTADOS[0];
+      return '<div style="background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r2);padding:11px 14px;margin-bottom:6px;display:flex;align-items:center;gap:10px">'+
+        '<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">'+esc(l.nombre)+'</div>'+
+        '<div style="font-size:10px;color:var(--tx2);margin-top:2px">'+(l.empresa?esc(l.empresa)+' · ':'')+esc(l.responsable||'')+'</div></div>'+
+        '<div style="display:flex;align-items:center;gap:8px;flex-shrink:0">'+
+        (l.importe?'<span style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:13px;color:var(--y)">'+fmtEur(l.importe)+'</span>':'')+
+        '<span style="font-size:9px;padding:2px 7px;border-radius:4px;background:rgba(0,0,0,.2);color:'+ec.col+'">'+esc(l.estado)+'</span>'+
+        '</div></div>';
+    }).join('');
+  }
+
+  h += '</div>';
   c.innerHTML = h;
 }
 
@@ -2351,6 +2454,7 @@ wireBtn('leadSaveBtn',  saveLead);
 wireBtn('tplOvX',       function(){ closeOv('tplOv'); });
 
 // Bottom nav
+wireBtn('bnav-home',   function(){ setView('home'); });
 wireBtn('bnav-all',    function(){ setView('all'); });
 wireBtn('bnav-kb',     function(){ setView('kb'); });
 wireBtn('bnav-fichas', function(){ setView('fichas'); });
@@ -2359,6 +2463,7 @@ wireBtn('bnav-leads', function(){ setView('leads'); });
 wireBtn('bnav-more',   function(){ document.getElementById('mmOv').classList.add('on'); });
 
 // Sidebar nav
+wireBtn('nav-home',   function(){ setView('home'); });
 wireBtn('nav-all',    function(){ setView('all'); });
 wireBtn('nav-kb',     function(){ setView('kb'); });
 wireBtn('nav-ms',     function(){ setView('ms'); });
