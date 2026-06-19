@@ -42,7 +42,7 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-h
 .lc-brand span{color:var(--y)}
 .lc-sub{font-size:12px;color:var(--tx2);margin-bottom:26px}
 .lc-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--tx2);display:block;margin-bottom:8px}
-.lc-who{display:flex;gap:8px;margin-bottom:16px}
+.lc-who{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
 .who-btn{
   flex:1;padding:11px 4px;border-radius:var(--r2);
   border:1.5px solid var(--bd);background:var(--bg3);
@@ -123,6 +123,7 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-h
 .av-C{background:var(--y);color:#16161a}
 .av-M{background:var(--bg4);color:var(--tx);border:1px solid var(--bd2)}
 .av-D{background:var(--tx2);color:var(--bg)}
+.av-A{background:#8e44ad;color:#fff}
 
 /* LAYOUT */
 .wrap{display:flex;flex:1;overflow:hidden}
@@ -276,6 +277,7 @@ td{padding:10px 12px;vertical-align:middle}
 .badge-C{background:rgba(240,187,61,.14);color:var(--y)}
 .badge-M{background:var(--hv);color:var(--tx2)}
 .badge-D{background:rgba(180,178,174,.14);color:var(--tx2)}
+.badge-A{background:rgba(142,68,173,.14);color:#8e44ad}
 .badge-x{background:var(--hv);color:var(--tx2)}
 .status{display:inline-flex;align-items:center;gap:3px;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity .1s}
 .status:active{opacity:.7}
@@ -608,6 +610,7 @@ td{padding:10px 12px;vertical-align:middle}
       <button class="who-btn" id="wb-Carlos" type="button">Carlos</button>
       <button class="who-btn" id="wb-Manu" type="button">Manu</button>
       <button class="who-btn" id="wb-Dani" type="button">Dani</button>
+      <button class="who-btn" id="wb-Alejandro" type="button">Alejandro</button>
     </div>
     <label class="lc-label">Contraseña</label>
     <input class="lc-input" type="password" id="pwdInp" placeholder="••••••••" autocomplete="current-password"/>
@@ -868,6 +871,14 @@ td{padding:10px 12px;vertical-align:middle}
       <div class="fg2"><label class="fg-lbl">Responsable</label><select class="fs" id="lead-responsable"></select></div>
       <div class="fg2"><label class="fg-lbl">Importe potencial (€)</label><input class="fi" type="number" id="lead-importe" placeholder="0" min="0" step="0.01"/></div>
       <div class="fg2"><label class="fg-lbl">Fecha contacto</label><input class="fi" type="date" id="lead-fecha"/></div>
+      <div class="fg2"><label class="fg-lbl">Origen / Fuente</label><select class="fs" id="lead-origen">
+        <option value="">— Seleccionar —</option>
+        <option value="Instagram">Instagram</option>
+        <option value="Google">Google</option>
+        <option value="Referido">Referido</option>
+        <option value="Web">Web</option>
+        <option value="Otro">Otro</option>
+      </select></div>
       <div class="fg2 full"><label class="fg-lbl">Notas</label><textarea class="ft" id="lead-notas" placeholder="Detalles de la reunión…" style="min-height:80px"></textarea></div>
     </div>
     <div class="mo-actions"><button class="btn-cancel" id="leadCancelBtn" type="button">Cancelar</button><button class="btn-save" id="leadSaveBtn" type="button">Guardar</button></div>
@@ -881,7 +892,7 @@ td{padding:10px 12px;vertical-align:middle}
 'use strict';
 
 // ── CONFIG ──────────────────────────────────────────────────────────────────
-var CREDS = { Carlos: 'LemonCarlos123.', Manu: 'LemonManu123.', Dani: 'LemonDani123.' };
+var CREDS = { Carlos: 'LemonCarlos123.', Manu: 'LemonManu123.', Dani: 'LemonDani123.', Alejandro: 'LemonAlejandro123.' };
 var SBU = 'https://hyvbxpsjgoqsazvmkjgb.supabase.co';
 var SBK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5dmJ4cHNqZ29xc2F6dm1ramdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MTAxODgsImV4cCI6MjA5MDE4NjE4OH0.1iM_hO2Wu3kcVYbXrfhjYqiPT3BU5asANkgvqMt_0qY';
 var TG_TOKEN = '8636177069:AAGE7lG9A82Zug88GfgQ0A6L80toBKRmL5A';
@@ -890,11 +901,11 @@ var SESSION_MS = 30 * 24 * 60 * 60 * 1000;
 var MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 var DOW = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
 var DEF_CLI = ['Lemonthree','Melia Isla Canela','Melia Benidorm','Clinica Sagur','Alessandro Thione','Lucia Piccoli Miracoli','Asociación Comerciantes Benalua'];
-var DEF_MEM = ['Carlos','Manu','Dani'];
+var DEF_MEM = ['Carlos','Manu','Dani','Alejandro'];
 var STATUS_MAP = {'● LIVE':'s-live','● In Progress':'s-wip','◐ Revisión':'s-rev','◆ Planificado':'s-plan','↻ Ongoing':'s-ong','⏸ On Hold':'s-hold','✓ Done':'s-done'};
 var PRI_MAP = { Alta:{cls:'pri-h',ico:'🔴'}, Media:{cls:'pri-m',ico:'🟡'}, Baja:{cls:'pri-l',ico:'🟢'} };
 var PRI_ORD = { Alta:0, Media:1, Baja:2 };
-var MEM_MAP = { Carlos:{badge:'badge-C',av:'av-C'}, Manu:{badge:'badge-M',av:'av-M'}, Dani:{badge:'badge-D',av:'av-D'} };
+var MEM_MAP = { Carlos:{badge:'badge-C',av:'av-C'}, Manu:{badge:'badge-M',av:'av-M'}, Dani:{badge:'badge-D',av:'av-D'}, Alejandro:{badge:'badge-A',av:'av-A'} };
 var KB_COLS = [{s:'◆ Planificado',c:'#aaa'},{s:'● In Progress',c:'#F0BB3D'},{s:'◐ Revisión',c:'#5dade2'},{s:'● LIVE',c:'#2ecc71'},{s:'⏸ On Hold',c:'#e74c3c'}];
 var LEAD_ESTADOS = [
   {key:'Contactado',cls:'le-contactado',col:'#5dade2'},
@@ -904,7 +915,7 @@ var LEAD_ESTADOS = [
   {key:'Rechazado',cls:'le-rechazado',col:'#e74c3c'}
 ];
 var LEAD_CSS = {'Contactado':'lc-contactado','1ª Reunión':'lc-reunion','Envío Propuesta':'lc-propuesta','Aprobado':'lc-aprobado','Rechazado':'lc-rechazado'};
-var EMAILS = { Carlos:'carlos@lemonthree.es', Manu:'manu@lemonthree.es', Dani:'dani@lemonthree.es' };
+var EMAILS = { Carlos:'carlos@lemonthree.es', Manu:'manu@lemonthree.es', Dani:'dani@lemonthree.es', Alejandro:'alejandro@lemonthree.es' };
 var TEMPLATES = [
   {ico:'📅',name:'Calendario Redes',desc:'Planificación mensual redes',status:'◆ Planificado',pri:'Alta',dl:'Planificación y creación del calendario de contenidos para redes sociales.',next:'Enviar propuesta al cliente para aprobación.'},
   {ico:'📣',name:'Campaña Paid Media',desc:'Configuración y gestión',status:'◆ Planificado',pri:'Alta',dl:'Configuración, lanzamiento y optimización de campaña de publicidad de pago.',next:'Definir objetivos y presupuesto con el cliente.'},
@@ -2151,6 +2162,7 @@ function buildLeads(c) {
         '<div class="lead-name">'+esc(l.nombre)+'</div>'+
         '<div class="lead-empresa">'+esc(l.empresa||'—')+(l.sector?' · '+esc(l.sector):'')+'</div>'+
         '<div class="lead-estado '+ec.cls+'">'+l.estado+'</div>'+
+        (l.origen?'<div style="display:inline-block;font-size:9px;font-weight:600;color:var(--tx2);background:var(--bg3);border:1px solid var(--bd);border-radius:4px;padding:2px 7px;margin-bottom:10px">'+esc(l.origen)+'</div>':'')+
         '<div class="lead-meta">'+
         (l.responsable?'<div class="lead-meta-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>'+esc(l.responsable)+'</div>':'')+
         (l.email?'<div class="lead-meta-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>'+esc(l.email)+'</div>':'')+
@@ -2175,6 +2187,7 @@ function openLeadModal(lead) {
   document.getElementById('lead-estado').value = lead ? (lead.estado||'Contactado') : 'Contactado';
   document.getElementById('lead-importe').value = lead ? (lead.importe||'') : '';
   document.getElementById('lead-fecha').value = lead ? (lead.fecha_contacto||new Date().toISOString().split('T')[0]) : new Date().toISOString().split('T')[0];
+  document.getElementById('lead-origen').value = lead ? (lead.origen||'') : '';
   document.getElementById('lead-notas').value = lead ? (lead.notas||'') : '';
   var resp = document.getElementById('lead-responsable');
   resp.innerHTML = '<option value="">— Seleccionar —</option>' + members.map(function(m){return'<option value="'+esc(m)+'"'+(lead&&lead.responsable===m?' selected':'')+'>'+m+'</option>';}).join('');
@@ -2198,6 +2211,7 @@ function saveLead() {
     responsable: document.getElementById('lead-responsable').value,
     importe: parseFloat(document.getElementById('lead-importe').value)||null,
     fecha_contacto: document.getElementById('lead-fecha').value||null,
+    origen: document.getElementById('lead-origen').value||null,
     notas: document.getElementById('lead-notas').value.trim(),
     updated_at: new Date().toISOString()
   };
