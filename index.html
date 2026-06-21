@@ -69,6 +69,24 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-h
   border-radius:var(--r2);padding:10px 13px;margin-top:10px;display:none;text-align:center
 }
 
+/* ADMIN PANEL */
+.adm-wrap{max-width:820px;margin:0 auto}
+.adm-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:var(--tx);margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.adm-card{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.adm-table{width:100%;border-collapse:collapse;font-size:13px}
+.adm-table th{text-align:left;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mu);padding:10px 12px;border-bottom:1px solid var(--bd);background:var(--bg3)}
+.adm-table td{padding:10px 12px;border-bottom:1px solid var(--bd2);color:var(--tx);vertical-align:middle}
+.adm-table tr:last-child td{border-bottom:none}
+.adm-perm{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:5px;background:var(--bg3);border:1px solid var(--bd);cursor:pointer;font-size:9px;font-family:'DM Mono',monospace;transition:all .12s;-webkit-tap-highlight-color:transparent;user-select:none}
+.adm-perm.on{background:var(--yd);border-color:var(--y);color:var(--y);font-weight:700}
+.adm-perms{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.adm-add-btn{background:var(--y);color:#16161a;border:none;padding:9px 18px;border-radius:var(--r2);font-family:'Syne',sans-serif;font-weight:700;font-size:12px;cursor:pointer;-webkit-appearance:none;transition:all .15s}
+.adm-del-btn{background:none;border:1px solid var(--bd);color:var(--tx2);padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;transition:all .12s;font-family:'DM Sans',sans-serif}
+.adm-del-btn:hover{border-color:#e74c3c;color:#e74c3c}
+.adm-pwd-btn{background:none;border:1px solid var(--bd);color:var(--tx2);padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;transition:all .12s;margin-right:4px;font-family:'DM Sans',sans-serif}
+.adm-pwd-btn:hover{border-color:var(--y);color:var(--y)}
+.adm-tag-admin{background:rgba(240,187,61,.15);color:var(--y);border:1px solid rgba(240,187,61,.3);border-radius:4px;padding:2px 7px;font-size:9px;font-weight:600;font-family:'DM Mono',monospace;display:inline-block;margin-top:2px}
+
 /* APP */
 #app{display:none;flex-direction:column;min-height:100vh}
 
@@ -604,17 +622,12 @@ td{padding:10px 12px;vertical-align:middle}
       <svg viewBox="0 0 1500 1500" width="30" height="30"><path fill="var(--tx)" d="M460.5 1134.3C434.2 1134.3 413.1 1123.7 392.1 1107.9C360.5 1076.4 355.2 1029 376.3 992.1L397.3 960.6C402.6 950 407.8 934.2 402.6 923.7C349.9 786.8 392.1 623.7 507.9 507.9C623.7 392.1 792.1 349.9 923.7 402.6C934.2 407.8 950 402.6 960.6 397.3L986.9 381.5C1023.7 360.5 1071.1 365.7 1102.7 397.3C1134.3 428.9 1139.5 476.3 1118.5 513.1L1102.7 539.4C1097.4 550 1092.1 565.8 1097.4 576.3C1150.1 707.9 1107.9 876.3 992.1 992.1C876.3 1107.9 707.9 1150.1 576.3 1097.4C565.8 1092.1 550 1097.4 539.4 1102.7L513.1 1118.5C497.3 1129 481.5 1134.3 460.5 1134.3Z"/><circle cx="750" cy="750" r="118" fill="#F0BB3D"/></svg>
       <div class="lc-brand">lem<span>●</span>nthree</div>
     </div>
-    <div class="lc-sub">Project Tracker — ¿Quién eres?</div>
+    <div class="lc-sub">Project Tracker — Inicia sesión</div>
     <label class="lc-label">Usuario</label>
-    <div class="lc-who" id="whoWrap">
-      <button class="who-btn" id="wb-Carlos" type="button">Carlos</button>
-      <button class="who-btn" id="wb-Manu" type="button">Manu</button>
-      <button class="who-btn" id="wb-Dani" type="button">Dani</button>
-      <button class="who-btn" id="wb-Alejandro" type="button">Alejandro</button>
-    </div>
+    <input class="lc-input" type="text" id="usernameInp" placeholder="Nombre de usuario" autocomplete="username"/>
     <label class="lc-label">Contraseña</label>
     <input class="lc-input" type="password" id="pwdInp" placeholder="••••••••" autocomplete="current-password"/>
-    <button class="lc-btn" id="loginBtn" type="button" disabled>Entrar →</button>
+    <button class="lc-btn" id="loginBtn" type="button">Entrar →</button>
     <div class="lc-error" id="loginErr">Usuario o contraseña incorrectos.</div>
   </div>
 </div>
@@ -658,6 +671,7 @@ td{padding:10px 12px;vertical-align:middle}
         <div class="sb-item" id="nav-fichas"><span>👥</span> Fichas cliente</div>
         <div class="sb-item" id="nav-leads"><span>🎯</span> Leads</div>
         <div class="sb-item" id="nav-tpl"><span>📋</span> Plantillas</div>
+        <div class="sb-item" id="nav-admin" style="display:none"><span>⚙️</span> Usuarios</div>
       </div>
       <div class="sb-sec">
         <div class="sb-head"><span>Responsable</span><span class="sb-add" id="sb-add-mem">+</span></div>
@@ -885,6 +899,46 @@ td{padding:10px 12px;vertical-align:middle}
   </div>
 </div>
 
+<!-- ADD USER MODAL -->
+<div class="ov" id="addUserOv">
+  <div class="mo mo-sm" style="max-width:440px">
+    <div class="mo-handle"></div>
+    <div class="mo-title"><span>👤 <em>Nuevo usuario</em></span><button class="mo-x" id="addUserOvX" type="button">✕</button></div>
+    <div class="fg">
+      <div class="fg2 full"><label class="fg-lbl">Nombre de usuario *</label><input class="fi" id="nu-username" placeholder="ej. Ana" autocomplete="off"/></div>
+      <div class="fg2 full"><label class="fg-lbl">Contraseña *</label><input class="fi" type="password" id="nu-password" placeholder="••••••••" autocomplete="new-password"/></div>
+      <div class="fg2 full"><label class="fg-lbl" style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="nu-admin" style="width:15px;height:15px;accent-color:var(--y)"/> Administrador</label></div>
+      <div class="fg2 full">
+        <label class="fg-lbl" style="margin-bottom:8px">Acceso a secciones</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <label style="font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" class="nu-perm" data-perm="home" checked style="accent-color:var(--y)"/> Dashboard</label>
+          <label style="font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" class="nu-perm" data-perm="all" checked style="accent-color:var(--y)"/> Tareas</label>
+          <label style="font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" class="nu-perm" data-perm="kb" checked style="accent-color:var(--y)"/> Kanban</label>
+          <label style="font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" class="nu-perm" data-perm="ms" checked style="accent-color:var(--y)"/> Hitos</label>
+          <label style="font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" class="nu-perm" data-perm="cal" checked style="accent-color:var(--y)"/> Calendario</label>
+          <label style="font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" class="nu-perm" data-perm="done" checked style="accent-color:var(--y)"/> Finalizadas</label>
+          <label style="font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" class="nu-perm" data-perm="fichas" checked style="accent-color:var(--y)"/> Fichas cliente</label>
+          <label style="font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" class="nu-perm" data-perm="leads" checked style="accent-color:var(--y)"/> Leads</label>
+          <label style="font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" class="nu-perm" data-perm="tpl" checked style="accent-color:var(--y)"/> Plantillas</label>
+        </div>
+      </div>
+    </div>
+    <div id="addUserErr" style="display:none;font-size:12px;color:#e74c3c;background:rgba(231,76,60,0.1);border-radius:var(--r2);padding:10px 13px;margin:0 0 10px 0;text-align:center"></div>
+    <div class="mo-actions"><button class="btn-cancel" id="addUserCancelBtn" type="button">Cancelar</button><button class="btn-save" id="addUserSaveBtn" type="button">Crear usuario</button></div>
+  </div>
+</div>
+
+<!-- RESET PASSWORD MODAL -->
+<div class="ov" id="resetPwdOv">
+  <div class="mo mo-sm" style="max-width:380px">
+    <div class="mo-handle"></div>
+    <div class="mo-title"><span>🔑 <em>Cambiar contraseña</em></span><button class="mo-x" id="resetPwdOvX" type="button">✕</button></div>
+    <div style="margin-bottom:14px"><label class="fg-lbl">Nueva contraseña *</label><input class="fi" type="password" id="rp-password" placeholder="••••••••" autocomplete="new-password"/></div>
+    <div id="resetPwdErr" style="display:none;font-size:12px;color:#e74c3c;background:rgba(231,76,60,0.1);border-radius:var(--r2);padding:10px 13px;margin:0 0 10px 0;text-align:center"></div>
+    <div class="mo-actions"><button class="btn-cancel" id="resetPwdCancelBtn" type="button">Cancelar</button><button class="btn-save" id="resetPwdSaveBtn" type="button">Guardar</button></div>
+  </div>
+</div>
+
 <div class="toast" id="toastEl"></div>
 
 <script>
@@ -892,7 +946,6 @@ td{padding:10px 12px;vertical-align:middle}
 'use strict';
 
 // ── CONFIG ──────────────────────────────────────────────────────────────────
-var CREDS = { Carlos: 'LemonCarlos123.', Manu: 'LemonManu123.', Dani: 'LemonDani123.', Alejandro: 'LemonAlejandro123.' };
 var SBU = 'https://hyvbxpsjgoqsazvmkjgb.supabase.co';
 var SBK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5dmJ4cHNqZ29xc2F6dm1ramdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MTAxODgsImV4cCI6MjA5MDE4NjE4OH0.1iM_hO2Wu3kcVYbXrfhjYqiPT3BU5asANkgvqMt_0qY';
 var TG_TOKEN = '8636177069:AAGE7lG9A82Zug88GfgQ0A6L80toBKRmL5A';
@@ -932,6 +985,7 @@ var vView = 'all', vLeadEst = 'all', vMem = 'all', vMon = 'all', vStat = 'all', 
 var calY = new Date().getFullYear(), calM = new Date().getMonth();
 var ntfPrefs = {new:true,status:true,assign:true,reminder:true,tg_new:true,tg_status:true,tg_reminder:true};
 var resendKey = '', lastNewId = null;
+var currentUserPerms = {}, currentUserIsAdmin = false, editUserId = null;
 
 // ── THEME ──────────────────────────────────────────────────────────────────
 document.documentElement.setAttribute('data-theme', localStorage.getItem('l3_theme') || 'dark');
@@ -942,60 +996,95 @@ function toggleTheme() {
 }
 
 // ── AUTH ──────────────────────────────────────────────────────────────────
-var _selUser = '';
+var AV_CLASSES = ['av-C','av-M','av-D','av-A'];
+function avatarClass(name) {
+  if (MEM_MAP[name]) return MEM_MAP[name].av;
+  var sum = 0; for (var i = 0; i < name.length; i++) sum += name.charCodeAt(i);
+  return AV_CLASSES[sum % AV_CLASSES.length];
+}
+
 function initLogin() {
   var loginBtn = document.getElementById('loginBtn');
+  var usernameInp = document.getElementById('usernameInp');
   var pwdInp = document.getElementById('pwdInp');
   var loginErr = document.getElementById('loginErr');
 
-  console.log('[L3] initLogin called, buttons found:', document.querySelectorAll('.who-btn').length);
-
-  document.querySelectorAll('.who-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      console.log('[L3] who-btn clicked:', btn.textContent.trim());
-      _selUser = btn.textContent.trim();
-      document.querySelectorAll('.who-btn').forEach(function(b) { b.classList.remove('sel'); });
-      btn.classList.add('sel');
-      loginBtn.disabled = false;
-      pwdInp.focus();
-    });
-  });
+  function showLoginErr(msg) {
+    loginErr.textContent = msg;
+    loginErr.style.display = 'block';
+    setTimeout(function() { loginErr.style.display = 'none'; }, 3500);
+  }
 
   function tryLogin() {
-    if (!_selUser) return;
+    var username = usernameInp.value.trim();
     var pwd = pwdInp.value;
-    if (CREDS[_selUser] && pwd === CREDS[_selUser]) {
-      localStorage.setItem('l3_user', _selUser);
+    if (!username || !pwd) { showLoginErr('Introduce usuario y contraseña.'); return; }
+    loginBtn.disabled = true;
+    loginBtn.textContent = '…';
+    sb.getUser(username, pwd).then(function(rows) {
+      if (!rows || !rows.length) {
+        showLoginErr('Usuario o contraseña incorrectos.');
+        pwdInp.value = '';
+        pwdInp.focus();
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Entrar →';
+        return;
+      }
+      var row = rows[0];
+      var perms = {
+        home:  row.perm_home  !== false,
+        all:   row.perm_all   !== false,
+        kb:    row.perm_kb    !== false,
+        ms:    row.perm_ms    !== false,
+        cal:   row.perm_cal   !== false,
+        done:  row.perm_done  !== false,
+        fichas:row.perm_fichas !== false,
+        leads: row.perm_leads !== false,
+        tpl:   row.perm_tpl   !== false
+      };
+      localStorage.setItem('l3_user', row.username);
       localStorage.setItem('l3_exp', String(Date.now() + SESSION_MS));
-      curUser = _selUser;
+      localStorage.setItem('l3_perms', JSON.stringify(perms));
+      localStorage.setItem('l3_admin', row.is_admin ? '1' : '0');
+      curUser = row.username;
+      currentUserPerms = perms;
+      currentUserIsAdmin = !!row.is_admin;
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('app').style.display = 'flex';
       setupUserUI();
       boot();
-    } else {
-      loginErr.style.display = 'block';
-      pwdInp.value = '';
-      pwdInp.focus();
-      setTimeout(function() { loginErr.style.display = 'none'; }, 3000);
-    }
+    }).catch(function() {
+      showLoginErr('Error de conexión. Inténtalo de nuevo.');
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Entrar →';
+    });
   }
 
   loginBtn.addEventListener('click', tryLogin);
   pwdInp.addEventListener('keydown', function(e) { if (e.key === 'Enter') tryLogin(); });
+  usernameInp.addEventListener('keydown', function(e) { if (e.key === 'Enter') pwdInp.focus(); });
 }
 
 function checkSession() {
   var u = localStorage.getItem('l3_user');
   var exp = parseInt(localStorage.getItem('l3_exp') || '0', 10);
-  if (u && CREDS[u] && Date.now() < exp) return u;
+  if (u && Date.now() < exp) {
+    try { currentUserPerms = JSON.parse(localStorage.getItem('l3_perms') || '{}'); } catch(e) { currentUserPerms = {}; }
+    currentUserIsAdmin = localStorage.getItem('l3_admin') === '1';
+    return u;
+  }
   localStorage.removeItem('l3_user');
   localStorage.removeItem('l3_exp');
+  localStorage.removeItem('l3_perms');
+  localStorage.removeItem('l3_admin');
   return null;
 }
 
 function logout() {
   localStorage.removeItem('l3_user');
   localStorage.removeItem('l3_exp');
+  localStorage.removeItem('l3_perms');
+  localStorage.removeItem('l3_admin');
   location.reload();
 }
 
@@ -1003,11 +1092,12 @@ function setupUserUI() {
   var av = document.getElementById('userAv');
   var lbl = document.getElementById('userLbl');
   var mm = document.getElementById('mmTitle');
-  var cfg = MEM_MAP[curUser] || {};
-  av.className = 'av ' + (cfg.av || 'av-D');
+  av.className = 'av ' + avatarClass(curUser);
   av.textContent = curUser.slice(0, 1);
   lbl.textContent = curUser;
   if (mm) mm.innerHTML = '<em>' + esc(curUser) + '</em>';
+  var adminNav = document.getElementById('nav-admin');
+  if (adminNav) adminNav.style.display = currentUserIsAdmin ? '' : 'none';
 }
 
 // ── SUPABASE ──────────────────────────────────────────────────────────────
@@ -1045,7 +1135,12 @@ var sb = {
   delLead:     function(id) { return sbFetch('leads?id=eq.' + id, { method:'DELETE' }); },
   addInv:      function(d) { return sbFetch('invoices', { method:'POST', prefer:'return=representation', body:JSON.stringify(d) }); },
   updInv:      function(id,d) { return sbFetch('invoices?id=eq.' + id, { method:'PATCH', prefer:'return=representation', body:JSON.stringify(d) }); },
-  delInv:      function(id) { return sbFetch('invoices?id=eq.' + id, { method:'DELETE' }); }
+  delInv:      function(id) { return sbFetch('invoices?id=eq.' + id, { method:'DELETE' }); },
+  getUser:     function(u,p) { return sbFetch('users?username=eq.' + encodeURIComponent(u) + '&password=eq.' + encodeURIComponent(p) + '&select=*'); },
+  getUsers:    function() { return sbFetch('users?order=username.asc&select=*'); },
+  addUser:     function(d) { return sbFetch('users', { method:'POST', prefer:'return=representation', body:JSON.stringify(d) }); },
+  updUser:     function(id,d) { return sbFetch('users?id=eq.' + id, { method:'PATCH', prefer:'return=representation', body:JSON.stringify(d) }); },
+  delUser:     function(id) { return sbFetch('users?id=eq.' + id, { method:'DELETE' }); }
 };
 
 // ── BOOT ──────────────────────────────────────────────────────────────────
@@ -1178,6 +1273,11 @@ function render() {
 }
 
 function buildSidebarNavs() {
+  // Permission-based nav visibility
+  ['home','all','kb','ms','cal','done','fichas','leads','tpl'].forEach(function(v) {
+    var el = document.getElementById('nav-' + v);
+    if (el) el.style.display = (currentUserPerms[v] === false) ? 'none' : '';
+  });
   // Member nav
   var mn = document.getElementById('memberNav');
   if (mn) {
@@ -1261,7 +1361,7 @@ function buildSidebarNavs() {
 
 function buildStats() {
   var el = document.getElementById('statsArea'); if (!el) return;
-  if (vView === 'home') { el.innerHTML = ''; return; }
+  if (vView === 'home' || vView === 'admin') { el.innerHTML = ''; return; }
   var act = tasks.filter(function(t) { return t.status !== '✓ Done'; });
   var tot = act.length;
   var live = act.filter(function(t) { return t.status === '● LIVE' || t.status === '● In Progress'; }).length;
@@ -1278,7 +1378,7 @@ function buildStats() {
 
 function buildFbar() {
   var el = document.getElementById('fbarArea'); if (!el) return;
-  if (vView === 'done' || vView === 'fichas' || vView === 'leads' || vView === 'home') { el.innerHTML = ''; return; }
+  if (vView === 'done' || vView === 'fichas' || vView === 'leads' || vView === 'home' || vView === 'admin') { el.innerHTML = ''; return; }
   var ss = ['all','● LIVE','● In Progress','◐ Revisión','◆ Planificado','↻ Ongoing','⏸ On Hold'];
   el.innerHTML = '<span class="fb-label">Estado</span>' +
     ss.map(function(s) { return '<button class="chip' + (vStat===s?' on':'') + '" data-stat="' + esc(s) + '">' + (s==='all'?'Todos':s) + '</button>'; }).join('') +
@@ -1297,7 +1397,120 @@ function buildContent() {
   if (vView === 'done')  { buildDone(c); return; }
   if (vView === 'fichas'){ buildFichas(c); return; }
   if (vView === 'leads'){ buildLeads(c); return; }
+  if (vView === 'admin'){ buildAdmin(c); return; }
   buildAll(c);
+}
+
+// ── ADMIN PANEL ──────────────────────────────────────────────────────────────
+var ADM_PERMS = [
+  {key:'home',lbl:'Dashboard'},{key:'all',lbl:'Tareas'},{key:'kb',lbl:'Kanban'},
+  {key:'ms',lbl:'Hitos'},{key:'cal',lbl:'Cal.'},{key:'done',lbl:'Finali.'},
+  {key:'fichas',lbl:'Fichas'},{key:'leads',lbl:'Leads'},{key:'tpl',lbl:'Plantil.'}
+];
+
+function buildAdmin(c) {
+  c.innerHTML = '<div class="adm-wrap"><div class="adm-title"><span>⚙️ Gestión de usuarios</span><button class="adm-add-btn" id="openAddUserBtn">+ Nuevo usuario</button></div><div class="adm-card" id="adminUserTable"><div style="text-align:center;padding:30px;color:var(--tx2)">Cargando…</div></div></div>';
+  document.getElementById('openAddUserBtn').onclick = openAddUserModal;
+  sb.getUsers().then(function(rows) {
+    rows = rows || [];
+    var tbl = document.getElementById('adminUserTable');
+    if (!tbl) return;
+    if (!rows.length) { tbl.innerHTML = '<div style="padding:24px;text-align:center;color:var(--tx2);font-size:13px">No hay usuarios.</div>'; return; }
+    tbl.innerHTML = '<table class="adm-table"><thead><tr><th>Usuario</th><th>' +
+      ADM_PERMS.map(function(p){return '<span title="'+p.lbl+'">'+p.lbl.slice(0,3)+'</span>';}).join(' ') +
+      '</th><th>Acciones</th></tr></thead><tbody>' +
+      rows.map(function(u) {
+        return '<tr>' +
+          '<td><div style="display:flex;align-items:center;gap:8px">' +
+            '<div class="av ' + avatarClass(u.username) + '" style="width:28px;height:28px;font-size:11px;flex-shrink:0">' + esc(u.username.slice(0,1)) + '</div>' +
+            '<div><div style="font-weight:600;color:var(--tx)">' + esc(u.username) + '</div>' + (u.is_admin ? '<span class="adm-tag-admin">Admin</span>' : '') + '</div>' +
+          '</div></td>' +
+          '<td><div class="adm-perms">' + ADM_PERMS.map(function(p) {
+            var val = u['perm_' + p.key];
+            return '<span class="adm-perm' + (val !== false ? ' on' : '') + '" title="' + p.lbl + '" data-uid="' + u.id + '" data-perm="' + p.key + '" data-val="' + (val !== false ? '1' : '0') + '">' + p.lbl.slice(0,3) + '</span>';
+          }).join('') + '</div></td>' +
+          '<td><button class="adm-pwd-btn" data-reset-pwd="' + u.id + '">🔑 Clave</button>' +
+            (u.username !== curUser ? '<button class="adm-del-btn" data-del-user="' + u.id + '" data-uname="' + esc(u.username) + '">Eliminar</button>' : '') +
+          '</td>' +
+        '</tr>';
+      }).join('') + '</tbody></table>';
+  }).catch(function(e) {
+    var tbl = document.getElementById('adminUserTable');
+    if (tbl) tbl.innerHTML = '<div style="padding:24px;text-align:center;color:#e74c3c;font-size:13px">Error: ' + esc(e.message) + '</div>';
+  });
+}
+
+function openAddUserModal() {
+  document.getElementById('nu-username').value = '';
+  document.getElementById('nu-password').value = '';
+  document.getElementById('nu-admin').checked = false;
+  document.querySelectorAll('.nu-perm').forEach(function(cb) { cb.checked = true; });
+  document.getElementById('addUserErr').style.display = 'none';
+  openOv('addUserOv');
+}
+
+function saveNewUser() {
+  var username = document.getElementById('nu-username').value.trim();
+  var password = document.getElementById('nu-password').value;
+  var errEl = document.getElementById('addUserErr');
+  if (!username || !password) {
+    errEl.textContent = 'Nombre de usuario y contraseña son obligatorios.';
+    errEl.style.display = 'block'; return;
+  }
+  var data = { username: username, password: password, is_admin: document.getElementById('nu-admin').checked };
+  document.querySelectorAll('.nu-perm').forEach(function(cb) { data['perm_' + cb.dataset.perm] = cb.checked; });
+  var btn = document.getElementById('addUserSaveBtn');
+  btn.disabled = true;
+  sb.addUser(data).then(function() {
+    closeOv('addUserOv');
+    toast('Usuario creado');
+    buildAdmin(document.getElementById('contentArea'));
+  }).catch(function(e) {
+    errEl.textContent = (e.message || '').indexOf('unique') >= 0 ? 'Ese nombre de usuario ya existe.' : 'Error al crear usuario.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+  });
+}
+
+function openResetPwd(userId) {
+  editUserId = userId;
+  document.getElementById('rp-password').value = '';
+  document.getElementById('resetPwdErr').style.display = 'none';
+  openOv('resetPwdOv');
+}
+
+function saveResetPwd() {
+  var pwd = document.getElementById('rp-password').value;
+  var errEl = document.getElementById('resetPwdErr');
+  if (!pwd) { errEl.textContent = 'Introduce la nueva contraseña.'; errEl.style.display = 'block'; return; }
+  var btn = document.getElementById('resetPwdSaveBtn');
+  btn.disabled = true;
+  sb.updUser(editUserId, { password: pwd }).then(function() {
+    closeOv('resetPwdOv');
+    toast('Contraseña actualizada');
+    btn.disabled = false;
+  }).catch(function() {
+    errEl.textContent = 'Error al actualizar contraseña.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+  });
+}
+
+function deleteUser(userId, username) {
+  if (!confirm('¿Eliminar al usuario ' + username + '? Esta acción no se puede deshacer.')) return;
+  sb.delUser(userId).then(function() {
+    toast('Usuario eliminado');
+    buildAdmin(document.getElementById('contentArea'));
+  }).catch(function() { toast('Error al eliminar usuario'); });
+}
+
+function toggleUserPerm(userId, perm, currentVal) {
+  var newVal = currentVal !== '1';
+  var update = {}; update['perm_' + perm] = newVal;
+  sb.updUser(userId, update).then(function() {
+    toast(newVal ? 'Permiso activado' : 'Permiso desactivado');
+    buildAdmin(document.getElementById('contentArea'));
+  }).catch(function() { toast('Error al actualizar permiso'); });
 }
 
 // SVG icons
@@ -2322,6 +2535,18 @@ document.addEventListener('click', function(e) {
       if (leadEl.dataset.delLead) { delLead(leadEl.dataset.delLead); return; }
     }
     if (t.id === 'addLeadBtn') { openLeadModal(null); return; }
+
+    // Admin panel actions
+    var resetEl = t.closest('[data-reset-pwd]');
+    if (resetEl) { openResetPwd(resetEl.dataset.resetPwd); return; }
+    var delUserEl = t.closest('[data-del-user]');
+    if (delUserEl) { deleteUser(delUserEl.dataset.delUser, delUserEl.dataset.uname); return; }
+    var permEl = t.closest('.adm-perm[data-uid]');
+    if (permEl) { toggleUserPerm(permEl.dataset.uid, permEl.dataset.perm, permEl.dataset.val); return; }
+    if (t.id === 'addUserSaveBtn') { saveNewUser(); return; }
+    if (t.id === 'addUserCancelBtn' || t.id === 'addUserOvX') { closeOv('addUserOv'); return; }
+    if (t.id === 'resetPwdSaveBtn') { saveResetPwd(); return; }
+    if (t.id === 'resetPwdCancelBtn' || t.id === 'resetPwdOvX') { closeOv('resetPwdOv'); return; }
     var lefEl = t.closest('[data-lead-est]');
     if (lefEl) { vLeadEst = lefEl.dataset.leadEst; buildLeads(document.getElementById('contentArea')); return; }
 
@@ -2486,6 +2711,7 @@ wireBtn('nav-done',   function(){ setView('done'); });
 wireBtn('nav-fichas', function(){ setView('fichas'); });
   wireBtn('nav-leads', function(){ setView('leads'); });
 wireBtn('nav-tpl',    openTpl);
+wireBtn('nav-admin',  function(){ setView('admin'); });
 wireBtn('sb-add-mem', function(){ renderMemList(); openOv('memOv'); });
 wireBtn('sb-add-cli', function(){ renderCliList(); openOv('cliMoOv'); });
 
@@ -2515,7 +2741,6 @@ document.addEventListener('keydown', function(e) {
 if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(function(regs){ regs.forEach(function(r){r.unregister();}); });
 
 // ── START ──────────────────────────────────────────────────────────────────
-console.log('[L3] Script executing, loginScreen:', document.getElementById('loginScreen') ? 'found' : 'NOT FOUND');
 initLogin();
 
 var sessionUser = checkSession();
