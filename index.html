@@ -614,6 +614,15 @@ td{padding:10px 12px;vertical-align:middle}
 ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:9px}
 </style>
 <link rel="stylesheet" href="visual.css"/>
+<style>
+#taskOv .mo {max-height:90dvh; overflow:auto; max-width:560px}
+#taskDetails {border-top:1px solid var(--bd2); margin-top:18px; padding-top:12px}
+#taskDetails summary {cursor:pointer; font-weight:600; color:var(--tx2); padding:6px 0}
+#taskDetails[open] summary {margin-bottom:10px}
+#taskOv .cli-cbs {max-height:112px; overflow:auto}
+.home-hero:after {display:none}
+.home-hero {border-radius:12px}
+</style>
 </head>
 <body>
 
@@ -717,38 +726,37 @@ td{padding:10px 12px;vertical-align:middle}
 
 <!-- TASK MODAL -->
 <div class="ov" id="taskOv">
-  <div class="mo">
+  <div class="mo" role="dialog" aria-labelledby="taskMoTitle" aria-modal="true">
     <div class="mo-handle"></div>
-    <div class="mo-title"><span id="taskMoTitle">+ Nueva <em>tarea</em></span><button class="mo-x" id="taskOvX" type="button">✕</button></div>
+    <div class="mo-title"><span id="taskMoTitle">+ Nueva <em>tarea</em></span><button class="mo-x" id="taskOvX" type="button" aria-label="Cerrar">✕</button></div>
     <div class="fg">
-      <div class="fg2 full"><label class="fg-lbl">Proyecto / Tarea *</label><input class="fi" id="f-task" placeholder="Nombre…" autocomplete="off"/></div>
-      <div class="fg2"><label class="fg-lbl">Responsable</label><select class="fs" id="f-owner"></select></div>
-      <div class="fg2"><label class="fg-lbl">Estado</label><select class="fs" id="f-status">
+      <div class="fg2 full"><label class="fg-lbl" for="f-task">Nombre de la tarea</label><input class="fi" id="f-task" placeholder="Ej. Preparar el calendario de diciembre" autocomplete="off" required="required"></div>
+      <div class="fg2"><label class="fg-lbl" for="f-owner">Responsable</label><select class="fs" id="f-owner"></select></div>
+      <div class="fg2"><label class="fg-lbl" for="f-de">Fecha entrega</label><input class="fi" type="date" id="f-de"></div>
+      <div class="fg2 full"><label class="fg-lbl">Clientes</label><div class="cli-cbs" id="f-cli"></div></div>
+      </div>
+    <details id="taskDetails"><summary>Más detalles</summary><div class="fg"><div class="fg2"><label class="fg-lbl" for="f-status">Estado</label><select class="fs" id="f-status">
         <option>● In Progress</option><option>◆ Planificado</option><option>● LIVE</option>
         <option>◐ Revisión</option><option>↻ Ongoing</option><option>⏸ On Hold</option><option>✓ Done</option>
       </select></div>
-      <div class="fg2"><label class="fg-lbl">Prioridad</label><select class="fs" id="f-pri">
+      <div class="fg2"><label class="fg-lbl" for="f-pri">Prioridad</label><select class="fs" id="f-pri">
         <option value="Alta">🔴 Alta</option><option value="Media" selected>🟡 Media</option><option value="Baja">🟢 Baja</option>
       </select></div>
-      <div class="fg2"><label class="fg-lbl">Mes</label><select class="fs" id="f-mon">
+      <div class="fg2"><label class="fg-lbl" for="f-mon">Mes</label><select class="fs" id="f-mon">
         <option>Enero</option><option>Febrero</option><option>Marzo</option><option>Abril</option>
         <option>Mayo</option><option>Junio</option><option>Julio</option><option>Agosto</option>
         <option>Septiembre</option><option>Octubre</option><option>Noviembre</option><option>Diciembre</option>
       </select></div>
-      <div class="fg2"><label class="fg-lbl">Fecha inicio</label><input class="fi" type="date" id="f-ds"/></div>
-      <div class="fg2"><label class="fg-lbl">Fecha entrega</label><input class="fi" type="date" id="f-de"/></div>
-      <div class="fg2"><label class="fg-lbl">¿Hito clave?</label><select class="fs" id="f-ms"><option value="no">No</option><option value="yes">Sí ◆</option></select></div>
-      <div class="fg2 full"><label class="fg-lbl">Clientes</label><div class="cli-cbs" id="f-cli"></div></div>
-      <div class="fg2 full"><label class="fg-lbl">Enlace</label><input class="fi" id="f-link" placeholder="https://…" autocomplete="off"/></div>
-      <div class="fg2"><label class="fg-lbl">Colaboradores</label><input class="fi" id="f-collab" placeholder="Equipo, agencia…" autocomplete="off"/></div>
-      <div class="fg2 full"><label class="fg-lbl">Descripción</label><textarea class="ft" id="f-desc" placeholder="¿Qué se está haciendo?"></textarea></div>
-      <div class="fg2 full"><label class="fg-lbl">Próximos pasos</label><textarea class="ft" id="f-next" placeholder="¿Qué viene?" style="min-height:54px"></textarea></div>
-      <div class="fg2 full"><label class="fg-lbl">Bloqueos</label><input class="fi" id="f-block" placeholder="Dependencias…" autocomplete="off"/></div>
-    </div>
-    <div class="mo-actions"><button class="btn-cancel" id="taskCancelBtn" type="button">Cancelar</button><button class="btn-save" id="taskSaveBtn" type="button">Guardar</button></div>
+      <div class="fg2"><label class="fg-lbl" for="f-ds">Fecha inicio</label><input class="fi" type="date" id="f-ds"></div>
+      <div class="fg2"><label class="fg-lbl" for="f-ms">¿Hito clave?</label><select class="fs" id="f-ms"><option value="no">No</option><option value="yes">Sí ◆</option></select></div>
+      <div class="fg2 full"><label class="fg-lbl" for="f-link">Enlace</label><input class="fi" id="f-link" placeholder="https://…" autocomplete="off"></div>
+      <div class="fg2"><label class="fg-lbl" for="f-collab">Colaboradores</label><input class="fi" id="f-collab" placeholder="Equipo, agencia…" autocomplete="off"></div>
+      <div class="fg2 full"><label class="fg-lbl" for="f-desc">Descripción</label><textarea class="ft" id="f-desc" placeholder="¿Qué se está haciendo?"></textarea></div>
+      <div class="fg2 full"><label class="fg-lbl" for="f-next">Próximos pasos</label><textarea class="ft" id="f-next" placeholder="¿Qué viene?" style="min-height:54px"></textarea></div>
+      <div class="fg2 full"><label class="fg-lbl" for="f-block">Bloqueos</label><input class="fi" id="f-block" placeholder="Dependencias…" autocomplete="off"></div>
+    </div></details><div class="mo-actions"><button class="btn-cancel" id="taskCancelBtn" type="button">Cancelar</button><button class="btn-save" id="taskSaveBtn" type="button">Guardar</button></div>
   </div>
 </div>
-
 <!-- INVOICE MODAL -->
 <div class="ov" id="invOv">
   <div class="mo mo-sm">
@@ -2116,13 +2124,17 @@ function doInline(field, val) {
 }
 
 // ── TASK MODAL ────────────────────────────────────────────────────────────
-function openTaskModal(task) {
+function openTaskModal(task, initialStatus) {
   editTaskId = task ? task.id : null;
-  document.getElementById('taskMoTitle').innerHTML = task ? '✎ Editar <em>tarea</em>' : '+ Nueva <em>tarea</em>';
+  document.getElementById('taskMoTitle').innerHTML = task ? 'Editar tarea' : 'Nueva tarea';
+  document.getElementById('taskDetails').open = Boolean(task);
+  document.getElementById('taskSaveBtn').textContent = task ? 'Guardar cambios' : 'Crear tarea';
+  document.getElementById('f-task').style.borderColor = '';
+  var inTaskView = ['all','kb','cal','done','ms'].includes(vView);
   document.getElementById('f-task').value = task ? task.task : '';
-  document.getElementById('f-status').value = task ? task.status : '● In Progress';
+  document.getElementById('f-status').value = task ? task.status : (initialStatus || '◆ Planificado');
   document.getElementById('f-pri').value = task ? (task.priority||'Media') : 'Media';
-  document.getElementById('f-mon').value = task ? task.month : MONTHS[new Date().getMonth()];
+  document.getElementById('f-mon').value = task ? task.month : inTaskView && vMon !== 'all' ? vMon : MONTHS[new Date().getMonth()];
   document.getElementById('f-ds').value = task ? (task.date_start||'') : '';
   document.getElementById('f-de').value = task ? (task.date_end||'') : '';
   document.getElementById('f-link').value = task ? (task.link||'') : '';
@@ -2132,9 +2144,12 @@ function openTaskModal(task) {
   document.getElementById('f-collab').value = task ? (task.collab||'') : '';
   document.getElementById('f-ms').value = task ? (task.milestone||'no') : 'no';
   var ownerSel = document.getElementById('f-owner');
-  ownerSel.innerHTML = '<option value="">— Seleccionar —</option>' + members.map(function(m) { return '<option value="' + esc(m) + '"' + (task&&task.owner===m?' selected':'') + '>' + m + '</option>'; }).join('');
-  if (!task && curUser) ownerSel.value = curUser;
-  var sel = parseCli(task ? task.client : null);
+  ownerSel.innerHTML = '<option value="">Por asignar</option>' + members.map(function(m) { return '<option value="' + esc(m) + '"' + (task&&task.owner===m?' selected':'') + '>' + m + '</option>'; }).join('');
+  if (!task && inTaskView) {
+    if (vMem !== 'all') ownerSel.value = vMem;
+    else if (quickScope === 'mine') ownerSel.value = members.find(function(m) { return m.toLowerCase() === curUser.toLowerCase(); }) || '';
+  }
+  var sel = task ? parseCli(task.client) : curFicha ? [curFicha] : inTaskView && vCli !== 'all' ? [vCli] : [];
   document.getElementById('f-cli').innerHTML = clients.map(function(c) {
     return '<label class="cli-cb"><input type="checkbox" value="' + esc(c) + '"' + (sel.includes(c)?' checked':'') + '/> ' + esc(c) + '</label>';
   }).join('');
@@ -2144,7 +2159,7 @@ function openTaskModal(task) {
 
 function saveTask() {
   var name = document.getElementById('f-task').value.trim();
-  if (!name) { document.getElementById('f-task').style.borderColor='#e74c3c'; return; }
+  if (!name) { var title = document.getElementById('f-task'); title.value = ''; title.focus(); title.reportValidity(); return; }
   document.getElementById('f-task').style.borderColor = '';
   var btn = document.getElementById('taskSaveBtn'); btn.disabled = true; btn.textContent = 'Guardando…';
   var cli = Array.from(document.querySelectorAll('#f-cli input:checked')).map(function(x) { return x.value; });
@@ -2179,18 +2194,22 @@ function saveTask() {
     }
     closeOv('taskOv'); render();
   }).catch(function(e) { toast('Error: '+e.message, 'err'); })
-  .finally(function() { btn.disabled = false; btn.textContent = 'Guardar'; });
+  .finally(function() { btn.disabled = false; btn.textContent = editTaskId ? 'Guardar cambios' : 'Crear tarea'; });
 }
 
 function editTask(id) { var t = tasks.find(function(x){return x.id===id;}); if(t) openTaskModal(t); }
 function dupTask(id) {
-  var t = tasks.find(function(x){return x.id===id;}); if(!t) return;
-  var copy = Object.assign({}, t); delete copy.id; delete copy.created_at;
-  copy.task = '[Copia] ' + copy.task; copy.updated_at = new Date().toISOString();
-  sb.addTask(copy).then(function(res) {
-    var s = Array.isArray(res) ? res[0] : res; if(s) tasks.push(s);
-    render(); toast('Duplicada ✓');
-  }).catch(function(e) { toast('Error: '+e.message,'err'); });
+  var t = tasks.find(function(x){return String(x.id)===String(id);}); if(!t) return;
+  openTaskModal(t);
+  editTaskId = null;
+  document.getElementById('taskMoTitle').textContent = 'Duplicar tarea';
+  document.getElementById('taskSaveBtn').textContent = 'Crear copia';
+  document.getElementById('taskDetails').open = false;
+  document.getElementById('f-task').value = '[Copia] ' + t.task;
+  document.getElementById('f-status').value = '◆ Planificado';
+  document.getElementById('f-mon').value = MONTHS[new Date().getMonth()];
+  ['f-ds','f-de','f-block','f-next'].forEach(function(id) { document.getElementById(id).value = ''; });
+
 }
 function delTask(id) {
   if (!confirm('¿Eliminar esta tarea?')) return;
@@ -2306,18 +2325,16 @@ function openTpl() {
 function useTpl(idx) {
   closeOv('tplOv');
   var tpl = TEMPLATES[idx];
-  var mes = MONTHS[new Date().getMonth()];
   openTaskModal(null);
-  setTimeout(function() {
-    document.getElementById('f-task').value = tpl.name + ' — [CLIENTE] ' + mes;
-    document.getElementById('f-status').value = tpl.status;
-    document.getElementById('f-pri').value = tpl.pri;
-    document.getElementById('f-mon').value = mes;
-    document.getElementById('f-desc').value = tpl.dl;
-    document.getElementById('f-next').value = tpl.next;
-    if (curUser) document.getElementById('f-owner').value = curUser;
-    document.getElementById('f-task').select();
-  }, 350);
+  var mes = document.getElementById('f-mon').value;
+  var client = Array.from(document.querySelectorAll('#f-cli input:checked')).map(function(cb){return cb.value;}).join(', ');
+  document.getElementById('f-task').value = [tpl.name, client, mes].filter(Boolean).join(' · ');
+  document.getElementById('f-status').value = tpl.status;
+  document.getElementById('f-pri').value = tpl.pri;
+  document.getElementById('f-mon').value = mes;
+  document.getElementById('f-desc').value = tpl.dl;
+  document.getElementById('f-next').value = tpl.next;
+  document.getElementById('f-task').select();
 }
 
 // ── NOTIFICATIONS ─────────────────────────────────────────────────────────
@@ -2650,6 +2667,9 @@ wireBtn('userChip',     function(){ document.getElementById('mmOv').classList.ad
 wireBtn('taskOvX',      function(){ closeOv('taskOv'); });
 wireBtn('taskCancelBtn',function(){ closeOv('taskOv'); });
 wireBtn('taskSaveBtn',  saveTask);
+document.getElementById('f-task').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); document.getElementById('taskSaveBtn').click(); }
+});
 
 wireBtn('invOvX',       function(){ closeOv('invOv'); });
 wireBtn('invCancelBtn', function(){ closeOv('invOv'); });
@@ -2769,7 +2789,7 @@ function dueLabel(t){if(!t.date_end)return 'Sin fecha';var today=dayKey(new Date
 function rowVisual(t){return '<button class="focus-row" data-edt="'+esc(t.id)+'"><span class="priority-mark"></span><span class="task-copy"><strong>'+esc(t.task)+'</strong><small>'+esc(parseCli(t.client).join(' · ')||'Sin cliente')+' · '+esc(t.owner||'Sin responsable')+'</small></span><span class="due-pill '+(matchesScope(t,'late')?'late':'')+'">'+dueLabel(t)+'</span></button>';}
 buildDashboard=function(c){
   var active=tasks.filter(function(t){return t.status!=='✓ Done';});
-  var h='<section class="home-hero"><div><div class="eyebrow">LEMONTHREE · ESPACIO DE TRABAJO</div><h2>Hola, '+esc(curUser)+'. Vamos a por ello.</h2><p>'+ (active.length?'Hay '+active.length+' tareas en marcha. Empieza por lo que necesita atención.':'Todo listo para organizar vuestro próximo proyecto.')+'</p></div><button class="v-btn primary" data-visual-new>+ Nueva tarea</button></section>';
+  var h='<section class="home-hero"><div><h2>Hola, '+esc(curUser)+'.</h2><p>'+ (active.length?'Hay '+active.length+' tareas en marcha. Empieza por lo que necesita atención.':'Todo listo para organizar vuestro próximo proyecto.')+'</p></div><button class="v-btn primary" data-visual-new>+ Nueva tarea</button></section>';
   h+='<div class="metric-grid">';
   [['late','Vencidas','#d46a65','Revisar entregas pendientes'],['today','Para hoy','#d8a32c','Tu foco más inmediato'],['week','Próximos 7 días','#6d8fca','Anticípate a las entregas'],['blocked','Bloqueadas','#a18ac3','Despeja el camino']].forEach(function(a){h+='<button class="metric" data-scope="'+a[0]+'" style="--accent:'+a[2]+'"><span class="metric-label"><i class="metric-dot"></i>'+a[1]+'</span><strong>'+active.filter(function(t){return matchesScope(t,a[0]);}).length+'</strong><small>'+a[3]+' ↗</small></button>';});
   h+='</div><div class="home-grid"><section class="panel"><div class="panel-head"><h2>Necesita atención</h2><button class="v-btn" data-scope="all">Ver tareas ↗</button></div>';
@@ -2794,7 +2814,7 @@ render=function(){
   if(currentUserPerms[vView]===false){vView=Object.keys(viewNames).find(function(v){return v!=='admin'&&currentUserPerms[v]!==false;})||'all';}
   originalRender();
   var taskView=['all','kb','ms','cal','done'].includes(vView);
-  document.getElementById('viewHeading').innerHTML='<div class="view-head"><div><div class="eyebrow">TU AGENCIA, EN ORDEN</div><h1>'+esc(viewNames[vView]||'Tu espacio')+'</h1><p>'+esc(viewDescriptions[vView]||'')+'</p></div>'+(vView==='all'?'<div class="view-tools"><button class="v-btn '+(taskLayout==='cards'?'on':'')+'" data-layout="cards">Tarjetas</button><button class="v-btn '+(taskLayout==='table'?'on':'')+'" data-layout="table">Tabla</button></div>':'')+'</div>';
+  document.getElementById('viewHeading').innerHTML='<div class="view-head"><div><h1>'+esc(viewNames[vView]||'Tu espacio')+'</h1><p>'+esc(viewDescriptions[vView]||'')+'</p></div>'+(vView==='all'?'<div class="view-tools"><button class="v-btn '+(taskLayout==='cards'?'on':'')+'" data-layout="cards">Tarjetas</button><button class="v-btn '+(taskLayout==='table'?'on':'')+'" data-layout="table">Tabla</button></div>':'')+'</div>';
   document.getElementById('quickArea').innerHTML=taskView?'<div class="quickbar">'+[['all','Todas'],['mine','Mis tareas'],['late','Vencidas'],['today','Hoy'],['week','7 días'],['blocked','Bloqueadas']].map(function(a){return '<button class="v-btn '+(quickScope===a[0]?'on':'')+'" aria-pressed="'+(quickScope===a[0])+'" data-quick="'+a[0]+'">'+a[1]+'</button>';}).join('')+'<button class="v-btn reset" data-reset>Limpiar filtros ↺</button></div>'+([vMem,vCli,vMon,vStat,vPri].some(function(v){return v!=='all';})?'<div class="filter-note">Filtros activos: '+[vMem,vCli,vMon,vStat,vPri].filter(function(v){return v!=='all';}).map(esc).join(' · ')+'</div>':''):'';
   if(vView==='all')document.getElementById('statsArea').innerHTML='';
   document.querySelectorAll('.sb-item,.bn-i').forEach(function(el){var key=el.id.replace(/^(bnav|nav)-/,'');if(key!=='more')el.classList.toggle('on',key===vView);if(currentUserPerms[key]===false)el.style.display='none';});
@@ -2846,20 +2866,19 @@ function applyMedia(){logoSlots.forEach(function(el){if(media().logo){el.innerHT
 function stateSelect(t){var opts=GROUPS.map(function(g){return '<option value="'+esc(g.status)+'"'+(t.status===g.status?' selected':'')+'>'+g.name+'</option>';}).join('');if(!GROUPS.some(function(g){return g.status===t.status;}))opts='<option selected value="'+esc(t.status||'')+'">'+esc(labels[t.status]||t.status||'Sin estado')+'</option>'+opts;return '<select class="group-status" style="--group-color:'+GROUPS.find(function(g){return g.key===groupOf(t);}).color+'" data-inline-status="'+esc(t.id)+'" aria-label="Estado de '+esc(t.task)+'">'+opts+'</select>';}
 function groupRows(ts){return ts.map(function(t){return '<tr><td><button class="row-task" data-edt="'+esc(t.id)+'">'+esc(t.task)+'</button>'+(t.blockers?'<small class="row-block">'+esc(t.blockers)+'</small>':'')+'</td><td>'+rOwner(t.owner,t.id)+'</td><td><button class="client-cell" data-pop="clients" data-id="'+esc(t.id)+'">'+esc(parseCli(t.client).join(', ')||'+ Cliente')+'</button></td><td>'+stateSelect(t)+'</td><td>'+rPri(t.priority,t.id)+'</td><td>'+rDate(t.date_start,t.id,'date_start')+'</td><td>'+(t.status==='✓ Done'?rDate(t.date_end,t.id,'date_end'):rDateRel(t.date_end,t.id,'date_end'))+'</td><td><button class="ib" data-cmt="'+esc(t.id)+'" title="Comentarios">'+I.cmt+'</button><button class="ib" data-edt="'+esc(t.id)+'" title="Editar tarea">'+I.edt+'</button></td></tr>';}).join('');}
 var previousBuildAll=buildAll;
-buildAll=function(c){if(!grouped){previousBuildAll(c);return;}var f=filtered();c.innerHTML='<div class="group-intro"><span>'+f.length+' tareas · Todos los estados</span><span>Pulsa una celda para editarla</span></div>'+GROUPS.map(function(g){var ts=f.filter(function(t){return groupOf(t)===g.key;});return '<section class="task-group" style="--group-color:'+g.color+'"><button class="group-heading" data-toggle-group="'+g.key+'" aria-expanded="'+!closedGroups.has(g.key)+'"><span class="group-chevron">'+(closedGroups.has(g.key)?'›':'⌄')+'</span><h2>'+g.name+'</h2><span class="group-count">'+ts.length+'</span></button><div class="group-body"'+(closedGroups.has(g.key)?' hidden':'')+'><div class="group-scroll"><table class="group-table"><thead><tr><th>Tarea / proyecto</th><th>Responsable</th><th>Cliente</th><th>Estado</th><th>Prioridad</th><th>Inicio</th><th>Entrega</th><th>Acciones</th></tr></thead><tbody>'+groupRows(ts)+'</tbody></table></div>'+(!ts.length?'<div class="group-empty">No hay tareas en este grupo con los filtros actuales.</div>':'')+'<button class="group-add" data-new-group="'+g.key+'">+ Añadir tarea</button></div></section>';}).join('');};
+buildAll=function(c){if(!grouped){previousBuildAll(c);return;}var f=filtered();c.innerHTML='<div class="group-intro"><span>'+f.length+' tareas · Todos los estados</span><span>Pulsa una celda para editarla</span></div>'+GROUPS.map(function(g){var ts=f.filter(function(t){return groupOf(t)===g.key;});return '<section class="task-group" style="--group-color:'+g.color+'"><button class="group-heading" data-toggle-group="'+g.key+'" aria-expanded="'+!closedGroups.has(g.key)+'"><span class="group-chevron">'+(closedGroups.has(g.key)?'›':'⌄')+'</span><h2>'+g.name+'</h2><span class="group-count">'+ts.length+'</span></button><div class="group-body"'+(closedGroups.has(g.key)?' hidden':'')+'>'+(ts.length?'<div class="group-scroll"><table class="group-table"><thead><tr><th>Tarea / proyecto</th><th>Responsable</th><th>Cliente</th><th>Estado</th><th>Prioridad</th><th>Inicio</th><th>Entrega</th><th>Acciones</th></tr></thead><tbody>'+groupRows(ts)+'</tbody></table></div>':'')+'<button class="group-add" data-new-group="'+g.key+'">+ Añadir tarea</button></div></section>';}).join('');};
 var prevRenderGroups=render;
 render=function(){prevRenderGroups();if(vView==='all'){
  var title=document.querySelector('#viewHeading h1');title.textContent=vCli==='all'?'Todas las tareas':vCli;
  var tools=document.querySelector('.view-tools');tools.innerHTML='<button class="v-btn '+(grouped?'on':'')+'" data-task-mode="groups">Por estados</button><button class="v-btn '+(!grouped&&taskLayout==='cards'?'on':'')+'" data-task-mode="cards">Tarjetas</button><button class="v-btn '+(!grouped&&taskLayout==='table'?'on':'')+'" data-task-mode="table">Tabla</button>';
- var qa=document.getElementById('quickArea');qa.insertAdjacentHTML('afterbegin','<div class="board-toolbar"><label for="boardClient">Cliente</label><select id="boardClient"><option value="all">Todos los clientes</option>'+clients.map(function(n){return '<option value="'+esc(n)+'"'+(vCli===n?' selected':'')+'>'+esc(n)+'</option>';}).join('')+'</select><button class="v-btn" id="teamImagesBtn">Logo y fotos del equipo</button></div>');
+ var qa=document.getElementById('quickArea');qa.insertAdjacentHTML('afterbegin','<div class="board-toolbar"><label for="boardClient">Cliente</label><select id="boardClient"><option value="all">Todos los clientes</option>'+clients.map(function(n){return '<option value="'+esc(n)+'"'+(vCli===n?' selected':'')+'>'+esc(n)+'</option>';}).join('')+'</select></div>');
  if(grouped)document.getElementById('fbarArea').innerHTML='';
  }
  applyMedia();
  document.querySelectorAll('[data-pop]').forEach(function(el){if(!['BUTTON','SELECT','INPUT'].includes(el.tagName)){el.tabIndex=0;el.setAttribute('role','button');}});
 };
 // Preserve legacy state values, but offer the requested five groups for new tasks.
-var oldTaskModal=openTaskModal;
-openTaskModal=function(task){oldTaskModal(task);if(!task)document.getElementById('f-status').value='◆ Planificado';};
+
 // Fix asynchronous edits so a second popover cannot redirect a pending update.
 doInline=function(field,val){var id=popId;closePop();var old=tasks.find(function(t){return String(t.id)===String(id);});if(!old)return;id=old.id;var d={updated_at:new Date().toISOString()};d[field]=val;sb.updTask(id,d).then(function(){tasks=tasks.map(function(t){return t.id===id?Object.assign({},t,d):t;});render();toast('Guardado ✓');var nw=tasks.find(function(t){return t.id===id;});if(field==='status'&&old.status!==val){tgStatusChange(nw,old.status);ntfStatusChange(nw,old.status);}if(field==='owner'&&val&&old.owner!==val)ntfAssign(nw);}).catch(function(){render();toast('No se pudo guardar. Inténtalo de nuevo.','err');});};
 var oldOpenPop=openPop;
@@ -2877,7 +2896,7 @@ document.addEventListener('change',async function(e){var el=e.target;if(el.id===
 document.addEventListener('click',function(e){var el=e.target.closest('[data-task-mode],[data-toggle-group],[data-new-group],[data-remove-image],#teamImagesBtn,#mediaTopBtn,#closeMedia,#exportMedia,#discardMedia');if(!el)return;
  if(el.dataset.taskMode){grouped=el.dataset.taskMode==='groups';if(!grouped)taskLayout=el.dataset.taskMode;render();}
  if(el.dataset.toggleGroup){var k=el.dataset.toggleGroup;closedGroups.has(k)?closedGroups.delete(k):closedGroups.add(k);render();}
- if(el.dataset.newGroup){var g=GROUPS.find(function(g){return g.key===el.dataset.newGroup;});openTaskModal(null);document.getElementById('f-status').value=g.status;if(vCli!=='all')document.querySelectorAll('#f-cli input').forEach(function(cb){cb.checked=cb.value===vCli;});if(vMem!=='all')document.getElementById('f-owner').value=vMem;}
+ if(el.dataset.newGroup){var g=GROUPS.find(function(g){return g.key===el.dataset.newGroup;});openTaskModal(null,g.status);}
  if(['teamImagesBtn','mediaTopBtn'].includes(el.id))openMediaEditor();
  if(el.id==='closeMedia')closeOv('mediaOv');
  if(el.dataset.removeImage){var data=JSON.parse(JSON.stringify(media()));if(el.dataset.removeImage==='logo')data.logo='';else delete data.avatars[el.dataset.imageName.toLowerCase()];try{saveDraft(data);}catch(err){toast(err.message,'err');}}
