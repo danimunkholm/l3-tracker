@@ -623,7 +623,15 @@ td{padding:10px 12px;vertical-align:middle}
 .home-hero:after {display:none}
 .home-hero {border-radius:12px}
 </style>
-</head>
+<style>
+.desk-tabs {display:flex;gap:4px;margin:0 0 18px}
+.desk-tabs [aria-pressed="true"] {background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.quick-capture,.desk-agenda {background:var(--bg2);border:1px solid var(--bd2);border-radius:12px;padding:18px;margin:0 0 16px}
+.quick-capture label {display:block;font-weight:650;margin-bottom:9px}
+.quick-capture>div {display:flex;gap:8px}
+.quick-capture input {min-width:0;flex:1;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd2);border-radius:8px;padding:10px}
+.desk-agenda h2 {margin:0 0 12px}.desk-agenda h3 {margin:18px 0 4px;font-size:14px}.desk-agenda small {font-weight:400;color:var(--tx2)}
+</style></head>
 <body>
 
 <!-- LOGIN -->
@@ -798,10 +806,6 @@ td{padding:10px 12px;vertical-align:middle}
   <div class="mo mo-sm">
     <div class="mo-handle"></div>
     <div class="mo-title"><span>🔔 <em>Notificaciones</em></span><button class="mo-x" id="ntfOvX" type="button">✕</button></div>
-    <div class="ntf-sec">Telegram</div>
-    <div class="ntf-row"><span>Nueva tarea creada</span><div class="toggle on" id="tog-tg_new"></div></div>
-    <div class="ntf-row"><span>Cambio de estado</span><div class="toggle on" id="tog-tg_status"></div></div>
-    <div class="ntf-row"><span>Recordatorio entrega (1 día antes)</span><div class="toggle on" id="tog-tg_reminder"></div></div>
     <div class="ntf-sec">Email (Resend)</div>
     <div class="ntf-row"><span>Al crear una tarea</span><div class="toggle on" id="tog-new"></div></div>
     <div class="ntf-row"><span>Al cambiar el estado</span><div class="toggle on" id="tog-status"></div></div>
@@ -960,8 +964,6 @@ td{padding:10px 12px;vertical-align:middle}
 // ── CONFIG ──────────────────────────────────────────────────────────────────
 var SBU = 'https://hyvbxpsjgoqsazvmkjgb.supabase.co';
 var SBK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5dmJ4cHNqZ29xc2F6dm1ramdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MTAxODgsImV4cCI6MjA5MDE4NjE4OH0.1iM_hO2Wu3kcVYbXrfhjYqiPT3BU5asANkgvqMt_0qY';
-var TG_TOKEN = '8636177069:AAGE7lG9A82Zug88GfgQ0A6L80toBKRmL5A';
-var TG_CHAT = '-5142480046';
 var SESSION_MS = 30 * 24 * 60 * 60 * 1000;
 var MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 var DOW = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
@@ -995,7 +997,7 @@ var curUser = '', editTaskId = null, editInvId = null, editLeadId = null, curFic
 var popId = null, popField = null, popCliSel = [];
 var vView = 'home', vLeadEst = 'all', vMem = 'all', vMon = 'all', vStat = 'all', vCli = 'all', vPri = 'all', vSort = 'created', vSearch = '';
 var calY = new Date().getFullYear(), calM = new Date().getMonth();
-var ntfPrefs = {new:true,status:true,assign:true,reminder:true,tg_new:true,tg_status:true,tg_reminder:true};
+var ntfPrefs = {new:true,status:true,assign:true,reminder:true};
 var resendKey = '', lastNewId = null;
 var currentUserPerms = {}, currentUserIsAdmin = false, editUserId = null;
 
@@ -1158,7 +1160,7 @@ var sb = {
 // ── BOOT ──────────────────────────────────────────────────────────────────
 function boot() {
   var saved = localStorage.getItem('l3_ntf');
-  if (saved) try { ntfPrefs = JSON.parse(saved); } catch(e) {}
+  if (saved) try { var prefs = JSON.parse(saved); Object.keys(ntfPrefs).forEach(function(key){ if (typeof prefs[key] === 'boolean') ntfPrefs[key] = prefs[key]; }); } catch(e) {}
   var savedContacts = localStorage.getItem('l3_contacts');
   if (savedContacts) try { contactInfo = JSON.parse(savedContacts); } catch(e) {}
   resendKey = localStorage.getItem('l3_rkey') || '';
@@ -1185,7 +1187,6 @@ function boot() {
     invoices = res[3] || [];
     leads = res[4] || [];
     render();
-    checkTgReminders();
     setInterval(function() {
       sb.getTasks().then(function(t) { if (t) { tasks = t; render(); } }).catch(function() {});
     }, 20000);
@@ -2118,7 +2119,7 @@ function doInline(field, val) {
     tasks = tasks.map(function(t) { return t.id === popId ? Object.assign({},t,d) : t; });
     var nw = tasks.find(function(t) { return t.id === popId; });
     render(); toast('Guardado ✓');
-    if (field === 'status' && prev.status !== val) { tgStatusChange(nw, prev.status); ntfStatusChange(nw, prev.status); }
+    if (field === 'status' && prev.status !== val) { ntfStatusChange(nw, prev.status); }
     if (field === 'owner' && val && prev.owner !== val) ntfAssign(nw);
   }).catch(function(e) { toast('Error: '+e.message, 'err'); });
 }
@@ -2145,6 +2146,7 @@ function openTaskModal(task, initialStatus) {
   document.getElementById('f-ms').value = task ? (task.milestone||'no') : 'no';
   var ownerSel = document.getElementById('f-owner');
   ownerSel.innerHTML = '<option value="">Por asignar</option>' + members.map(function(m) { return '<option value="' + esc(m) + '"' + (task&&task.owner===m?' selected':'') + '>' + m + '</option>'; }).join('');
+  if (!task && vView === 'home' && homePersonal) ownerSel.value = members.find(function(m){return m.toLowerCase()===curUser.toLowerCase();}) || '';
   if (!task && inTaskView) {
     if (vMem !== 'all') ownerSel.value = vMem;
     else if (quickScope === 'mine') ownerSel.value = members.find(function(m) { return m.toLowerCase() === curUser.toLowerCase(); }) || '';
@@ -2189,7 +2191,7 @@ function saveTask() {
       if (s) { tasks.push(s); lastNewId = s.id; }
       else sb.getTasks().then(function(ts) { if(ts) tasks = ts; });
       toast('Añadida ✓', 'ok');
-      ntfNew(d); tgNewTask(d);
+      ntfNew(d);
       if (d.owner) ntfAssign(d);
     }
     closeOv('taskOv'); render();
@@ -2362,9 +2364,6 @@ function eHtml(title, body, task) { return '<div style="font-family:Arial,sans-s
 function ntfNew(t) { if(!ntfPrefs.new)return; var r=t.owner&&EMAILS[t.owner]?[EMAILS[t.owner]]:Object.values(EMAILS); sendEmail('Nueva tarea: '+t.task,eHtml('Nueva tarea','<p style="color:#b0ada8;font-size:13px">Se ha creado una nueva tarea.</p>',t),r); }
 function ntfStatusChange(t,old) { if(!ntfPrefs.status)return; var r=t.owner&&EMAILS[t.owner]?[EMAILS[t.owner]]:Object.values(EMAILS); sendEmail('Estado: '+t.task,eHtml('Estado actualizado','<p style="color:#b0ada8;font-size:13px">De <b style="color:#fff">'+old+'</b> a <b style="color:#F0BB3D">'+t.status+'</b></p>',t),r); }
 function ntfAssign(t) { if(!ntfPrefs.assign||!t.owner)return; var e=EMAILS[t.owner];if(!e)return; sendEmail('Tarea asignada: '+t.task,eHtml('Asignación','<p style="color:#b0ada8;font-size:13px">Nueva tarea asignada a ti.</p>',t),[e]); }
-async function sendTg(msg) { try { await fetch('https://api.telegram.org/bot'+TG_TOKEN+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:TG_CHAT,text:msg,parse_mode:'HTML'})}); } catch(e) {} }
-function tgNewTask(t) { if(!ntfPrefs.tg_new)return; sendTg('🍋 <b>Nueva tarea</b>\n\n📌 '+(t.task||'')+(t.owner?'\n👤 '+t.owner:'')+(t.date_end?'\n📅 Entrega: '+fmtDate(t.date_end):'')+'\n'+(PRI_MAP[t.priority||'Media']||PRI_MAP.Media).ico+' '+(t.priority||'Media')); }
-function tgStatusChange(t,old) { if(!ntfPrefs.tg_status)return; sendTg('🔄 <b>Estado actualizado</b>\n\n📌 '+(t.task||'')+'\n'+old+' → <b>'+t.status+'</b>'+(t.owner?'\n👤 '+t.owner:'')); }
 
 // ── LEADS ─────────────────────────────────────────────────────
 function buildLeads(c) {
@@ -2466,15 +2465,6 @@ function delLead(id) {
   .catch(function(e){toast('Error: '+e.message,'err');});
 }
 
-function checkTgReminders() {
-  var today = new Date(); today.setHours(0,0,0,0);
-  var in1 = new Date(today); in1.setDate(in1.getDate()+1);
-  tasks.forEach(function(t) {
-    if (!t.date_end || t.status==='✓ Done') return;
-    var d = new Date(t.date_end+'T00:00'); d.setHours(0,0,0,0);
-    if (d.getTime()===in1.getTime()) sendTg('⏰ <b>Entrega mañana</b>\n\n📌 '+(t.task||'')+'\n📅 '+fmtDate(t.date_end)+(t.owner?'\n👤 '+t.owner:'')+'\n\n<i>Recuerda revisar el estado de la tarea</i>');
-  });
-}
 
 // ── MOBILE FILTER ─────────────────────────────────────────────────────────
 function buildMfilContent() {
@@ -2787,8 +2777,36 @@ function openScope(scope){resetFilters();quickScope=scope;vSort='deadline';setVi
 function emptyVisual(title,desc){return '<div class="empty-state"><strong>'+title+'</strong>'+desc+'</div>';}
 function dueLabel(t){if(!t.date_end)return 'Sin fecha';var today=dayKey(new Date());return t.date_end===today?'Hoy':fmtDate(t.date_end);}
 function rowVisual(t){return '<button class="focus-row" data-edt="'+esc(t.id)+'"><span class="priority-mark"></span><span class="task-copy"><strong>'+esc(t.task)+'</strong><small>'+esc(parseCli(t.client).join(' · ')||'Sin cliente')+' · '+esc(t.owner||'Sin responsable')+'</small></span><span class="due-pill '+(matchesScope(t,'late')?'late':'')+'">'+dueLabel(t)+'</span></button>';}
+var homePersonal = true;
+function quickCapture(){
+  return '<form class="quick-capture" data-capture><label for="captureName">Añadir una tarea</label><div><input id="captureName" maxlength="500" autocomplete="off" required placeholder="¿Qué hay que hacer?"><button class="v-btn primary" type="submit">Crear tarea</button></div></form>';
+}
+document.addEventListener('submit',function(e){
+  if (!e.target.matches('[data-capture]')) return;
+  e.preventDefault();
+  var input=e.target.querySelector('input'), title=input.value.trim();
+  if (!title) {input.value=''; input.reportValidity(); return;}
+  if (document.getElementById('taskSaveBtn').disabled) return;
+  openTaskModal(null);
+  document.getElementById('f-task').value=title;
+  saveTask();
+});
+document.addEventListener('click',function(e){
+  var button=e.target.closest('[data-home-mode]');
+  if (button) {homePersonal=button.dataset.homeMode==='mine';render();}
+});
 buildDashboard=function(c){
   var active=tasks.filter(function(t){return t.status!=='✓ Done';});
+  var switcher='<div class="desk-tabs" role="group" aria-label="Ámbito del inicio">'+[['mine','Mis pendientes'],['team','Equipo']].map(function(item){
+    return '<button class="v-btn" data-home-mode="'+item[0]+'" aria-pressed="'+(homePersonal===(item[0]==='mine'))+'">'+item[1]+'</button>';
+  }).join('')+'</div>';
+  if (homePersonal) {
+    var mine=active.filter(function(t){return matchesScope(t,'mine');}).sort(function(a,b){return (a.date_end||'9999').localeCompare(b.date_end||'9999');});
+    var today=dayKey(new Date());
+    var groups=[['Vencidas',mine.filter(function(t){return t.date_end && t.date_end<today;})],['Para hoy',mine.filter(function(t){return t.date_end===today;})],['Próximas entregas',mine.filter(function(t){return t.date_end>today;})],['Sin fecha',mine.filter(function(t){return !t.date_end;})]];
+    c.innerHTML=switcher+quickCapture()+'<section class="desk-agenda"><h2>Mi agenda</h2>'+groups.filter(function(g){return g[1].length;}).map(function(g){return '<h3>'+g[0]+' <small>'+g[1].length+'</small></h3>'+g[1].map(rowVisual).join('');}).join('')+(mine.length?'':emptyVisual('Todo al día','No tienes tareas pendientes asignadas.'))+'</section>';
+    return;
+  }
   var h='<section class="home-hero"><div><h2>Hola, '+esc(curUser)+'.</h2><p>'+ (active.length?'Hay '+active.length+' tareas en marcha. Empieza por lo que necesita atención.':'Todo listo para organizar vuestro próximo proyecto.')+'</p></div><button class="v-btn primary" data-visual-new>+ Nueva tarea</button></section>';
   h+='<div class="metric-grid">';
   [['late','Vencidas','#d46a65','Revisar entregas pendientes'],['today','Para hoy','#d8a32c','Tu foco más inmediato'],['week','Próximos 7 días','#6d8fca','Anticípate a las entregas'],['blocked','Bloqueadas','#a18ac3','Despeja el camino']].forEach(function(a){h+='<button class="metric" data-scope="'+a[0]+'" style="--accent:'+a[2]+'"><span class="metric-label"><i class="metric-dot"></i>'+a[1]+'</span><strong>'+active.filter(function(t){return matchesScope(t,a[0]);}).length+'</strong><small>'+a[3]+' ↗</small></button>';});
@@ -2800,7 +2818,7 @@ buildDashboard=function(c){
   var counts=owners.map(function(name){return {name:name,count:active.filter(function(t){return (t.owner||'Sin responsable')===name;}).length};}).sort(function(a,b){return b.count-a.count;});
   var max=Math.max.apply(null,[1].concat(counts.map(function(x){return x.count;})));
   h+=counts.length?counts.map(function(x){return '<div class="team-row"><div class="team-label"><span>'+esc(x.name)+'</span><strong>'+x.count+'</strong></div><div class="team-track"><div class="team-fill" style="width:'+Math.round(x.count/max*100)+'%"></div></div></div>';}).join(''):emptyVisual('Vuestro equipo, aquí','Añade responsables desde el menú superior.');
-  h+='<div class="team-foot">Recuento de tareas, sin estimación de horas.</div></section></div>';c.innerHTML=h;
+  h+='<div class="team-foot">Recuento de tareas, sin estimación de horas.</div></section></div>';c.innerHTML=switcher+h;
 };
 var originalBuildAll=buildAll;
 buildAll=function(c){
@@ -2871,7 +2889,7 @@ var prevRenderGroups=render;
 render=function(){prevRenderGroups();if(vView==='all'){
  var title=document.querySelector('#viewHeading h1');title.textContent=vCli==='all'?'Todas las tareas':vCli;
  var tools=document.querySelector('.view-tools');tools.innerHTML='<button class="v-btn '+(grouped?'on':'')+'" data-task-mode="groups">Por estados</button><button class="v-btn '+(!grouped&&taskLayout==='cards'?'on':'')+'" data-task-mode="cards">Tarjetas</button><button class="v-btn '+(!grouped&&taskLayout==='table'?'on':'')+'" data-task-mode="table">Tabla</button>';
- var qa=document.getElementById('quickArea');qa.insertAdjacentHTML('afterbegin','<div class="board-toolbar"><label for="boardClient">Cliente</label><select id="boardClient"><option value="all">Todos los clientes</option>'+clients.map(function(n){return '<option value="'+esc(n)+'"'+(vCli===n?' selected':'')+'>'+esc(n)+'</option>';}).join('')+'</select></div>');
+ var qa=document.getElementById('quickArea');qa.insertAdjacentHTML('afterbegin',quickCapture()+'<div class="board-toolbar"><label for="boardClient">Cliente</label><select id="boardClient"><option value="all">Todos los clientes</option>'+clients.map(function(n){return '<option value="'+esc(n)+'"'+(vCli===n?' selected':'')+'>'+esc(n)+'</option>';}).join('')+'</select></div>');
  if(grouped)document.getElementById('fbarArea').innerHTML='';
  }
  applyMedia();
@@ -2880,7 +2898,7 @@ render=function(){prevRenderGroups();if(vView==='all'){
 // Preserve legacy state values, but offer the requested five groups for new tasks.
 
 // Fix asynchronous edits so a second popover cannot redirect a pending update.
-doInline=function(field,val){var id=popId;closePop();var old=tasks.find(function(t){return String(t.id)===String(id);});if(!old)return;id=old.id;var d={updated_at:new Date().toISOString()};d[field]=val;sb.updTask(id,d).then(function(){tasks=tasks.map(function(t){return t.id===id?Object.assign({},t,d):t;});render();toast('Guardado ✓');var nw=tasks.find(function(t){return t.id===id;});if(field==='status'&&old.status!==val){tgStatusChange(nw,old.status);ntfStatusChange(nw,old.status);}if(field==='owner'&&val&&old.owner!==val)ntfAssign(nw);}).catch(function(){render();toast('No se pudo guardar. Inténtalo de nuevo.','err');});};
+doInline=function(field,val){var id=popId;closePop();var old=tasks.find(function(t){return String(t.id)===String(id);});if(!old)return;id=old.id;var d={updated_at:new Date().toISOString()};d[field]=val;sb.updTask(id,d).then(function(){tasks=tasks.map(function(t){return t.id===id?Object.assign({},t,d):t;});render();toast('Guardado ✓');var nw=tasks.find(function(t){return t.id===id;});if(field==='status'&&old.status!==val){ntfStatusChange(nw,old.status);}if(field==='owner'&&val&&old.owner!==val)ntfAssign(nw);}).catch(function(){render();toast('No se pudo guardar. Inténtalo de nuevo.','err');});};
 var oldOpenPop=openPop;
 openPop=function(e,field,id){var match=tasks.find(function(t){return String(t.id)===String(id);});if(match)id=match.id;oldOpenPop(e,field,id);if(field==='owner')document.querySelectorAll('#popBody .pop-opt[data-val]').forEach(function(el){var name=el.dataset.val;el.innerHTML=name?avatarHtml(name)+'<span>'+esc(name)+'</span>':'Sin asignar';el.tabIndex=0;el.setAttribute('role','button');});};
 function openMediaEditor(){
