@@ -631,7 +631,26 @@ td{padding:10px 12px;vertical-align:middle}
 .quick-capture>div {display:flex;gap:8px}
 .quick-capture input {min-width:0;flex:1;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd2);border-radius:8px;padding:10px}
 .desk-agenda h2 {margin:0 0 12px}.desk-agenda h3 {margin:18px 0 4px;font-size:14px}.desk-agenda small {font-weight:400;color:var(--tx2)}
-</style></head>
+</style><style>
+.op-workspace{display:grid;gap:16px;color:var(--tx)}
+.op-toolbar,.op-heading,.op-filters,.op-switch{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.op-toolbar,.op-heading{justify-content:space-between}
+.op-switch{border:1px solid var(--bd2);background:var(--bg2);padding:4px;border-radius:12px;gap:4px}
+.op-switch button,.op-edit{font:inherit;cursor:pointer;border:0;background:transparent;color:var(--tx2);padding:8px 14px;border-radius:8px}
+.op-switch button[aria-pressed=true]{color:#fff;background:#2b3037}
+.op-filters{align-items:flex-end}.op-filters label{display:grid;gap:4px;font-size:11px;color:var(--tx2)}
+.op-filters select{font:inherit;font-size:13px;background:var(--bg2);color:var(--tx);border:1px solid var(--bd2);padding:7px;border-radius:7px}
+.op-filters [aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--y)}.op-refresh{margin-left:auto}
+.op-heading h2{font-size:20px}.op-heading span,.op-empty,.op-values small,.op-row small{font-size:12px;color:var(--tx2)}
+.op-group,.op-values{background:var(--bg2);border:1px solid var(--bd2);border-radius:12px;overflow:hidden}
+.op-group h3{border-left:4px solid var(--op-tone);font-size:15px;padding:12px 16px;margin:0}.op-group h3 small{font-size:12px;color:var(--tx2);margin-left:5px}
+.op-row{display:grid;grid-template-columns:minmax(100px,1.15fr) minmax(100px,1.5fr) minmax(80px,.8fr) auto;gap:16px;align-items:center;border-top:1px solid var(--bd);padding:14px 18px}.op-row>div{min-width:0;overflow-wrap:anywhere}
+.op-row small{display:block;margin-top:3px}.op-row .op-late{color:#ac503d}.op-name{border:0;background:none;color:var(--tx);font:inherit;font-weight:700;text-align:left;padding:0;cursor:pointer}.op-name:hover{text-decoration:underline}.op-edit{border:1px solid var(--bd2);font-size:12px;padding:6px 10px}.op-empty{padding:10px 18px}
+.op-values{padding:12px 16px}.op-values summary{cursor:pointer;font-weight:600}.op-values>div{display:flex;gap:28px;flex-wrap:wrap;padding:14px 0}.op-values p{font-size:12px}.op-values strong{display:block;font-size:20px}
+@media(max-width:650px){.op-row{grid-template-columns:minmax(0,1fr) auto;gap:8px}.op-action{grid-column:1/-1;grid-row:2}.op-person{grid-column:1}.op-edit{grid-column:2;grid-row:1}.op-filters select{max-width:155px}.op-person small{display:inline;margin-left:9px}.op-refresh{margin-left:0}}
+
+</style>
+</head>
 <body>
 
 <!-- LOGIN -->
@@ -2935,11 +2954,97 @@ function crmNeedsAction(l){var m=crmData(l);return crmOpen(l)&&m.nextDate&&m.nex
 function crmMatching(){return leads.filter(function(l){return (vLeadEst==='all'||l.estado===vLeadEst)&&(crmSource==='all'||(l.origen||'Sin indicar')===crmSource)&&(crmOwner==='all'||(l.responsable||'Sin asignar')===crmOwner)&&(!crmDue||crmNeedsAction(l))&&(!vSearch||[l.nombre,l.empresa,l.origen,crmData(l).sourceDetail,l.responsable].join(' ').toLowerCase().includes(vSearch));});}
 function crmRecent(){if(crmRecentLoaded)return;crmRecentLoaded=true;sbFetch('lead_comments?select=lead_id,author,body,created_at&order=created_at.desc&limit=200').then(function(rows){(rows||[]).forEach(function(row){if(!crmUpdates[row.lead_id])crmUpdates[row.lead_id]=row;});if(vView==='leads')buildLeads(document.getElementById('contentArea'));}).catch(function(){crmRecentLoaded=false;});}
 function crmOption(value,label,selected){return '<option value="'+esc(value)+'"'+(selected===value?' selected':'')+'>'+esc(label)+'</option>';}
-function crmCard(l){var m=crmData(l),val=crmValue(l),stage=crmStage(l),last=crmUpdates[l.id];return '<article class="crm-card" style="--stage:'+stage[2]+'"><div class="crm-card-top"><span class="crm-stage">'+esc(stage[1])+'</span><button class="ib" data-edt-lead="'+esc(l.id)+'" title="Editar oportunidad">'+I.edt+'</button></div><button class="crm-title" data-crm-detail="'+esc(l.id)+'">'+esc(l.empresa||l.nombre)+'</button><div class="crm-contact">'+esc(l.empresa?l.nombre:'Sin empresa')+'</div><div class="crm-source"><span>Origen</span><strong>'+esc(l.origen||'Sin indicar')+'</strong>'+(m.sourceDetail?'<small>'+esc(m.sourceDetail)+'</small>':'')+'</div><div class="crm-value"><strong>'+(val?fmtEur(val.year):'Por definir')+'</strong><span>Primer año · sin IVA</span>'+(val?'<small>'+(m.billing==='monthly'?fmtEur(Number(l.importe)||0)+'/mes × '+val.months+' meses'+(m.setup?' + '+fmtEur(Number(m.setup))+' puntual':''):m.billing==='annual'?fmtEur(Number(l.importe)||0)+'/año'+(m.setup?' + '+fmtEur(Number(m.setup))+' puntual':''):'Proyecto puntual')+'</small>':'<small>Importe anterior: '+fmtEur(Number(l.importe)||0)+' · falta periodicidad</small>')+'</div><div class="crm-next '+(crmNeedsAction(l)?'needs-action':'')+'"><span>Próximo paso</span><strong>'+esc(m.nextAction||'Sin próxima acción')+'</strong><small>'+(m.nextDate?fmtDate(m.nextDate):'Sin fecha')+'</small></div><div class="crm-update-preview"><span>Último update disponible</span><p>'+esc(last?last.body.slice(0,100):'Abre el seguimiento para ver el historial.')+'</p>'+(last?'<small>'+esc(last.author)+' · '+new Date(last.created_at).toLocaleDateString('es-ES')+'</small>':'')+'</div><div class="crm-card-bottom">'+ownerAv(l.responsable)+'<button class="v-btn" data-crm-detail="'+esc(l.id)+'">Seguimiento →</button></div></article>';}
-buildLeads=function(c){var f=crmMatching(),open=f.filter(crmOpen),won=f.filter(function(l){return l.estado==='Aprobado';}),sum=function(rows,key){return rows.reduce(function(n,l){var val=crmValue(l);return n+(val?val[key]:0);},0);};var unknown=f.filter(function(l){return l.estado!=='Rechazado'&&!crmValue(l);}).length;
- c.innerHTML='<div class="crm-bar"><div><h2>De primer contacto a cliente</h2><p>Origen, próximos pasos y valor de cada oportunidad.</p></div><button class="v-btn primary" id="addLeadBtn">+ Nueva oportunidad</button><button class="v-btn" id="crmRefresh">Actualizar</button></div><div class="crm-kpis">'+[['Oportunidades abiertas',open.length,'Excluye ganadas y descartadas'],['Potencial · primer año',fmtEur(sum(open,'year')),'Abiertas · sin IVA'],['Ganado · primer año',fmtEur(sum(won,'year')),'Valor estimado, no cobrado'],['Recurrente anual ganado',fmtEur(sum(won,'recurring')),'Cuotas anualizadas · sin puntuales']].map(function(a){return '<div><span>'+a[0]+'</span><strong>'+a[1]+'</strong><small>'+a[2]+'</small></div>';}).join('')+'</div><p class="crm-kpi-note">Cifras de la selección actual. Primer año = primeros 12 meses desde el inicio del servicio, no año natural.'+(unknown?' <b>'+unknown+' importe(s) pendiente(s) de clasificar, excluidos de los totales.</b>':'')+'</p><div class="crm-filters"><label>Etapa<select id="crmStage">'+crmOption('all','Todas las etapas',vLeadEst)+CRM_STAGES.map(function(s){return crmOption(s[0],s[1],vLeadEst);}).join('')+'</select></label><label>Origen<select id="crmSource">'+crmOption('all','Todos los orígenes',crmSource)+Array.from(new Set(leads.map(function(l){return l.origen||'Sin indicar';}))).sort().map(function(s){return crmOption(s,s,crmSource);}).join('')+'</select></label><label>Responsable<select id="crmOwner">'+crmOption('all','Todo el equipo',crmOwner)+Array.from(new Set(leads.map(function(l){return l.responsable||'Sin asignar';}))).sort().map(function(s){return crmOption(s,s,crmOwner);}).join('')+'</select></label><button class="v-btn '+(crmDue?'on':'')+'" id="crmDue" aria-pressed="'+crmDue+'">Contactar hoy / vencidos</button><button class="v-btn" id="crmReset">Limpiar filtros</button></div><div class="crm-results">'+f.length+' oportunidades · Busca por nombre, empresa u origen en la barra superior</div>'+(f.length?'<div class="crm-grid">'+f.map(crmCard).join('')+'</div>':emptyVisual('Sin oportunidades en esta vista','Cambia los filtros o añade un nuevo contacto.'));
- crmRecent();
+var crmMode = 'agenda';
+
+function followupGroup(lead, today) {
+  var date = crmData(lead).nextDate;
+  if (!date) return 'Sin fecha';
+  if (date < today) return 'Vencidos';
+  return date === today ? 'Hoy' : 'Próximos';
+}
+
+function leadRow(lead, today) {
+  var meta = crmData(lead);
+  var stage = crmStage(lead);
+  var value = crmValue(lead);
+  var date = meta.nextDate;
+  var urgency = followupGroup(lead, today);
+  var closed = !crmOpen(lead);
+  var amount = value ? fmtEur(value.year) : 'Por definir';
+  return '<article class="op-row"><div class="op-account"><button type="button" class="op-name" data-crm-detail="'+esc(lead.id)+'">'+esc(lead.empresa || lead.nombre)+'</button><small>'+esc(lead.empresa ? lead.nombre : lead.origen || '')+'</small></div>'+
+    '<div class="op-action"><span>'+esc(closed ? stage[1] : meta.nextAction || 'Definir próximo paso')+'</span>'+
+    '<small class="'+(!closed && urgency==='Vencidos'?'op-late':'')+'">'+esc(closed ? '' : date ? fmtDate(date) : 'Sin fecha de seguimiento')+'</small></div>'+
+    '<div class="op-person">'+esc(lead.responsable || 'Por asignar')+'<small>'+esc(amount)+'</small></div>'+
+    '<button class="op-edit" type="button" data-edt-lead="'+esc(lead.id)+'" aria-label="Editar '+esc(lead.empresa || lead.nombre)+'">Editar</button></article>';
+}
+
+function opportunityGroup(label, rows, today, color) {
+  return '<section class="op-group" style="--op-tone:'+color+'"><h3>'+esc(label)+' <small>'+rows.length+'</small></h3>'+
+    (rows.length ? rows.map(function(l){return leadRow(l,today);}).join('') : '<p class="op-empty">Sin oportunidades en esta etapa.</p>')+'</section>';
+}
+
+function opportunityFilter(id, label, options, current) {
+  return '<label>'+label+'<select id="'+id+'">'+options.map(function(o){return crmOption(o[0],o[1],current);}).join('')+'</select></label>';
+}
+
+function opportunityValues(rows) {
+  var potential=0, won=0, recurring=0, unknown=0;
+  rows.forEach(function(l){
+    if (!crmOpen(l) && l.estado !== 'Aprobado') return;
+    var value=crmValue(l);
+    if (!value) { unknown++; return; }
+    if (crmOpen(l)) potential+=value.year;
+    else { won+=value.year; recurring+=value.recurring; }
+  });
+  return '<details class="op-values"><summary>Valor comercial de la selección</summary><div>'+
+    [['Potencial · primer año',potential],['Ganado · primer año',won],['Recurrente anual ganado',recurring]].map(function(m){return '<p>'+m[0]+'<strong>'+esc(fmtEur(m[1]))+'</strong></p>';}).join('')+
+    '</div><small>Honorarios estimados sin IVA. Primer año desde el inicio del servicio.'+(unknown?' '+unknown+' con importe pendiente de clasificar.':'')+'</small></details>';
+}
+
+buildLeads=function(c){
+  var summaryOpen = Boolean(c.querySelector('.op-values[open]'));
+  var today=dayKey(new Date());
+  var matches=crmMatching();
+  var isAgenda=crmMode==='agenda';
+  var rows=matches.filter(function(l){return !isAgenda || crmOpen(l);}).sort(function(a,b){
+    var byDate=(crmData(a).nextDate || '9999').localeCompare(crmData(b).nextDate || '9999');
+    return byDate || (a.empresa || a.nombre || '').localeCompare(b.empresa || b.nombre || '', 'es');
+  });
+  var stages=CRM_STAGES.map(function(stage){return stage.slice();});
+  rows.forEach(function(l){if(!stages.some(function(s){return s[0]===l.estado;}))stages.push([l.estado,crmStage(l)[1],'#818b9a']);});
+  var sections=isAgenda
+    ? [['Vencidos','#ae594a'],['Hoy','#d9a42d'],['Próximos','#56807b'],['Sin fecha','#899198']].map(function(g){
+        var group=rows.filter(function(l){return followupGroup(l,today)===g[0];});
+        return group.length ? opportunityGroup(g[0],group,today,g[1]) : '';
+      }).join('')
+    : stages.filter(function(s){return vLeadEst==='all'||vLeadEst===s[0];}).map(function(s){
+        return opportunityGroup(s[1],rows.filter(function(l){return l.estado===s[0];}),today,s[2]);
+      }).join('');
+  function choices(field, fallback, allLabel){
+    return [['all',allLabel]].concat(Array.from(new Set(leads.map(function(l){return l[field]||fallback;}))).sort().map(function(v){return [v,v];}));
+  }
+  var activeFilters=crmSource!=='all'||crmOwner!=='all'||vLeadEst!=='all'||vSearch||crmDue;
+  c.innerHTML='<div class="op-workspace"><div class="op-toolbar"><div class="op-switch" role="group" aria-label="Vista comercial">'+
+    [['agenda','Agenda'],['stages','Por etapas']].map(function(m){return '<button type="button" data-op-mode="'+m[0]+'" aria-pressed="'+(crmMode===m[0])+'">'+m[1]+'</button>';}).join('')+
+    '</div><button class="v-btn primary" id="addLeadBtn">+ Nueva oportunidad</button></div>'+
+    '<div class="op-filters">'+opportunityFilter('crmOwner','Responsable',choices('responsable','Sin asignar','Todo el equipo'),crmOwner)+
+    opportunityFilter('crmSource','Origen',choices('origen','Sin indicar','Todos'),crmSource)+
+    opportunityFilter('crmStage','Etapa',[['all','Todas']].concat(CRM_STAGES.filter(function(s){return !isAgenda||crmOpen({estado:s[0]});})),vLeadEst)+
+    '<button class="v-btn" id="crmDue" aria-pressed="'+crmDue+'">Hoy y vencidos</button>'+
+    (activeFilters?'<button class="v-btn" id="crmReset">Limpiar</button>':'')+
+    '<button class="v-btn op-refresh" id="crmRefresh">Actualizar</button></div>'+
+    '<div class="op-heading"><h2>'+(isAgenda?'Seguimiento comercial':'Oportunidades por etapa')+'</h2><span>'+rows.length+(isAgenda?' abiertas':' en la selección')+'</span></div>'+
+    (rows.length ? sections : emptyVisual(isAgenda?'Sin oportunidades abiertas en esta vista':'Sin oportunidades en esta vista',activeFilters?'Prueba a limpiar los filtros.':'Añade una oportunidad para empezar.'))+
+    opportunityValues(rows)+'</div>';
+  c.querySelector('.op-values').open = summaryOpen;
 };
+document.addEventListener('click',function(e){
+  var button=e.target.closest('[data-op-mode]');
+  if (!button) return;
+  crmMode=button.dataset.opMode;
+  if(crmMode==='agenda' && ['Aprobado','Rechazado'].includes(vLeadEst)) vLeadEst='all';
+  buildLeads(document.getElementById('contentArea'));
+});
 // Extend the existing form, retaining its compatible columns.
 var amountField=document.getElementById('lead-importe');amountField.parentElement.querySelector('label').textContent='Cuota o importe del servicio (€, sin IVA)';
 amountField.parentElement.insertAdjacentHTML('beforebegin','<div class="fg2 full crm-form-section"><h3>Valor comercial</h3><p>Introduce honorarios de agencia, sin IVA ni inversión publicitaria del cliente.</p></div><div class="fg2"><label class="fg-lbl" for="crmBilling">Tipo de ingreso</label><select class="fs" id="crmBilling"><option value="pending">Pendiente de clasificar</option><option value="monthly">Cuota mensual</option><option value="annual">Cuota anual</option><option value="oneoff">Proyecto puntual</option></select></div>');
@@ -2961,9 +3066,9 @@ saveLead=function(){var name=document.getElementById('lead-nombre').value.trim()
  var d={nombre:name,empresa:document.getElementById('lead-empresa').value.trim(),sector:document.getElementById('lead-sector').value.trim(),email:document.getElementById('lead-email').value.trim(),telefono:document.getElementById('lead-telefono').value.trim(),estado:document.getElementById('lead-estado').value,responsable:document.getElementById('lead-responsable').value,importe:amountField.value===''?null:amount,fecha_contacto:document.getElementById('lead-fecha').value||null,origen:sourceSelect.value||null,notas:crmPack(m),updated_at:new Date().toISOString()};
  var btn=document.getElementById('leadSaveBtn');btn.disabled=true;btn.textContent='Guardando…';(id?sb.updLead(id,d):sb.addLead(d)).then(function(rows){if(id)leads=leads.map(function(l){return String(l.id)===String(id)?Object.assign({},l,d):l;});else{var row=Array.isArray(rows)?rows[0]:rows;if(!row)throw new Error('No se recibió la oportunidad guardada. Recarga antes de reintentar.');leads.unshift(row);}closeOv('leadOv');if(vView==='leads')buildLeads(document.getElementById('contentArea'));toast('Oportunidad guardada ✓');}).catch(function(e){toast('No se pudo guardar: '+e.message,'err');}).finally(function(){btn.disabled=false;btn.textContent='Guardar';});
 };
-document.body.insertAdjacentHTML('beforeend','<div class="ov" id="crmDetail"><div class="mo crm-detail" role="dialog" aria-modal="true" aria-labelledby="crmDetailTitle"><div class="mo-title"><span id="crmDetailTitle">Seguimiento</span><button class="mo-x" id="crmClose" aria-label="Cerrar">✕</button></div><div id="crmDetailSummary"></div><div class="crm-history-head"><h3>Historial de updates</h3><button class="v-btn" id="crmHistoryReload">Recargar</button></div><div id="crmHistory" aria-live="polite"></div><label class="fg-lbl" for="crmUpdateBody">¿Qué ha cambiado?</label><textarea class="ft" id="crmUpdateBody" placeholder="Hemos enviado la propuesta. La revisan el viernes…"></textarea><div class="crm-update-actions"><span>Se guardará con tu nombre y fecha.</span><button class="v-btn primary" id="crmPostUpdate">Añadir update</button></div></div></div>');
-function crmLoadHistory(){var id=crmDetailId,request=++crmHistoryRequest;document.getElementById('crmHistory').innerHTML='<p>Cargando historial…</p>';sb.getLeadCmts(id).then(function(rows){if(request!==crmHistoryRequest||id!==crmDetailId)return;document.getElementById('crmHistory').innerHTML=rows&&rows.length?rows.map(function(r){return '<article class="crm-history-item"><div>'+avatarHtml(r.author)+'<strong>'+esc(r.author||'Equipo')+'</strong><time>'+new Date(r.created_at).toLocaleString('es-ES')+'</time></div><p>'+esc(r.body).replace(/\n/g,'<br>')+'</p></article>';}).join(''):'<p>Aún no hay updates. Añade el primero.</p>';var last=(rows||[]).slice().sort(function(a,b){return String(b.created_at).localeCompare(String(a.created_at));})[0];if(last){crmUpdates[id]=last;if(vView==='leads')buildLeads(document.getElementById('contentArea'));}}).catch(function(){if(request===crmHistoryRequest)document.getElementById('crmHistory').innerHTML='<p>No se pudo cargar el historial. Pulsa Recargar.</p>';});}
-function crmDetail(id){var l=leads.find(function(l){return String(l.id)===String(id);});if(!l)return;crmDetailId=l.id;var m=crmData(l);document.getElementById('crmDetailTitle').textContent=l.empresa||l.nombre;document.getElementById('crmDetailSummary').innerHTML='<div class="crm-detail-summary"><p><b>'+esc(l.nombre)+'</b> · '+esc(crmStage(l)[1])+'</p><p>Origen: '+esc(l.origen||'Sin indicar')+(m.sourceDetail?' · '+esc(m.sourceDetail):'')+'</p><p>'+esc(l.email||'Sin email')+' · '+esc(l.telefono||'Sin teléfono')+'</p><p><b>Próximo paso:</b> '+esc(m.nextAction||'Sin definir')+' · '+(m.nextDate?fmtDate(m.nextDate):'Sin fecha')+'</p>'+(m.notes?'<p class="crm-context">'+esc(m.notes).replace(/\n/g,'<br>')+'</p>':'')+'<button class="v-btn" id="crmEditDetail">Editar datos y próximo paso</button></div>';document.getElementById('crmUpdateBody').value='';openOv('crmDetail');crmLoadHistory();}
+document.body.insertAdjacentHTML('beforeend','<div class="ov" id="crmDetail"><div class="mo crm-detail" role="dialog" aria-modal="true" aria-labelledby="crmDetailTitle"><div class="mo-title"><span id="crmDetailTitle">Seguimiento</span><button class="mo-x" id="crmClose" aria-label="Cerrar">✕</button></div><div id="crmDetailSummary"></div><div class="crm-history-head"><h3>Historial de seguimiento</h3><button class="v-btn" id="crmHistoryReload">Recargar</button></div><div id="crmHistory" aria-live="polite"></div><label class="fg-lbl" for="crmUpdateBody">¿Qué ha cambiado?</label><textarea class="ft" id="crmUpdateBody" placeholder="Hemos enviado la propuesta. La revisan el viernes…"></textarea><div class="crm-update-actions"><span>Se guardará con tu nombre y fecha.</span><button class="v-btn primary" id="crmPostUpdate">Guardar nota</button></div></div></div>');
+function crmLoadHistory(){var id=crmDetailId,request=++crmHistoryRequest;document.getElementById('crmHistory').innerHTML='<p>Cargando historial…</p>';sb.getLeadCmts(id).then(function(rows){if(request!==crmHistoryRequest||id!==crmDetailId)return;document.getElementById('crmHistory').innerHTML=rows&&rows.length?rows.map(function(r){return '<article class="crm-history-item"><div>'+avatarHtml(r.author)+'<strong>'+esc(r.author||'Equipo')+'</strong><time>'+new Date(r.created_at).toLocaleString('es-ES')+'</time></div><p>'+esc(r.body).replace(/\n/g,'<br>')+'</p></article>';}).join(''):'<p>Aún no hay notas de seguimiento.</p>';var last=(rows||[]).slice().sort(function(a,b){return String(b.created_at).localeCompare(String(a.created_at));})[0];if(last){crmUpdates[id]=last;if(vView==='leads')buildLeads(document.getElementById('contentArea'));}}).catch(function(){if(request===crmHistoryRequest)document.getElementById('crmHistory').innerHTML='<p>No se pudo cargar el historial. Pulsa Recargar.</p>';});}
+function crmDetail(id){var l=leads.find(function(l){return String(l.id)===String(id);});if(!l)return;crmDetailId=l.id;var m=crmData(l), valuation=crmValue(l);document.getElementById('crmDetailTitle').textContent=l.empresa||l.nombre;document.getElementById('crmDetailSummary').innerHTML='<div class="crm-detail-summary"><p><b>'+esc(l.nombre)+'</b> · '+esc(crmStage(l)[1])+'</p><p>Origen: '+esc(l.origen||'Sin indicar')+(m.sourceDetail?' · '+esc(m.sourceDetail):'')+'</p><p>'+esc(l.email||'Sin email')+' · '+esc(l.telefono||'Sin teléfono')+'</p><p><b>Próximo paso:</b> '+esc(m.nextAction||'Sin definir')+' · '+(m.nextDate?fmtDate(m.nextDate):'Sin fecha')+'</p>'+ '<p><b>Honorarios · primer año:</b> '+(valuation?fmtEur(valuation.year):'Por definir')+' · '+esc(l.responsable||'Sin asignar')+'</p>'+(m.notes?'<p class="crm-context">'+esc(m.notes).replace(/\n/g,'<br>')+'</p>':'')+'<button class="v-btn" id="crmEditDetail">Editar datos y próximo paso</button></div>';document.getElementById('crmUpdateBody').value='';openOv('crmDetail');crmLoadHistory();}
 openLeadCmt=crmDetail;
 document.addEventListener('change',function(e){var el=e.target;if(el.id==='crmStage')vLeadEst=el.value;if(el.id==='crmSource')crmSource=el.value;if(el.id==='crmOwner')crmOwner=el.value;if(['crmStage','crmSource','crmOwner'].includes(el.id))buildLeads(document.getElementById('contentArea'));if(['crmBilling','crmMonths','crmSetup'].includes(el.id))crmCalc();});
 document.addEventListener('input',function(e){if(['crmMonths','crmSetup','lead-importe'].includes(e.target.id))crmCalc();});
@@ -3026,3 +3131,4 @@ if (sessionUser) {
 </script>
 </body>
 </html>
+
